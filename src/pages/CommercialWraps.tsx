@@ -230,7 +230,7 @@ export default function CommercialWraps() {
       setGeneratedDesigns({ sheet: url });
     } catch (error) {
       console.error('Error generating design:', error);
-      setGeneratedDesigns({ sheet: uploadedImage });
+      setGeneratedDesigns({ sheet: uploadedImage ?? '' });
     }
 
     setIsGenerating(false);
