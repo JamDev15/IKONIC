@@ -1,0 +1,122 @@
+import { useEffect, useRef } from 'react';
+
+// Flipped and reversed Japanese Katakana characters
+const FLIPPED_KATAKANA = 'ᄀᄂᄃᄅᄆᄇᄉᄊᄋᄌᄍᄎᄏᄐᄑ하ᅢᅣᅤᅥᅦᅧᅨᅩᅪᅫᅬᅭᅮᅯᅰᅱᅲᅳᅴᅵᆨᆩᆪᆫᆬᆭᆯᆰᆱᆲᆳᆴᆵᆶᆷᆸᆹᆺᆻᆼᆽᆾᆿᇀᇁᇂ';
+
+// Additional flipped symbols and characters
+const FLIPPED_SYMBOLS = 'ƆƎƧИႱႧႰႳႵႷႸႹႺႻႼႽႾႿჀჁჂჃჄჅაბგდევზთიკლმნოპჟრსტუფქღყშჩცძწჭხჯჰ';
+
+// Combine all flipped characters
+const MATRIX_CHARS = FLIPPED_KATAKANA + FLIPPED_SYMBOLS;
+
+export default function MatrixBackground() {
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return;
+
+    // Set canvas size
+    const resizeCanvas = () => {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    };
+    resizeCanvas();
+    window.addEventListener('resize', resizeCanvas);
+
+    // Font settings
+    const fontSize = 16;
+    const columns = Math.ceil(canvas.width / fontSize);
+    
+    // Initialize drops at random positions
+    const drops: number[] = [];
+    for (let i = 0; i < columns; i++) {
+      drops[i] = Math.random() * -canvas.height;
+    }
+
+    // Speed variation for each column
+    const speeds: number[] = [];
+    for (let i = 0; i < columns; i++) {
+      speeds[i] = Math.random() * 2 + 1;
+    }
+
+    // Animation loop
+    let animationId: number;
+    
+    const draw = () => {
+      // Create fade effect for trails
+      ctx.fillStyle = 'rgba(11, 13, 16, 0.08)';
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+      // Set font
+      ctx.font = `bold ${fontSize}px monospace`;
+      ctx.textBaseline = 'top';
+
+      // Draw characters for each column
+      for (let i = 0; i < drops.length; i++) {
+        // Pick random flipped character
+        const char = MATRIX_CHARS[Math.floor(Math.random() * MATRIX_CHARS.length)];
+        
+        const x = i * fontSize;
+        const y = drops[i];
+
+        // Draw the character with Matrix-style green
+        // Some characters are brighter (the "head" of the stream)
+        const isBright = Math.random() > 0.97;
+        
+        if (isBright) {
+          // Bright white-green for leading characters
+          ctx.fillStyle = '#ccffcc';
+          ctx.shadowColor = '#00ff41';
+          ctx.shadowBlur = 15;
+        } else {
+          // Matrix green for trailing characters
+          const brightness = Math.random() * 0.4 + 0.6;
+          ctx.fillStyle = `rgba(0, 255, 65, ${brightness})`;
+          ctx.shadowBlur = 0;
+        }
+        
+        // Draw the flipped character
+        ctx.save();
+        ctx.translate(x + fontSize / 2, y + fontSize / 2);
+        ctx.scale(-1, -1); // Flip upside down and backward
+        ctx.translate(-(x + fontSize / 2), -(y + fontSize / 2));
+        ctx.fillText(char, x, y);
+        ctx.restore();
+
+        // Move drop down
+        drops[i] += speeds[i];
+
+        // Reset drop when it goes off screen
+        if (drops[i] > canvas.height) {
+          drops[i] = -fontSize;
+          speeds[i] = Math.random() * 2 + 1;
+        }
+      }
+
+      animationId = requestAnimationFrame(draw);
+    };
+
+    draw();
+
+    return () => {
+      window.removeEventListener('resize', resizeCanvas);
+      cancelAnimationFrame(animationId);
+    };
+  }, []);
+
+  return (
+    <canvas
+      ref={canvasRef}
+      className="fixed inset-0 pointer-events-none"
+      style={{ 
+        opacity: 0.7,
+        zIndex: 0,
+        background: 'transparent'
+      }}
+    />
+  );
+}

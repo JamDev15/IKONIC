@@ -1,0 +1,146 @@
+import { useRef, useLayoutEffect } from 'react';
+import { gsap } from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
+
+gsap.registerPlugin(ScrollTrigger);
+
+export default function EngageSection() {
+  const sectionRef = useRef<HTMLElement>(null);
+  const bgRef = useRef<HTMLDivElement>(null);
+  const topPanelRef = useRef<HTMLDivElement>(null);
+  const bottomPanelRef = useRef<HTMLDivElement>(null);
+  const headlineRef = useRef<HTMLDivElement>(null);
+  const contentRef = useRef<HTMLDivElement>(null);
+
+  useLayoutEffect(() => {
+    const section = sectionRef.current;
+    if (!section) return;
+
+    const ctx = gsap.context(() => {
+      const scrollTl = gsap.timeline({
+        scrollTrigger: {
+          trigger: section,
+          start: 'top top',
+          end: '+=130%',
+          pin: true,
+          scrub: 0.6,
+        }
+      });
+
+      // ENTRANCE (0% - 30%)
+      scrollTl
+        .fromTo(bgRef.current, 
+          { scale: 1.08, opacity: 0.6 }, 
+          { scale: 1, opacity: 1, ease: 'none' }, 
+          0
+        )
+        .fromTo(topPanelRef.current, 
+          { x: '-70vw' }, 
+          { x: 0, ease: 'power2.out' }, 
+          0
+        )
+        .fromTo(bottomPanelRef.current, 
+          { x: '70vw' }, 
+          { x: 0, ease: 'power2.out' }, 
+          0.06
+        )
+        .fromTo(headlineRef.current, 
+          { x: '-60vw', opacity: 0 }, 
+          { x: 0, opacity: 1, ease: 'power2.out' }, 
+          0.10
+        )
+        .fromTo(contentRef.current, 
+          { y: '-20vh', opacity: 0 }, 
+          { y: 0, opacity: 1, ease: 'power2.out' }, 
+          0.12
+        );
+
+      // SETTLE (30% - 70%): Hold
+
+      // EXIT (70% - 100%)
+      scrollTl
+        .to(headlineRef.current, 
+          { x: '30vw', opacity: 0.25, ease: 'power2.in' }, 
+          0.70
+        )
+        .to(headlineRef.current, 
+          { opacity: 0, ease: 'power2.in' }, 
+          0.94
+        )
+        .to(topPanelRef.current, 
+          { x: '-70vw', ease: 'power2.in' }, 
+          0.78
+        )
+        .to(bottomPanelRef.current, 
+          { x: '70vw', ease: 'power2.in' }, 
+          0.78
+        )
+        .to(bgRef.current, 
+          { scale: 1.05, opacity: 0.6, ease: 'power2.in' }, 
+          0.80
+        );
+
+    }, section);
+
+    return () => ctx.revert();
+  }, []);
+
+  return (
+    <section 
+      ref={sectionRef} 
+      className="section-pinned z-[60]"
+    >
+      {/* Background image */}
+      <div 
+        ref={bgRef}
+        className="absolute inset-0 w-full h-full"
+      >
+        <img 
+          src="/engage_portrait.jpg" 
+          alt="Engagement"
+          className="w-full h-full object-cover"
+        />
+        <div className="absolute inset-0 bg-charcoal/40" />
+      </div>
+
+      {/* Top-left dark panel */}
+      <div 
+        ref={topPanelRef}
+        className="absolute left-0 top-0 w-[62vw] h-[34vh] bg-charcoal z-10"
+      />
+
+      {/* Bottom-right dark panel */}
+      <div 
+        ref={bottomPanelRef}
+        className="absolute right-0 bottom-0 w-[62vw] h-[34vh] bg-charcoal z-10"
+      />
+
+      {/* Content */}
+      <div 
+        ref={contentRef}
+        className="absolute left-[7vw] top-[10vh] z-20 max-w-[46vw]"
+      >
+        <p className="text-body text-lg text-offwhite leading-relaxed">
+          Creative that respects the audience—fast hooks, clear value, and consistent brand voice.
+        </p>
+      </div>
+
+      {/* CTA */}
+      <div className="absolute right-[7vw] top-[10vh] z-20">
+        <button className="btn-outline">
+          Explore the work
+        </button>
+      </div>
+
+      {/* Oversized headline */}
+      <div 
+        ref={headlineRef}
+        className="absolute left-[6vw] top-[56vh] z-20"
+      >
+        <h2 className="text-headline text-display text-offwhite">
+          ENGAGE
+        </h2>
+      </div>
+    </section>
+  );
+}

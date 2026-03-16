@@ -1,0 +1,57 @@
+/* App-specific styles */
+
+/* Ensure smooth scrolling behavior */
+html {
+  scroll-behavior: auto;
+}
+
+/* Pin spacer styling */
+.pin-spacer {
+  background: transparent !important;
+}
+
+/* Section transitions */
+.section-pinned {
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+
+/* Image optimization */
+img {
+  image-rendering: -webkit-optimize-contrast;
+}
+
+/* Button hover states */
+.btn-primary,
+.btn-outline {
+  will-change: transform;
+}
+
+/* Form focus states */
+input:focus,
+textarea:focus,
+select:focus {
+  box-shadow: 0 0 0 2px rgba(255, 77, 46, 0.2);
+}
+
+/* Responsive typography adjustments */
+@media (max-width: 768px) {
+  .text-display {
+    font-size: clamp(36px, 10vw, 64px) !important;
+  }
+  
+  .text-headline {
+    font-size: clamp(28px, 8vw, 48px) !important;
+  }
+}
+
+/* Reduce motion for accessibility */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

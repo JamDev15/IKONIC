@@ -1,0 +1,149 @@
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@300;400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 220 14% 4%;
+    --foreground: 220 14% 96%;
+    --card: 220 14% 6%;
+    --card-foreground: 220 14% 96%;
+    --popover: 220 14% 6%;
+    --popover-foreground: 220 14% 96%;
+    --primary: 158 100% 50%;
+    --primary-foreground: 0 0% 0%;
+    --secondary: 220 8% 12%;
+    --secondary-foreground: 220 14% 96%;
+    --muted: 220 8% 16%;
+    --muted-foreground: 220 8% 65%;
+    --accent: 158 100% 50%;
+    --accent-foreground: 0 0% 0%;
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 220 8% 20%;
+    --input: 220 8% 20%;
+    --ring: 158 100% 50%;
+    --radius: 0.375rem;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  
+  html {
+    scroll-behavior: auto;
+  }
+  
+  body {
+    @apply bg-background text-foreground antialiased;
+    font-family: 'Inter', sans-serif;
+    overflow-x: hidden;
+  }
+  
+  h1, h2, h3, h4, h5, h6 {
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+  }
+}
+
+@layer components {
+  .font-display {
+    font-family: 'Space Grotesk', sans-serif;
+  }
+  
+  .font-body {
+    font-family: 'Inter', sans-serif;
+  }
+  
+  .font-mono {
+    font-family: 'IBM Plex Mono', monospace;
+  }
+  
+  .text-headline {
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: -0.02em;
+    line-height: 0.95;
+  }
+  
+  .text-micro {
+    font-family: 'IBM Plex Mono', monospace;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    font-size: 0.75rem;
+  }
+  
+  .grain-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 9999;
+    opacity: 0.04;
+    mix-blend-mode: overlay;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+  }
+  
+  .section-pinned {
+    width: 100vw;
+    height: 100vh;
+    position: relative;
+    overflow: hidden;
+    will-change: transform;
+  }
+  
+  .hairline-border {
+    border: 1px solid rgba(246, 247, 249, 0.35);
+  }
+  
+  .accent-panel {
+    background: #00FF9D;
+    transform: skewX(-12deg);
+  }
+  
+  .btn-primary {
+    @apply px-6 py-3 bg-mint text-charcoal font-semibold rounded-md transition-all duration-200;
+    box-shadow: 0 0 20px rgba(0, 255, 157, 0.3);
+  }
+  
+  .btn-primary:hover {
+    transform: translateY(-2px) scale(1.02);
+    box-shadow: 0 0 30px rgba(0, 255, 157, 0.5);
+  }
+  
+  .btn-outline {
+    @apply px-6 py-3 border border-mint text-mint font-medium rounded-md transition-all duration-200;
+  }
+  
+  .btn-outline:hover {
+    background: rgba(0, 255, 157, 0.1);
+    transform: translateY(-2px) scale(1.02);
+    box-shadow: 0 0 20px rgba(0, 255, 157, 0.2);
+  }
+}
+
+/* Smooth scrolling for anchor links */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Hide scrollbar but keep functionality */
+::-webkit-scrollbar {
+  width: 0px;
+  background: transparent;
+}
+
+/* Selection color */
+::selection {
+  background: rgba(0, 255, 157, 0.3);
+  color: white;
+}
