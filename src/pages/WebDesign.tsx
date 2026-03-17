@@ -66,7 +66,7 @@ export default function WebDesign() {
             Our GoHighLevel experts create digital experiences that turn visitors into customers.
           </p>
           <div className="flex flex-wrap justify-center gap-4">
-            <a href="tel:+17206791230" className="btn-primary inline-flex items-center gap-2">
+            <a href="/contact" className="btn-primary inline-flex items-center gap-2">
               <Phone className="w-5 h-5" />
               Get Free Quote
             </a>
@@ -199,7 +199,7 @@ export default function WebDesign() {
           <p className="text-offwhite-dark mb-8">
             Get a free consultation and quote for your web design project.
           </p>
-          <a href="tel:+17206791230" className="btn-primary inline-flex items-center gap-2 text-lg px-8 py-4">
+          <a href="/contact" className="btn-primary inline-flex items-center gap-2 text-lg px-8 py-4">
             <Phone className="w-5 h-5" />
             Call (720) 679-1230
           </a>

@@ -70,7 +70,7 @@ export default function LearnMore() {
             what we build at Ikonic.
           </p>
           <div className="flex flex-wrap justify-center gap-4">
-            <a href="tel:+17206791230" className="btn-primary inline-flex items-center gap-2">
+            <a href="/contact" className="btn-primary inline-flex items-center gap-2">
               <Phone className="w-5 h-5" />
               Get Free Consultation
             </a>
@@ -217,7 +217,7 @@ export default function LearnMore() {
           <p className="text-offwhite-dark mb-8">
             Book your free 15-minute consultation. No commitment, just a clear plan to scale your business.
           </p>
-          <a href="tel:+17206791230" className="btn-primary inline-flex items-center gap-2 text-lg px-8 py-4">
+          <a href="/contact" className="btn-primary inline-flex items-center gap-2 text-lg px-8 py-4">
             <Phone className="w-5 h-5" />
             Call (720) 679-1230
           </a>

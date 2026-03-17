@@ -54,7 +54,7 @@ export default function ReputationManagement() {
             rankings. Turn satisfied customers into online advocates.
           </p>
           <div className="flex flex-wrap justify-center gap-4">
-            <a href="tel:+17206791230" className="btn-primary inline-flex items-center gap-2">
+            <a href="/contact" className="btn-primary inline-flex items-center gap-2">
               <Phone className="w-5 h-5" />
               Get Free Analysis
             </a>
@@ -204,7 +204,7 @@ export default function ReputationManagement() {
           <p className="text-offwhite-dark mb-8">
             Get a free reputation analysis and see how we can improve your online presence.
           </p>
-          <a href="tel:+17206791230" className="btn-primary inline-flex items-center gap-2 text-lg px-8 py-4">
+          <a href="/contact" className="btn-primary inline-flex items-center gap-2 text-lg px-8 py-4">
             <Phone className="w-5 h-5" />
             Call (720) 679-1230
           </a>

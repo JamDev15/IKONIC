@@ -54,7 +54,7 @@ export default function SpeedToLead() {
             responding faster than competitors.
           </p>
           <div className="flex flex-wrap justify-center gap-4">
-            <a href="tel:+17206791230" className="btn-primary inline-flex items-center gap-2">
+            <a href="/contact" className="btn-primary inline-flex items-center gap-2">
               <Phone className="w-5 h-5" />
               Get Started
             </a>
@@ -209,7 +209,7 @@ export default function SpeedToLead() {
           <p className="text-offwhite-dark mb-8">
             Book your free consultation and see how speed-to-lead automation can transform your business.
           </p>
-          <a href="tel:+17206791230" className="btn-primary inline-flex items-center gap-2 text-lg px-8 py-4">
+          <a href="/contact" className="btn-primary inline-flex items-center gap-2 text-lg px-8 py-4">
             <Phone className="w-5 h-5" />
             Call (720) 679-1230
           </a>
