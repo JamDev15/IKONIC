@@ -1,5 +1,5 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node';
-import OpenAI from 'openai';
+import { GoogleGenAI } from '@google/genai';
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
   if (req.method !== 'POST') {
@@ -14,7 +14,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
   const apiKey = process.env.OPENAI_API_KEY;
   if (!apiKey) {
-    return res.status(500).json({ error: 'OpenAI API key not configured' });
+    return res.status(500).json({ error: 'API key not configured' });
   }
 
   const styleDescriptions: Record<string, string> = {
@@ -55,22 +55,26 @@ ${serviceText ? `- Service strip at bottom: "${serviceText}"` : ''}
 QUALITY: Professional wrap design sheet, crisp vector edges, print-ready appearance, clean layout matching industry-standard wrap template sheets.`;
 
   try {
-    const openai = new OpenAI({ apiKey });
+    const ai = new GoogleGenAI({ apiKey });
 
-    const response = await openai.images.generate({
-      model: 'dall-e-3',
-      prompt,
-      n: 1,
-      size: '1792x1024',
-      quality: 'hd',
+    const response = await ai.models.generateContent({
+      model: 'gemini-2.0-flash-exp-image-generation',
+      contents: prompt,
+      config: {
+        responseModalities: ['TEXT', 'IMAGE'],
+      },
     });
 
-    const imageUrl = response.data[0]?.url;
-    if (!imageUrl) {
-      return res.status(500).json({ error: 'No image returned from OpenAI' });
+    const parts = response.candidates?.[0]?.content?.parts || [];
+    for (const part of parts) {
+      if (part.inlineData?.data) {
+        const mimeType = part.inlineData.mimeType || 'image/png';
+        const url = `data:${mimeType};base64,${part.inlineData.data}`;
+        return res.status(200).json({ url });
+      }
     }
 
-    return res.status(200).json({ url: imageUrl });
+    return res.status(500).json({ error: 'No image returned from Gemini' });
   } catch (error: unknown) {
     const message = error instanceof Error ? error.message : 'Image generation failed';
     return res.status(500).json({ error: message });
