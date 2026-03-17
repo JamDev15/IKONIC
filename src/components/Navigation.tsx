@@ -48,7 +48,8 @@ export default function Navigation() {
             <img 
               src="/logo-ikonic.webp"
               alt="Ikonic" 
-              className="h-16 w-auto transition-all duration-300 group-hover:brightness-0 group-hover:invert-[.8] group-hover:sepia group-hover:saturate-[500%] group-hover:hue-rotate-[100deg]"
+              style={{ height: '64px', width: 'auto' }}
+              className="transition-all duration-300 group-hover:brightness-0 group-hover:invert-[.8] group-hover:sepia group-hover:saturate-[500%] group-hover:hue-rotate-[100deg]"
             />
           </Link>
 
