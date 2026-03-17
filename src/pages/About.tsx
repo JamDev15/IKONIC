@@ -183,7 +183,7 @@ export default function About() {
           <p className="text-offwhite-dark mb-8">
             Let's build something great together. Book your free consultation today.
           </p>
-          <a href="tel:+17206791230" className="btn-primary inline-flex items-center gap-2 text-lg px-8 py-4">
+          <a href="/contact" className="btn-primary inline-flex items-center gap-2 text-lg px-8 py-4">
             Get Started
           </a>
         </div>
