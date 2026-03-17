@@ -58,7 +58,7 @@ QUALITY: Professional wrap design sheet, crisp vector edges, print-ready appeara
     const ai = new GoogleGenAI({ apiKey });
 
     const response = await ai.models.generateContent({
-      model: 'gemini-2.0-flash-exp-image-generation',
+      model: 'gemini-2.0-flash-exp',
       contents: prompt,
       config: {
         responseModalities: ['TEXT', 'IMAGE'],
