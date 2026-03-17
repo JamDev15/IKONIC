@@ -1,5 +1,4 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node';
-import { GoogleGenAI } from '@google/genai';
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
   if (req.method !== 'POST') {
@@ -43,34 +42,38 @@ DESIGN STYLE:
 - Clean geometric color blocks: diagonal panels, sharp angular shapes
 - ${styleDescriptions[wrapStyle] || styleDescriptions.full}
 - ${colorInstruction}
-- Smooth color gradients only within large shape panels
 - White and dark contrast areas for text readability
 
-TEXT ON WRAP (keep minimal and clean):
+TEXT ON WRAP:
 - Company name: "${businessName}" in large clean bold sans-serif font
 ${tagline ? `- Tagline: "${tagline}" in smaller font` : ''}
-${serviceText ? `- Service strip at bottom: "${serviceText}"` : ''}
-- Website placeholder at bottom strip
+${serviceText ? `- Services: "${serviceText}"` : ''}
 
-QUALITY: Professional wrap design sheet, crisp vector edges, print-ready appearance, clean layout matching industry-standard wrap template sheets.`;
+QUALITY: Professional wrap design sheet, crisp vector edges, print-ready appearance.`;
 
   try {
-    const ai = new GoogleGenAI({ apiKey });
+    const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash-exp-image-generation:generateContent?key=${apiKey}`;
 
-    const response = await ai.models.generateContent({
-      model: 'gemini-2.0-flash-exp',
-      contents: prompt,
-      config: {
-        responseModalities: ['TEXT', 'IMAGE'],
-      },
+    const response = await fetch(apiUrl, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        contents: [{ role: 'user', parts: [{ text: prompt }] }],
+        generationConfig: { responseModalities: ['IMAGE', 'TEXT'] },
+      }),
     });
 
-    const parts = response.candidates?.[0]?.content?.parts || [];
+    const data = await response.json();
+
+    if (!response.ok) {
+      return res.status(500).json({ error: data?.error?.message || 'Gemini API error' });
+    }
+
+    const parts = data?.candidates?.[0]?.content?.parts || [];
     for (const part of parts) {
       if (part.inlineData?.data) {
         const mimeType = part.inlineData.mimeType || 'image/png';
-        const url = `data:${mimeType};base64,${part.inlineData.data}`;
-        return res.status(200).json({ url });
+        return res.status(200).json({ url: `data:${mimeType};base64,${part.inlineData.data}` });
       }
     }
 
