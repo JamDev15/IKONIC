@@ -1,7 +1,8 @@
 import { useRef, useLayoutEffect } from 'react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import { Mail, Phone, MapPin, Send, Facebook, Instagram, ArrowRight } from 'lucide-react';
+import { Mail, Phone, MapPin, ArrowRight, Facebook, Instagram } from 'lucide-react';
+import Footer from '../components/Footer';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -209,89 +210,7 @@ export default function ContactSection() {
         </div>
       </div>
 
-      {/* Footer */}
-      <footer className="mt-24 pt-12 border-t border-white/10">
-        <div className="px-[6vw]">
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-12">
-            {/* Brand */}
-            <div className="md:col-span-1">
-              <img 
-                src="/logo.png" 
-                alt="Ikonic" 
-                className="h-10 w-auto mb-4"
-              />
-              <p className="text-offwhite-dark text-sm">
-                The Digital Agency That Works While You Sleep.
-              </p>
-            </div>
-            
-            {/* Quick Links */}
-            <div>
-              <h4 className="text-offwhite font-medium mb-4">Quick Links</h4>
-              <ul className="space-y-2">
-                {['Home', 'About', 'Services', 'Contact', 'Blogs'].map((link) => (
-                  <li key={link}>
-                    <a 
-                      href={`#${link.toLowerCase()}`}
-                      className="text-offwhite-dark text-sm hover:text-mint transition-colors"
-                    >
-                      {link}
-                    </a>
-                  </li>
-                ))}
-              </ul>
-            </div>
-            
-            {/* Services */}
-            <div>
-              <h4 className="text-offwhite font-medium mb-4">Services</h4>
-              <ul className="space-y-2">
-                {[
-                  'Web Design & Funnels',
-                  'CRM & Automations',
-                  'Reputation Management',
-                  'Speed to Lead Systems',
-                  'Marketing Systems'
-                ].map((service) => (
-                  <li key={service}>
-                    <a 
-                      href="#services"
-                      className="text-offwhite-dark text-sm hover:text-mint transition-colors"
-                    >
-                      {service}
-                    </a>
-                  </li>
-                ))}
-              </ul>
-            </div>
-            
-            {/* Newsletter */}
-            <div>
-              <h4 className="text-offwhite font-medium mb-4">Stay Connected</h4>
-              <p className="text-offwhite-dark text-sm mb-4">
-                Get business growth tips and strategies straight to your inbox.
-              </p>
-              <div className="flex gap-2">
-                <input 
-                  type="email"
-                  placeholder="Your email"
-                  className="flex-1 px-4 py-2 bg-charcoal border border-white/20 rounded-lg text-offwhite text-sm focus:outline-none focus:border-mint"
-                />
-                <button className="px-4 py-2 bg-mint text-charcoal rounded-lg hover:bg-mint-dark transition-colors">
-                  <Send className="w-4 h-4" />
-                </button>
-              </div>
-            </div>
-          </div>
-          
-          {/* Copyright */}
-          <div className="pt-8 border-t border-white/10 text-center">
-            <p className="text-offwhite-dark text-sm">
-              © 2026 Ikonic. All rights reserved.
-            </p>
-          </div>
-        </div>
-      </footer>
+      <Footer />
     </section>
   );
 }

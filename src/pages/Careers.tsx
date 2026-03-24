@@ -11,6 +11,7 @@ import {
 } from 'lucide-react';
 import Navigation from '../components/Navigation';
 import MatrixBackground from '../components/MatrixBackground';
+import Footer from '../components/Footer';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -235,23 +236,28 @@ export default function Careers() {
           
           <div className="bg-charcoal border border-white/10 rounded-2xl p-3 md:p-4">
             <iframe
-              src="https://crm.ikonic303.com/widget/form/YoKGheZ0aVCEaSOJQFxY"
-              className="w-full h-[1199px] border-0 rounded-[3px] bg-charcoal-light"
-              title="Client Information"
-              loading="lazy"
+              src="https://crm.ikonic303.com/widget/form/dd8OOBPO2eKjd0XxtMZu"
+              style={{width:'100%', height:'1994px', border:'none', borderRadius:'3px'}}
+              id="inline-dd8OOBPO2eKjd0XxtMZu"
+              data-layout="{'id':'INLINE'}"
+              data-trigger-type="alwaysShow"
+              data-trigger-value=""
+              data-activation-type="alwaysActivated"
+              data-activation-value=""
+              data-deactivation-type="neverDeactivate"
+              data-deactivation-value=""
+              data-form-name="Apply to Join Ikonic Sales Team"
+              data-height="1994"
+              data-layout-iframe-id="inline-dd8OOBPO2eKjd0XxtMZu"
+              data-form-id="dd8OOBPO2eKjd0XxtMZu"
+              title="Apply to Join Ikonic Sales Team"
             />
+            <script src="https://crm.ikonic303.com/js/form_embed.js"></script>
           </div>
         </div>
       </section>
 
-      {/* Footer */}
-      <footer className="py-12 px-[6vw] border-t border-white/10 relative z-10">
-        <div className="max-w-6xl mx-auto text-center">
-          <p className="text-offwhite-dark text-sm">
-            © 2026 Ikonic. All rights reserved.
-          </p>
-        </div>
-      </footer>
+      <Footer />
     </div>
   );
 }

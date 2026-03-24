@@ -4,6 +4,7 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { Globe, Check, Phone, Zap, TrendingUp, Users } from 'lucide-react';
 import Navigation from '../components/Navigation';
 import MatrixBackground from '../components/MatrixBackground';
+import Footer from '../components/Footer';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -206,14 +207,7 @@ export default function WebDesign() {
         </div>
       </section>
 
-      {/* Footer */}
-      <footer className="py-12 px-[6vw] border-t border-white/10 relative z-10">
-        <div className="max-w-6xl mx-auto text-center">
-          <p className="text-offwhite-dark text-sm">
-            © 2026 Ikonic. All rights reserved.
-          </p>
-        </div>
-      </footer>
+      <Footer />
     </div>
   );
 }
