@@ -55,19 +55,11 @@ QUALITY: Professional wrap design sheet, crisp vector edges, print-ready appeara
   try {
     const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-image:generateContent?key=${apiKey}`;
 
-    // Build parts — include logo image if provided
-    const parts: object[] = [{ text: prompt }];
-    if (logo && typeof logo === 'string' && logo.includes('base64,')) {
-      const [header, data] = logo.split('base64,');
-      const mimeType = header.replace('data:', '').replace(';', '') || 'image/png';
-      parts.push({ inlineData: { mimeType, data } });
-    }
-
     const response = await fetch(apiUrl, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        contents: [{ role: 'user', parts }],
+        contents: [{ role: 'user', parts: [{ text: prompt }] }],
         generationConfig: { responseModalities: ['IMAGE', 'TEXT'] },
       }),
     });
