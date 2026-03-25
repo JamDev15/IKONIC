@@ -74,7 +74,7 @@ export default function CommercialWraps() {
   const [uploadedImage, setUploadedImage] = useState<string | null>(null);
   const [uploadedLogo, setUploadedLogo] = useState<string | null>(null);
   const [newService, setNewService] = useState('');
-  const [isPaid, setIsPaid] = useState(false);
+  const [isPaid, setIsPaid] = useState(true); // Payment disabled — Stripe commented out
   const [isSendingEmail, setIsSendingEmail] = useState(false);
   const [emailSent, setEmailSent] = useState(false);
 
@@ -943,11 +943,11 @@ We will prepare production-ready vector files and contact you at ${formData.emai
                   Back
                 </button>
                 <button
-                  onClick={() => setCurrentStep(7)}
+                  onClick={() => setCurrentStep(8)}
                   disabled={!formData.businessName || !formData.contactName || !formData.email || !formData.phone}
                   className="btn-primary inline-flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
                 >
-                  Continue to Payment
+                  Continue to Generate
                   <ArrowRight className="w-4 h-4" />
                 </button>
               </div>
@@ -1054,7 +1054,29 @@ We will prepare production-ready vector files and contact you at ${formData.emai
             </div>
           )}
 
-          {/* Step 8: Review & Submit */}
+          {/* Step 8: Generate & Review */}
+          {currentStep === 8 && Object.keys(generatedDesigns).length === 0 && (
+            <div className="bg-charcoal border border-white/10 rounded-2xl p-8 text-center">
+              <Sparkles className="w-12 h-12 text-mint mx-auto mb-4" />
+              <h3 className="font-display text-xl font-bold text-offwhite mb-2">Ready to Generate</h3>
+              <p className="text-offwhite-dark mb-6">Click below to generate your AI vehicle wrap designs.</p>
+              <div className="flex justify-between mt-4">
+                <button onClick={() => setCurrentStep(6)} className="btn-outline">Back</button>
+                <button
+                  onClick={handleGenerateDesign}
+                  disabled={isGenerating}
+                  className="btn-primary inline-flex items-center gap-2 disabled:opacity-50"
+                >
+                  {isGenerating ? (
+                    <><RefreshCw className="w-5 h-5 animate-spin" />Generating...</>
+                  ) : (
+                    <><Sparkles className="w-5 h-5" />Generate Designs</>
+                  )}
+                </button>
+              </div>
+            </div>
+          )}
+
           {currentStep === 8 && Object.keys(generatedDesigns).length > 0 && (
             <div className="bg-charcoal border border-white/10 rounded-2xl p-8">
               <h3 className="font-display text-xl font-bold text-offwhite mb-6 flex items-center gap-2">
