@@ -5,7 +5,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     return res.status(405).json({ error: 'Method not allowed' });
   }
 
-  const { businessName, wrapStyle, colorTheme, brandColors, services, tagline } = req.body;
+  const { businessName, wrapStyle, colorTheme, brandColors, services, tagline, logo, logoDescription } = req.body;
 
   if (!businessName) {
     return res.status(400).json({ error: 'Missing required fields' });
@@ -48,17 +48,26 @@ TEXT ON WRAP:
 - Company name: "${businessName}" in large clean bold sans-serif font
 ${tagline ? `- Tagline: "${tagline}" in smaller font` : ''}
 ${serviceText ? `- Services: "${serviceText}"` : ''}
+${logo ? `- IMPORTANT: The attached image is the company logo. Place this EXACT logo prominently on the vehicle sides. ${logoDescription ? logoDescription : 'Center it on the door panels.'}` : ''}
 
 QUALITY: Professional wrap design sheet, crisp vector edges, print-ready appearance.`;
 
   try {
     const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-image:generateContent?key=${apiKey}`;
 
+    // Build parts — include logo image if provided
+    const parts: object[] = [{ text: prompt }];
+    if (logo && typeof logo === 'string' && logo.includes('base64,')) {
+      const [header, data] = logo.split('base64,');
+      const mimeType = header.replace('data:', '').replace(';', '') || 'image/png';
+      parts.push({ inlineData: { mimeType, data } });
+    }
+
     const response = await fetch(apiUrl, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        contents: [{ role: 'user', parts: [{ text: prompt }] }],
+        contents: [{ role: 'user', parts }],
         generationConfig: { responseModalities: ['IMAGE', 'TEXT'] },
       }),
     });

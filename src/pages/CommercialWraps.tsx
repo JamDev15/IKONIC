@@ -218,6 +218,8 @@ export default function CommercialWraps() {
           brandColors: formData.brandColors,
           services: formData.services,
           tagline: formData.tagline,
+          logo: uploadedLogo || null,
+          logoDescription: formData.logoDescription || '',
         }),
       });
 
@@ -236,7 +238,7 @@ export default function CommercialWraps() {
 
     setIsGenerating(false);
     setCurrentStep(8);
-  }, [uploadedImage, formData.businessName, formData.wrapStyle, formData.colorTheme, formData.brandColors, formData.services, formData.tagline]);
+  }, [uploadedImage, uploadedLogo, formData.businessName, formData.wrapStyle, formData.colorTheme, formData.brandColors, formData.services, formData.tagline, formData.logoDescription]);
 
   const handleDownloadDesign = useCallback((side: string, dataUrl: string) => {
     const link = document.createElement('a');
