@@ -50,6 +50,28 @@ function App() {
     };
   }, []);
 
+  useEffect(() => {
+    const scriptId = 'ghl-chat-widget-script';
+
+    // Add chat widget once for all routes.
+    if (document.getElementById(scriptId)) {
+      return;
+    }
+
+    const script = document.createElement('script');
+    script.id = scriptId;
+    script.src = 'https://widgets.leadconnectorhq.com/loader.js';
+    script.setAttribute('data-resources-url', 'https://widgets.leadconnectorhq.com/chat-widget/loader.js');
+    script.setAttribute('data-widget-id', '69965105f3036706b875cf61');
+    script.async = true;
+
+    document.body.appendChild(script);
+
+    return () => {
+      script.remove();
+    };
+  }, []);
+
   return (
     <Router>
       <div className="relative bg-charcoal min-h-screen">
