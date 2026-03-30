@@ -78,7 +78,7 @@ export default function CommercialWraps() {
 
   const [ghlFormSubmitted, setGhlFormSubmitted] = useState(false);
 
-  // Load GHL form embed script and listen for submission when step 9 is reached
+  // Load GHL form embed script and detect Thank You screen via postMessage
   useEffect(() => {
     if (currentStep === 9) {
       setGhlFormSubmitted(false);
@@ -89,15 +89,14 @@ export default function CommercialWraps() {
       }
       const handleMessage = (e: MessageEvent) => {
         const d = e.data;
-        if (
-          d && typeof d === 'object' && (
-            d.type === 'form_submitted' ||
-            d.event === 'form_submitted' ||
-            d.type === 'FORM_SUBMISSION_SUCCESS' ||
-            d.formSubmitted === true ||
-            (typeof d.message === 'string' && d.message.toLowerCase().includes('submit'))
-          )
-        ) {
+        if (!d || typeof d !== 'object') return;
+        // GHL sends explicit submission event
+        if (d.type === 'form_submitted' || d.event === 'form_submitted') {
+          setGhlFormSubmitted(true);
+          return;
+        }
+        // GHL sends resize message — Thank You page is much shorter than the form (1248px)
+        if (d.type === 'resize' && typeof d.height === 'number' && d.height < 700) {
           setGhlFormSubmitted(true);
         }
       };
@@ -1113,13 +1112,15 @@ We will prepare production-ready vector files and contact you at ${formData.emai
               />
               <div className="flex justify-between items-center mt-6">
                 <button onClick={() => setCurrentStep(6)} className="btn-outline">Back</button>
-                <button
-                  onClick={() => setCurrentStep(8)}
-                  className="btn-primary inline-flex items-center gap-2"
-                >
-                  Generate My Wrap
-                  <Sparkles className="w-4 h-4" />
-                </button>
+                {ghlFormSubmitted && (
+                  <button
+                    onClick={() => setCurrentStep(8)}
+                    className="btn-primary inline-flex items-center gap-2"
+                  >
+                    Generate My Wrap
+                    <Sparkles className="w-4 h-4" />
+                  </button>
+                )}
               </div>
             </div>
           )}
