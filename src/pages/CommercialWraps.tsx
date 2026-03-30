@@ -77,36 +77,31 @@ export default function CommercialWraps() {
   const [isPaid, setIsPaid] = useState(true); // Payment disabled — Stripe commented out
 
   const [ghlFormSubmitted, setGhlFormSubmitted] = useState(false);
+  const ghlIframeRef = useRef<HTMLIFrameElement>(null);
 
-  // Load GHL form embed script and detect Thank You screen via postMessage
+  // Watch iframe height attribute — GHL sets it smaller when Thank You screen shows
   useEffect(() => {
-    if (currentStep === 9) {
-      setGhlFormSubmitted(false);
-      if (!document.querySelector('script[src="https://crm.ikonic303.com/js/form_embed.js"]')) {
-        const s = document.createElement('script');
-        s.src = 'https://crm.ikonic303.com/js/form_embed.js';
-        document.body.appendChild(s);
-      }
-      const handleMessage = (e: MessageEvent) => {
-        let d = e.data;
-        // GHL sometimes sends JSON strings instead of objects
-        if (typeof d === 'string') {
-          try { d = JSON.parse(d); } catch { return; }
-        }
-        if (!d || typeof d !== 'object') return;
-        // Explicit submission events
-        if (d.type === 'form_submitted' || d.event === 'form_submitted' || d.action === 'form_submitted') {
-          setGhlFormSubmitted(true);
-          return;
-        }
-        // GHL resize message — Thank You page is much shorter than the 1248px form
-        if ((d.type === 'resize' || d.action === 'resize') && typeof d.height === 'number' && d.height < 700) {
-          setGhlFormSubmitted(true);
-        }
-      };
-      window.addEventListener('message', handleMessage);
-      return () => window.removeEventListener('message', handleMessage);
+    if (currentStep !== 9) return;
+    setGhlFormSubmitted(false);
+
+    if (!document.querySelector('script[src="https://crm.ikonic303.com/js/form_embed.js"]')) {
+      const s = document.createElement('script');
+      s.src = 'https://crm.ikonic303.com/js/form_embed.js';
+      document.body.appendChild(s);
     }
+
+    // Poll iframe height — GHL changes it to ~300-500px on Thank You screen
+    const interval = setInterval(() => {
+      const iframe = ghlIframeRef.current;
+      if (!iframe) return;
+      const h = parseInt(iframe.getAttribute('height') || iframe.style.height || '1248');
+      if (h < 700) {
+        setGhlFormSubmitted(true);
+        clearInterval(interval);
+      }
+    }, 500);
+
+    return () => clearInterval(interval);
   }, [currentStep]);
   const [isSendingEmail, setIsSendingEmail] = useState(false);
   const [emailSent, setEmailSent] = useState(false);
@@ -1098,6 +1093,7 @@ We will prepare production-ready vector files and contact you at ${formData.emai
               </h3>
               <p className="text-offwhite-dark mb-6">Fill out the form below so our team can follow up with your final wrap files.</p>
               <iframe
+                ref={ghlIframeRef}
                 src="https://crm.ikonic303.com/widget/form/R5hy9Jhsgeavr7pkl1vH"
                 style={{ width: '100%', height: '1248px', border: 'none', borderRadius: '3px' }}
                 id="inline-R5hy9Jhsgeavr7pkl1vH"
