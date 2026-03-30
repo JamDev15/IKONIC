@@ -1111,30 +1111,15 @@ We will prepare production-ready vector files and contact you at ${formData.emai
                 data-form-id="R5hy9Jhsgeavr7pkl1vH"
                 title="Funnel - Ikonic Mktng"
               />
-              <div className="mt-6">
-                {!ghlFormSubmitted ? (
-                  <div className="flex justify-between items-center">
-                    <button onClick={() => setCurrentStep(6)} className="btn-outline">Back</button>
-                    <button
-                      onClick={() => setGhlFormSubmitted(true)}
-                      className="btn-outline inline-flex items-center gap-2 border-mint text-mint hover:bg-mint/10"
-                    >
-                      <Check className="w-4 h-4" />
-                      I've Submitted the Form
-                    </button>
-                  </div>
-                ) : (
-                  <div className="flex justify-between items-center">
-                    <button onClick={() => setCurrentStep(6)} className="btn-outline">Back</button>
-                    <button
-                      onClick={() => setCurrentStep(8)}
-                      className="btn-primary inline-flex items-center gap-2"
-                    >
-                      Generate My Wrap
-                      <Sparkles className="w-4 h-4" />
-                    </button>
-                  </div>
-                )}
+              <div className="flex justify-between items-center mt-6">
+                <button onClick={() => setCurrentStep(6)} className="btn-outline">Back</button>
+                <button
+                  onClick={() => setCurrentStep(8)}
+                  className="btn-primary inline-flex items-center gap-2"
+                >
+                  Generate My Wrap
+                  <Sparkles className="w-4 h-4" />
+                </button>
               </div>
             </div>
           )}
