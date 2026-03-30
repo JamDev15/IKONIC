@@ -88,15 +88,19 @@ export default function CommercialWraps() {
         document.body.appendChild(s);
       }
       const handleMessage = (e: MessageEvent) => {
-        const d = e.data;
+        let d = e.data;
+        // GHL sometimes sends JSON strings instead of objects
+        if (typeof d === 'string') {
+          try { d = JSON.parse(d); } catch { return; }
+        }
         if (!d || typeof d !== 'object') return;
-        // GHL sends explicit submission event
-        if (d.type === 'form_submitted' || d.event === 'form_submitted') {
+        // Explicit submission events
+        if (d.type === 'form_submitted' || d.event === 'form_submitted' || d.action === 'form_submitted') {
           setGhlFormSubmitted(true);
           return;
         }
-        // GHL sends resize message — Thank You page is much shorter than the form (1248px)
-        if (d.type === 'resize' && typeof d.height === 'number' && d.height < 700) {
+        // GHL resize message — Thank You page is much shorter than the 1248px form
+        if ((d.type === 'resize' || d.action === 'resize') && typeof d.height === 'number' && d.height < 700) {
           setGhlFormSubmitted(true);
         }
       };
@@ -1112,15 +1116,27 @@ We will prepare production-ready vector files and contact you at ${formData.emai
               />
               <div className="flex justify-between items-center mt-6">
                 <button onClick={() => setCurrentStep(6)} className="btn-outline">Back</button>
-                {ghlFormSubmitted && (
-                  <button
-                    onClick={() => setCurrentStep(8)}
-                    className="btn-primary inline-flex items-center gap-2"
-                  >
-                    Generate My Wrap
-                    <Sparkles className="w-4 h-4" />
-                  </button>
-                )}
+                <div className="flex flex-col items-end gap-2">
+                  {ghlFormSubmitted ? (
+                    <button
+                      onClick={() => setCurrentStep(8)}
+                      className="btn-primary inline-flex items-center gap-2"
+                    >
+                      Generate My Wrap
+                      <Sparkles className="w-4 h-4" />
+                    </button>
+                  ) : (
+                    <>
+                      <p className="text-offwhite-dark text-sm">Submit the form above to continue</p>
+                      <button
+                        onClick={() => setGhlFormSubmitted(true)}
+                        className="text-mint text-xs underline opacity-60 hover:opacity-100 transition-opacity"
+                      >
+                        Form submitted? Click here
+                      </button>
+                    </>
+                  )}
+                </div>
               </div>
             </div>
           )}
