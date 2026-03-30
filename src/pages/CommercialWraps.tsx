@@ -75,6 +75,30 @@ export default function CommercialWraps() {
   const [uploadedLogo, setUploadedLogo] = useState<string | null>(null);
   const [newService, setNewService] = useState('');
   const [isPaid, setIsPaid] = useState(true); // Payment disabled — Stripe commented out
+
+  const [ghlFormSubmitted, setGhlFormSubmitted] = useState(false);
+
+  // Load GHL form embed script and listen for submission when step 9 is reached
+  useEffect(() => {
+    if (currentStep === 9) {
+      setGhlFormSubmitted(false);
+      if (!document.querySelector('script[src="https://crm.ikonic303.com/js/form_embed.js"]')) {
+        const s = document.createElement('script');
+        s.src = 'https://crm.ikonic303.com/js/form_embed.js';
+        document.body.appendChild(s);
+      }
+      const handleMessage = (e: MessageEvent) => {
+        if (
+          (e.origin && e.origin.includes('ikonic303.com')) ||
+          (e.data && (e.data.type === 'form_submitted' || e.data.event === 'form_submitted' || e.data.formSubmitted))
+        ) {
+          setGhlFormSubmitted(true);
+        }
+      };
+      window.addEventListener('message', handleMessage);
+      return () => window.removeEventListener('message', handleMessage);
+    }
+  }, [currentStep]);
   const [isSendingEmail, setIsSendingEmail] = useState(false);
   const [emailSent, setEmailSent] = useState(false);
 
@@ -1081,16 +1105,27 @@ We will prepare production-ready vector files and contact you at ${formData.emai
                 data-form-id="R5hy9Jhsgeavr7pkl1vH"
                 title="Funnel - Ikonic Mktng"
               />
-              <script src="https://crm.ikonic303.com/js/form_embed.js" />
-              <div className="flex justify-between mt-6">
+              <div className="flex justify-between mt-6 items-center">
                 <button onClick={() => setCurrentStep(6)} className="btn-outline">Back</button>
-                <button
-                  onClick={() => setCurrentStep(8)}
-                  className="btn-primary inline-flex items-center gap-2"
-                >
-                  Generate My Wrap
-                  <Sparkles className="w-4 h-4" />
-                </button>
+                {ghlFormSubmitted ? (
+                  <button
+                    onClick={() => setCurrentStep(8)}
+                    className="btn-primary inline-flex items-center gap-2"
+                  >
+                    Generate My Wrap
+                    <Sparkles className="w-4 h-4" />
+                  </button>
+                ) : (
+                  <div className="text-right">
+                    <p className="text-offwhite-dark text-sm mb-2">Submit the form above to continue</p>
+                    <button
+                      onClick={() => setGhlFormSubmitted(true)}
+                      className="text-mint text-xs underline opacity-60 hover:opacity-100"
+                    >
+                      Already submitted? Click here
+                    </button>
+                  </div>
+                )}
               </div>
             </div>
           )}
