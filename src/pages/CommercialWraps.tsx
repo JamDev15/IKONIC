@@ -945,11 +945,11 @@ We will prepare production-ready vector files and contact you at ${formData.emai
                   Back
                 </button>
                 <button
-                  onClick={() => setCurrentStep(8)}
+                  onClick={() => setCurrentStep(9)}
                   disabled={!formData.businessName || !formData.contactName || !formData.email || !formData.phone}
                   className="btn-primary inline-flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
                 >
-                  Continue to Generate
+                  Continue
                   <ArrowRight className="w-4 h-4" />
                 </button>
               </div>
@@ -972,7 +972,7 @@ We will prepare production-ready vector files and contact you at ${formData.emai
                     <p className="text-offwhite-dark text-sm">{formData.selectedSides.length} side{formData.selectedSides.length > 1 ? 's' : ''} selected</p>
                   </div>
                   <div className="text-right">
-                    <p className="text-3xl font-bold text-mint">$20.00</p>
+                    <p className="text-3xl font-bold text-mint">FREE</p>
                     <p className="text-offwhite-dark text-xs">per design round</p>
                   </div>
                 </div>
@@ -1006,7 +1006,7 @@ We will prepare production-ready vector files and contact you at ${formData.emai
               ) : (
                 <div className="text-center p-8 bg-mint/10 border border-mint/30 rounded-xl">
                   <Check className="w-12 h-12 text-mint mx-auto mb-3" />
-                  <p className="text-offwhite font-medium text-lg">Payment Successful!</p>
+                  <p className="text-offwhite font-medium text-lg">FREE AI IMAGE GENERATOR COMMERCIAL WRAP</p>
                   <p className="text-offwhite-dark text-sm">Proceed to generate your wrap designs</p>
                 </div>
               )}
@@ -1056,6 +1056,45 @@ We will prepare production-ready vector files and contact you at ${formData.emai
             </div>
           )}
 
+          {/* Step 9: CRM Form */}
+          {currentStep === 9 && (
+            <div className="bg-charcoal border border-white/10 rounded-2xl p-8">
+              <h3 className="font-display text-xl font-bold text-offwhite mb-2 flex items-center gap-2">
+                <Sparkles className="w-5 h-5 text-mint" />
+                One Last Step Before Your Design
+              </h3>
+              <p className="text-offwhite-dark mb-6">Fill out the form below so our team can follow up with your final wrap files.</p>
+              <iframe
+                src="https://crm.ikonic303.com/widget/form/R5hy9Jhsgeavr7pkl1vH"
+                style={{ width: '100%', height: '1248px', border: 'none', borderRadius: '3px' }}
+                id="inline-R5hy9Jhsgeavr7pkl1vH"
+                data-layout="{'id':'INLINE'}"
+                data-trigger-type="alwaysShow"
+                data-trigger-value=""
+                data-activation-type="alwaysActivated"
+                data-activation-value=""
+                data-deactivation-type="neverDeactivate"
+                data-deactivation-value=""
+                data-form-name="Funnel - Ikonic Mktng"
+                data-height="1248"
+                data-layout-iframe-id="inline-R5hy9Jhsgeavr7pkl1vH"
+                data-form-id="R5hy9Jhsgeavr7pkl1vH"
+                title="Funnel - Ikonic Mktng"
+              />
+              <script src="https://crm.ikonic303.com/js/form_embed.js" />
+              <div className="flex justify-between mt-6">
+                <button onClick={() => setCurrentStep(6)} className="btn-outline">Back</button>
+                <button
+                  onClick={() => setCurrentStep(8)}
+                  className="btn-primary inline-flex items-center gap-2"
+                >
+                  Generate My Wrap
+                  <Sparkles className="w-4 h-4" />
+                </button>
+              </div>
+            </div>
+          )}
+
           {/* Step 8: Generate & Review */}
           {currentStep === 8 && Object.keys(generatedDesigns).length === 0 && (
             <div className="bg-charcoal border border-white/10 rounded-2xl p-8 text-center">
@@ -1063,7 +1102,7 @@ We will prepare production-ready vector files and contact you at ${formData.emai
               <h3 className="font-display text-xl font-bold text-offwhite mb-2">Ready to Generate</h3>
               <p className="text-offwhite-dark mb-6">Click below to generate your AI vehicle wrap designs.</p>
               <div className="flex justify-between mt-4">
-                <button onClick={() => setCurrentStep(6)} className="btn-outline">Back</button>
+                <button onClick={() => setCurrentStep(9)} className="btn-outline">Back</button>
                 <button
                   onClick={handleGenerateDesign}
                   disabled={isGenerating}
