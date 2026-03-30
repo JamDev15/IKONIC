@@ -88,9 +88,15 @@ export default function CommercialWraps() {
         document.body.appendChild(s);
       }
       const handleMessage = (e: MessageEvent) => {
+        const d = e.data;
         if (
-          (e.origin && e.origin.includes('ikonic303.com')) ||
-          (e.data && (e.data.type === 'form_submitted' || e.data.event === 'form_submitted' || e.data.formSubmitted))
+          d && typeof d === 'object' && (
+            d.type === 'form_submitted' ||
+            d.event === 'form_submitted' ||
+            d.type === 'FORM_SUBMISSION_SUCCESS' ||
+            d.formSubmitted === true ||
+            (typeof d.message === 'string' && d.message.toLowerCase().includes('submit'))
+          )
         ) {
           setGhlFormSubmitted(true);
         }
@@ -1105,24 +1111,27 @@ We will prepare production-ready vector files and contact you at ${formData.emai
                 data-form-id="R5hy9Jhsgeavr7pkl1vH"
                 title="Funnel - Ikonic Mktng"
               />
-              <div className="flex justify-between mt-6 items-center">
-                <button onClick={() => setCurrentStep(6)} className="btn-outline">Back</button>
-                {ghlFormSubmitted ? (
-                  <button
-                    onClick={() => setCurrentStep(8)}
-                    className="btn-primary inline-flex items-center gap-2"
-                  >
-                    Generate My Wrap
-                    <Sparkles className="w-4 h-4" />
-                  </button>
-                ) : (
-                  <div className="text-right">
-                    <p className="text-offwhite-dark text-sm mb-2">Submit the form above to continue</p>
+              <div className="mt-6">
+                {!ghlFormSubmitted ? (
+                  <div className="flex justify-between items-center">
+                    <button onClick={() => setCurrentStep(6)} className="btn-outline">Back</button>
                     <button
                       onClick={() => setGhlFormSubmitted(true)}
-                      className="text-mint text-xs underline opacity-60 hover:opacity-100"
+                      className="btn-outline inline-flex items-center gap-2 border-mint text-mint hover:bg-mint/10"
                     >
-                      Already submitted? Click here
+                      <Check className="w-4 h-4" />
+                      I've Submitted the Form
+                    </button>
+                  </div>
+                ) : (
+                  <div className="flex justify-between items-center">
+                    <button onClick={() => setCurrentStep(6)} className="btn-outline">Back</button>
+                    <button
+                      onClick={() => setCurrentStep(8)}
+                      className="btn-primary inline-flex items-center gap-2"
+                    >
+                      Generate My Wrap
+                      <Sparkles className="w-4 h-4" />
                     </button>
                   </div>
                 )}
