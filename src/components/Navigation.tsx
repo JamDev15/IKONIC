@@ -6,6 +6,7 @@ export default function Navigation() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isServicesOpen, setIsServicesOpen] = useState(false);
+  const [isCalcOpen, setIsCalcOpen] = useState(false);
   const location = useLocation();
 
   useEffect(() => {
@@ -20,6 +21,7 @@ export default function Navigation() {
   useEffect(() => {
     setIsMobileMenuOpen(false);
     setIsServicesOpen(false);
+    setIsCalcOpen(false);
   }, [location.pathname]);
 
   const serviceLinks = [
@@ -98,6 +100,38 @@ export default function Navigation() {
               )}
             </div>
             
+            {/* Calculators Dropdown */}
+            <div className="relative">
+              <button
+                onClick={() => setIsCalcOpen(!isCalcOpen)}
+                onMouseEnter={() => setIsCalcOpen(true)}
+                className="flex items-center gap-1 text-sm font-medium text-offwhite-dark hover:text-mint transition-colors"
+              >
+                Calculators
+                <ChevronDown className={`w-4 h-4 transition-transform ${isCalcOpen ? 'rotate-180' : ''}`} />
+              </button>
+
+              {isCalcOpen && (
+                <div
+                  onMouseLeave={() => setIsCalcOpen(false)}
+                  className="absolute top-full left-0 mt-2 w-52 bg-charcoal border border-white/10 rounded-lg shadow-xl overflow-hidden"
+                >
+                  <Link
+                    to="/wrap-calculator"
+                    className="block px-4 py-3 text-sm text-offwhite-dark hover:bg-mint/10 hover:text-mint transition-colors"
+                  >
+                    Wrap Calculator
+                  </Link>
+                  <Link
+                    to="/print-ship"
+                    className="block px-4 py-3 text-sm text-offwhite-dark hover:bg-mint/10 hover:text-mint transition-colors border-t border-white/10"
+                  >
+                    Print &amp; Ship
+                  </Link>
+                </div>
+              )}
+            </div>
+
             <Link to="/blogs" className="text-sm font-medium text-offwhite-dark hover:text-mint transition-colors">
               Blogs
             </Link>
@@ -158,6 +192,16 @@ export default function Navigation() {
             ))}
           </div>
           
+          <div className="text-center">
+            <p className="text-mint text-sm mb-3">Calculators</p>
+            <Link to="/wrap-calculator" className="block text-xl font-display font-bold text-offwhite-dark hover:text-mint transition-colors py-2">
+              Wrap Calculator
+            </Link>
+            <Link to="/print-ship" className="block text-xl font-display font-bold text-offwhite-dark hover:text-mint transition-colors py-2">
+              Print &amp; Ship
+            </Link>
+          </div>
+
           <Link to="/blogs" className="text-2xl font-display font-bold text-offwhite hover:text-mint transition-colors">
             Blogs
           </Link>
