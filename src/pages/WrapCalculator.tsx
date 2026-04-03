@@ -5,37 +5,80 @@ import MatrixBackground from '../components/MatrixBackground';
 import Footer from '../components/Footer';
 import { ChevronDown, ChevronUp, AlertTriangle } from 'lucide-react';
 
-// ── Internal pricing constants (office use only — not shown to client) ────────
-const _RATE        = 15;    // $/sqft base rate
-const _OVERPRINT   = 1.15;  // 15% overprint/waste buffer
-const _DESIGN_FEE  = 500;   // flat design fee
-const _MARKUP      = 2.5;   // final markup multiplier
+// ── Internal pricing constants (office use only) ──────────────────────────────
+const _R  = 15;   // $/sqft base rate
+const _O  = 1.15; // 15% overprint/waste buffer
+const _D  = 500;  // flat design fee
+const _M  = 2.5;  // final markup multiplier
 
-// ── Vehicle data [minSqft, maxSqft] ──────────────────────────────────────────
-const VEHICLES: Record<string, { sqft: [number, number]; icon: string; flat: boolean }> = {
-  'Sedan / Coupe':           { sqft: [50,  65],  icon: '🚗', flat: false },
-  'SUV / Crossover':         { sqft: [60,  80],  icon: '🚙', flat: false },
-  'Pickup Truck':            { sqft: [55,  75],  icon: '🛻', flat: false },
-  'Cargo Van':               { sqft: [80,  120], icon: '🚐', flat: false },
-  'Sprinter / Transit':      { sqft: [120, 180], icon: '🚌', flat: false },
-  'Box Truck (16–26 ft)':    { sqft: [180, 350], icon: '📦', flat: true  },
-  'Flatbed / Trailer':       { sqft: [200, 400], icon: '🚛', flat: true  },
-  'Fleet Vehicle (per unit)':{ sqft: [50,  120], icon: '🏢', flat: false },
+// ── Vehicle categories with exact sqft ───────────────────────────────────────
+const CATS = [
+  { name: 'Cars', icon: '🚗', vehicles: [
+    { id: 'compact_car',     label: 'Compact (Civic, Corolla, etc.)',       sqft: 45  },
+    { id: 'midsize_sedan',   label: 'Mid-Size Sedan (Camry, Accord)',        sqft: 52  },
+    { id: 'fullsize_sedan',  label: 'Full-Size Sedan (Charger, Impala)',     sqft: 60  },
+  ]},
+  { name: 'SUVs & Crossovers', icon: '🚙', vehicles: [
+    { id: 'compact_suv',   label: 'Compact SUV (RAV4, CR-V)',               sqft: 55  },
+    { id: 'midsize_suv',   label: 'Mid-Size SUV (4Runner, Explorer)',        sqft: 65  },
+    { id: 'fullsize_suv',  label: 'Full-Size SUV (Tahoe, Expedition)',       sqft: 80  },
+  ]},
+  { name: 'Pickup Trucks', icon: '🛻', vehicles: [
+    { id: 'reg_cab_pickup',   label: 'Regular / Extended Cab',              sqft: 50  },
+    { id: 'crew_short_pickup',label: 'Crew Cab – Short Bed',                sqft: 58  },
+    { id: 'crew_long_pickup', label: 'Crew Cab – Long Bed',                 sqft: 65  },
+  ]},
+  { name: 'Cargo Vans', icon: '🚐', vehicles: [
+    { id: 'compact_cargo',  label: 'Compact (Transit Connect, NV200)',      sqft: 60  },
+    { id: 'std_cargo',      label: 'Standard (Express, E-Series)',          sqft: 90  },
+    { id: 'extended_cargo', label: 'Extended (Express LWB, E-350 Ext)',     sqft: 105 },
+  ]},
+  { name: 'Sprinter / Transit Vans', icon: '🚌', vehicles: [
+    { id: 'sprinter_sr_short', label: 'Standard Roof – Short (144" WB)',    sqft: 105 },
+    { id: 'sprinter_sr_long',  label: 'Standard Roof – Long (170" WB)',     sqft: 120 },
+    { id: 'sprinter_hr_short', label: 'High Roof – Short (144" WB)',        sqft: 130 },
+    { id: 'sprinter_hr_long',  label: 'High Roof – Long (170" WB)',         sqft: 148 },
+    { id: 'sprinter_hr_ext',   label: 'High Roof – Extended (170E WB)',     sqft: 168 },
+  ]},
+  { name: 'Box Trucks', icon: '📦', vehicles: [
+    { id: 'box_10', label: '10 ft Box Truck', sqft: 150, flat: true },
+    { id: 'box_12', label: '12 ft Box Truck', sqft: 175, flat: true },
+    { id: 'box_14', label: '14 ft Box Truck', sqft: 200, flat: true },
+    { id: 'box_16', label: '16 ft Box Truck', sqft: 225, flat: true },
+    { id: 'box_20', label: '20 ft Box Truck', sqft: 275, flat: true },
+    { id: 'box_24', label: '24 ft Box Truck', sqft: 335, flat: true },
+    { id: 'box_26', label: '26 ft Box Truck', sqft: 370, flat: true },
+  ]},
+  { name: 'Enclosed Trailers', icon: '🚛', vehicles: [
+    { id: 'trailer_6x12',  label: '6×12 Enclosed Trailer',  sqft: 120, flat: true },
+    { id: 'trailer_7x14',  label: '7×14 Enclosed Trailer',  sqft: 155, flat: true },
+    { id: 'trailer_7x16',  label: '7×16 Enclosed Trailer',  sqft: 178, flat: true },
+    { id: 'trailer_8x20',  label: '8×20 Enclosed Trailer',  sqft: 232, flat: true },
+    { id: 'trailer_8x24',  label: '8×24 Enclosed Trailer',  sqft: 278, flat: true },
+    { id: 'trailer_48_semi',label: '48 ft Semi Trailer',     sqft: 500, flat: true },
+    { id: 'trailer_53_semi',label: '53 ft Semi Trailer',     sqft: 560, flat: true },
+  ]},
+] as const;
+
+type Vehicle = { id: string; label: string; sqft: number; flat?: boolean };
+
+// Flat lookup map
+const VEH_MAP: Record<string, Vehicle> = {};
+CATS.forEach(c => c.vehicles.forEach((v: any) => { VEH_MAP[v.id] = v; }));
+
+// ── Coverage ──────────────────────────────────────────────────────────────────
+const COVERAGE: Record<string, { mult: number; desc: string; spot?: boolean }> = {
+  'Full Wrap':                 { mult: 1.00, desc: 'Complete coverage — maximum impact' },
+  'Half Wrap':                 { mult: 0.55, desc: 'Strategic panels — great ROI' },
+  'Spot Graphics / Lettering': { mult: 0.25, desc: 'Logo, phone, essentials — starting at $800', spot: true },
 };
 
-// ── Coverage types ────────────────────────────────────────────────────────────
-const COVERAGE: Record<string, { multiplier: number; desc: string; spotBase?: boolean }> = {
-  'Full Wrap':                   { multiplier: 1.00, desc: 'Complete coverage — maximum impact' },
-  'Partial Wrap':                { multiplier: 0.55, desc: 'Strategic panels — great ROI' },
-  'Spot Graphics / Lettering':   { multiplier: 0.25, desc: 'Logo, phone, essentials', spotBase: true },
-};
-
-// ── Material combos ───────────────────────────────────────────────────────────
-const MATERIALS: Record<string, { multiplier: number; flatOnly: boolean; desc: string }> = {
-  'Premium Cast Vinyl (3M / Avery)': { multiplier: 1.0, flatOnly: false, desc: 'Industry gold standard — vibrant, durable, 7+ year life' },
-  'Standard Calendered Vinyl':        { multiplier: 0.9, flatOnly: true,  desc: 'Made for flat surfaces — trailers, storefronts & box trucks' },
-  'Reflective Vinyl':                 { multiplier: 2.0, flatOnly: false, desc: 'Visible day & night — ideal for service vehicles' },
-  'Chrome / Specialty Finish':        { multiplier: 2.0, flatOnly: false, desc: 'Head-turning metallic & specialty looks — 1 year warranty' },
+// ── Materials ─────────────────────────────────────────────────────────────────
+const MATERIALS: Record<string, { _m: number; flatOnly?: boolean; desc: string }> = {
+  'Premium Cast Vinyl (3M / Avery)': { _m: 1.0, desc: 'Industry gold standard — vibrant, durable, 7+ year life' },
+  'Standard Calendered Vinyl':       { _m: 0.9, flatOnly: true, desc: 'Made for flat surfaces — trailers, storefronts & box trucks' },
+  'Reflective Vinyl':                { _m: 2.0, desc: 'Visible day & night — ideal for service vehicles' },
+  'Chrome / Specialty Finish':       { _m: 2.0, desc: 'Head-turning metallic & specialty looks — 1 year warranty' },
 };
 
 // ── Component ─────────────────────────────────────────────────────────────────
@@ -44,77 +87,42 @@ export default function WrapCalculator() {
   const fromWrap     = searchParams.get('coverage');
   const fromBusiness = searchParams.get('business');
 
-  const [vehicleType, setVehicleType]   = useState('Sedan / Coupe');
-  const [coverageType, setCoverageType] = useState(fromWrap && COVERAGE[fromWrap] ? fromWrap : 'Full Wrap');
-  const [material, setMaterial]         = useState('Premium Cast Vinyl (3M / Avery)');
-  const [qty, setQty]                   = useState(1);
+  const [vehicleId, setVehicleId]   = useState('');
+  const [coverage, setCoverage]     = useState(fromWrap && COVERAGE[fromWrap] ? fromWrap : 'Full Wrap');
+  const [material, setMaterial]     = useState('Premium Cast Vinyl (3M / Avery)');
+  const [qty, setQty]               = useState(1);
   const [showBreakdown, setShowBreakdown] = useState(false);
+  const [showResult, setShowResult] = useState(false);
 
-  const vehicle   = VEHICLES[vehicleType];
-  const isFlat    = vehicle.flat;
+  const vehicle  = vehicleId ? VEH_MAP[vehicleId] : null;
+  const isFlat   = !!vehicle?.flat;
+  const effMat   = MATERIALS[material]?.flatOnly && !isFlat ? 'Premium Cast Vinyl (3M / Avery)' : material;
+  const ready    = !!vehicle;
 
-  // If selected material is flatOnly but vehicle isn't flat — reset
-  const effectiveMaterial = MATERIALS[material]?.flatOnly && !isFlat
-    ? 'Premium Cast Vinyl (3M / Avery)'
-    : material;
-
-  // ── Price calculation ─────────────────────────────────────────────────────
   const calc = useMemo(() => {
-    const [minSqft, maxSqft] = vehicle.sqft;
-    const cov = COVERAGE[coverageType];
-    const mat = MATERIALS[effectiveMaterial];
+    if (!vehicle) return null;
+    const sqft = vehicle.sqft;
+    const cov  = COVERAGE[coverage];
+    const mat  = MATERIALS[effMat];
 
-    let unitLow: number, unitHigh: number;
-
-    if (cov.spotBase) {
-      // Special spot graphics pricing: $800 base + $8/sqft above 50
-      unitLow  = Math.round(800 + Math.max(0, minSqft - 50) * 8);
-      unitHigh = Math.round(800 + Math.max(0, maxSqft - 50) * 8);
+    let unit: number;
+    if (cov.spot) {
+      unit = Math.round(800 + Math.max(0, sqft - 50) * 8);
     } else {
-      unitLow  = Math.round((minSqft * cov.multiplier * _OVERPRINT * _RATE * mat.multiplier + _DESIGN_FEE) * _MARKUP);
-      unitHigh = Math.round((maxSqft * cov.multiplier * _OVERPRINT * _RATE * mat.multiplier + _DESIGN_FEE) * _MARKUP);
+      unit = Math.round((sqft * cov.mult * _O * _R * mat._m + _D) * _M);
     }
+    const total = unit * qty;
 
-    const priceLow  = unitLow  * qty;
-    const priceHigh = unitHigh * qty;
+    const cost        = Math.round(sqft * cov.mult * _O * _R * mat._m + _D) * qty;
+    const profit      = total - cost;
+    const margin      = total > 0 ? ((profit / total) * 100).toFixed(1) : '0';
+    const impLow      = Math.round(sqft * 500);
+    const impHigh     = Math.round(sqft * 900);
 
-    // Internal cost breakdown (not shown to client)
-    const costLow  = Math.round(minSqft * cov.multiplier * _OVERPRINT * _RATE * mat.multiplier + _DESIGN_FEE);
-    const costHigh = Math.round(maxSqft * cov.multiplier * _OVERPRINT * _RATE * mat.multiplier + _DESIGN_FEE);
-
-    const sqftLow  = Math.round(minSqft * cov.multiplier * _OVERPRINT);
-    const sqftHigh = Math.round(maxSqft * cov.multiplier * _OVERPRINT);
-
-    const impressionsLow  = Math.round(minSqft * 500);
-    const impressionsHigh = Math.round(maxSqft * 900);
-
-    const profitLow  = priceLow  - costLow  * qty;
-    const profitHigh = priceHigh - costHigh * qty;
-
-    const marginLow  = priceLow  > 0 ? ((profitLow  / priceLow)  * 100).toFixed(1) : '0';
-    const marginHigh = priceHigh > 0 ? ((profitHigh / priceHigh) * 100).toFixed(1) : '0';
-
-    return {
-      priceLow, priceHigh, unitLow, unitHigh,
-      costLow: costLow * qty, costHigh: costHigh * qty,
-      sqftLow, sqftHigh, impressionsLow, impressionsHigh,
-      profitLow, profitHigh, marginLow, marginHigh,
-    };
-  }, [vehicleType, coverageType, effectiveMaterial, qty, vehicle]);
+    return { unit, total, cost, profit, margin, impLow, impHigh, sqft };
+  }, [vehicleId, coverage, effMat, qty, vehicle]);
 
   const fmt = (n: number) => `$${n.toLocaleString()}`;
-
-  // ── UI helpers ────────────────────────────────────────────────────────────
-  const Card = ({ title, children }: { title: string; children: React.ReactNode }) => (
-    <div className="bg-charcoal border border-white/10 rounded-2xl p-6 mb-4">
-      <h2 className="font-display text-lg font-bold text-offwhite mb-4">{title}</h2>
-      {children}
-    </div>
-  );
-
-  const Label = ({ children }: { children: React.ReactNode }) => (
-    <p className="text-sm text-offwhite-dark mb-2">{children}</p>
-  );
 
   return (
     <div className="relative min-h-screen bg-charcoal">
@@ -123,150 +131,226 @@ export default function WrapCalculator() {
 
       <div className="relative z-10 pt-28 pb-20 px-[4vw]">
         <div className="max-w-7xl mx-auto">
+
+          {/* Page Header */}
           <h1 className="font-display text-3xl font-bold text-offwhite mb-1">Wrap Calculator</h1>
-          <p className="text-offwhite-dark mb-4">Configure your wrap project and get instant pricing</p>
+          <p className="text-offwhite-dark mb-4">Select your vehicle, coverage, and material to get an instant estimate</p>
+
           {fromBusiness && (
             <div className="bg-mint/10 border border-mint/30 rounded-xl px-5 py-4 mb-6 flex items-center gap-3">
               <span className="text-2xl">✅</span>
               <div>
                 <p className="text-mint font-semibold">Design imported from AI Wrap Generator</p>
-                <p className="text-offwhite-dark text-sm">Business: <span className="text-offwhite">{fromBusiness}</span> · Coverage pre-filled to <span className="text-offwhite">{coverageType}</span></p>
+                <p className="text-offwhite-dark text-sm">Business: <span className="text-offwhite">{fromBusiness}</span> · Coverage pre-filled to <span className="text-offwhite">{coverage}</span></p>
               </div>
             </div>
           )}
 
           <div className="flex flex-col lg:flex-row gap-6">
 
-            {/* ── Left Column ── */}
+            {/* ── Left Column ─────────────────────────────────────────────── */}
             <div className="flex-1 min-w-0">
 
-              {/* Step 1 — Vehicle Type */}
-              <Card title="Step 1 — Vehicle Type">
-                <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-                  {Object.entries(VEHICLES).map(([name, data]) => (
-                    <button
-                      key={name}
-                      onClick={() => {
-                        setVehicleType(name);
-                        // reset calendered if switching away from flat
-                        if (!data.flat && MATERIALS[material]?.flatOnly) {
-                          setMaterial('Premium Cast Vinyl (3M / Avery)');
-                        }
-                      }}
-                      className={`flex flex-col items-center gap-2 p-4 rounded-xl border text-sm transition-all ${
-                        vehicleType === name
-                          ? 'border-mint bg-mint/10 text-mint'
-                          : 'border-white/10 bg-charcoal-light text-offwhite-dark hover:border-white/30'
-                      }`}
-                    >
-                      <span className="text-2xl">{data.icon}</span>
-                      <span className="text-xs text-center leading-tight">{name}</span>
-                      <span className="text-xs opacity-60">{data.sqft[0]}–{data.sqft[1]} sqft</span>
-                    </button>
-                  ))}
+              {/* Step 1 — Vehicle */}
+              <div className="bg-charcoal border border-white/10 rounded-2xl p-6 mb-4">
+                <div className="flex items-baseline gap-3 mb-4">
+                  <span className="text-xs font-semibold text-blue-400 font-mono opacity-70">01</span>
+                  <h2 className="font-display text-lg font-bold text-offwhite">Vehicle Type</h2>
                 </div>
-              </Card>
 
-              {/* Step 2 — Wrap Coverage */}
-              <Card title="Step 2 — Wrap Coverage">
+                {CATS.map(cat => (
+                  <div key={cat.name} className="mb-4">
+                    <div className="flex items-center gap-2 mb-2">
+                      <span className="text-lg">{cat.icon}</span>
+                      <span className="text-xs font-semibold text-offwhite-dark uppercase tracking-wider">{cat.name}</span>
+                    </div>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2">
+                      {cat.vehicles.map((v: any) => (
+                        <button
+                          key={v.id}
+                          onClick={() => {
+                            setVehicleId(v.id);
+                            if (!v.flat && MATERIALS[material]?.flatOnly) setMaterial('Premium Cast Vinyl (3M / Avery)');
+                            setShowResult(false);
+                          }}
+                          className={`p-3 rounded-xl border text-left text-sm transition-all ${
+                            vehicleId === v.id
+                              ? 'border-blue-500/40 bg-blue-500/10 text-offwhite'
+                              : 'border-white/10 bg-charcoal-light text-offwhite-dark hover:border-white/30'
+                          }`}
+                        >
+                          <div className="font-semibold text-xs leading-tight">{v.label}</div>
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              {/* Step 2 — Coverage */}
+              <div className={`bg-charcoal border border-white/10 rounded-2xl p-6 mb-4 transition-opacity duration-500 ${ready ? 'opacity-100' : 'opacity-30 pointer-events-none'}`}>
+                <div className="flex items-baseline gap-3 mb-4">
+                  <span className="text-xs font-semibold text-blue-400 font-mono opacity-70">02</span>
+                  <h2 className="font-display text-lg font-bold text-offwhite">Wrap Coverage</h2>
+                </div>
                 <div className="flex flex-col sm:flex-row gap-3">
                   {Object.entries(COVERAGE).map(([name, data]) => (
                     <button
                       key={name}
-                      onClick={() => setCoverageType(name)}
-                      className={`flex-1 py-4 px-4 rounded-xl border text-left transition-all ${
-                        coverageType === name
-                          ? 'border-mint bg-mint/10'
+                      onClick={() => { setCoverage(name); setShowResult(false); }}
+                      className={`flex-1 py-4 px-4 rounded-xl border text-left transition-all flex items-center justify-between ${
+                        coverage === name
+                          ? 'border-blue-500/40 bg-blue-500/10'
                           : 'border-white/10 bg-charcoal-light hover:border-white/30'
                       }`}
                     >
-                      <div className={`font-semibold text-sm mb-1 ${coverageType === name ? 'text-mint' : 'text-offwhite'}`}>
-                        {name}
+                      <div>
+                        <div className={`font-semibold text-sm mb-1 ${coverage === name ? 'text-offwhite' : 'text-offwhite-dark'}`}>{name}</div>
+                        <div className="text-xs text-offwhite-dark/60">{data.desc}</div>
                       </div>
-                      <div className="text-xs text-offwhite-dark">{data.desc}</div>
-                      <div className={`text-xs mt-1 font-medium ${coverageType === name ? 'text-mint' : 'text-offwhite-dark'}`}>
-                        {data.spotBase ? 'From $800' : `${Math.round(data.multiplier * 100)}% coverage`}
-                      </div>
+                      {coverage === name && (
+                        <div className="w-5 h-5 rounded-full bg-blue-500 flex items-center justify-center text-white text-xs font-bold flex-shrink-0 ml-2">✓</div>
+                      )}
                     </button>
                   ))}
                 </div>
-              </Card>
+              </div>
 
               {/* Step 3 — Material */}
-              <Card title="Step 3 — Material Selection">
+              <div className={`bg-charcoal border border-white/10 rounded-2xl p-6 mb-4 transition-opacity duration-500 ${ready ? 'opacity-100' : 'opacity-30 pointer-events-none'}`}>
+                <div className="flex items-baseline gap-3 mb-4">
+                  <span className="text-xs font-semibold text-blue-400 font-mono opacity-70">03</span>
+                  <h2 className="font-display text-lg font-bold text-offwhite">Material</h2>
+                </div>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                   {Object.entries(MATERIALS).map(([name, data]) => {
-                    const disabled = data.flatOnly && !isFlat;
+                    const disabled = !!data.flatOnly && !isFlat;
                     return (
                       <button
                         key={name}
-                        onClick={() => !disabled && setMaterial(name)}
+                        onClick={() => { if (!disabled) { setMaterial(name); setShowResult(false); } }}
                         disabled={disabled}
-                        className={`p-4 rounded-xl border text-left transition-all ${
+                        className={`p-4 rounded-xl border text-left transition-all flex items-center justify-between ${
                           disabled
                             ? 'border-white/5 opacity-30 cursor-not-allowed'
-                            : effectiveMaterial === name
-                            ? 'border-mint bg-mint/10'
+                            : effMat === name
+                            ? 'border-blue-500/40 bg-blue-500/10'
                             : 'border-white/10 bg-charcoal-light hover:border-white/30'
                         }`}
                       >
-                        <div className={`font-semibold text-sm mb-1 ${effectiveMaterial === name && !disabled ? 'text-mint' : 'text-offwhite'}`}>
-                          {name}
+                        <div>
+                          <div className={`font-semibold text-sm mb-1 ${effMat === name && !disabled ? 'text-offwhite' : 'text-offwhite-dark'}`}>{name}</div>
+                          <div className="text-xs text-offwhite-dark/60">{data.desc}</div>
+                          {data.flatOnly && <div className="text-xs text-orange-400 mt-1">Flat surfaces only</div>}
                         </div>
-                        <div className="text-xs text-offwhite-dark">{data.desc}</div>
-                        {data.flatOnly && (
-                          <div className="text-xs text-orange-400 mt-1">Flat surfaces only</div>
+                        {effMat === name && !disabled && (
+                          <div className="w-5 h-5 rounded-full bg-blue-500 flex items-center justify-center text-white text-xs font-bold flex-shrink-0 ml-2">✓</div>
                         )}
                       </button>
                     );
                   })}
                 </div>
-              </Card>
+              </div>
 
               {/* Step 4 — Quantity */}
-              <Card title="Step 4 — Quantity / Fleet">
-                <Label>Number of Vehicles</Label>
-                <div className="flex items-center gap-4">
-                  <button
-                    onClick={() => setQty(q => Math.max(1, q - 1))}
-                    className="w-10 h-10 rounded-lg border border-white/10 bg-charcoal-light text-offwhite font-bold text-lg hover:border-mint transition-colors"
-                  >−</button>
-                  <span className="text-2xl font-bold text-offwhite w-12 text-center">{qty}</span>
-                  <button
-                    onClick={() => setQty(q => q + 1)}
-                    className="w-10 h-10 rounded-lg border border-white/10 bg-charcoal-light text-offwhite font-bold text-lg hover:border-mint transition-colors"
-                  >+</button>
-                  {qty > 1 && (
-                    <span className="text-mint text-sm font-medium">Fleet pricing applied ✓</span>
-                  )}
+              <div className={`bg-charcoal border border-white/10 rounded-2xl p-6 mb-4 transition-opacity duration-500 ${ready ? 'opacity-100' : 'opacity-30 pointer-events-none'}`}>
+                <div className="flex items-baseline gap-3 mb-4">
+                  <span className="text-xs font-semibold text-blue-400 font-mono opacity-70">04</span>
+                  <h2 className="font-display text-lg font-bold text-offwhite">How Many Vehicles?</h2>
                 </div>
-              </Card>
+                <div className="flex items-center gap-4">
+                  <button onClick={() => { setQty(q => Math.max(1, q - 1)); setShowResult(false); }} className="w-11 h-11 rounded-xl border border-white/10 bg-charcoal-light text-offwhite font-bold text-xl hover:border-blue-500/40 transition-colors flex items-center justify-center">−</button>
+                  <span className="text-3xl font-bold text-offwhite w-14 text-center font-mono">{qty}</span>
+                  <button onClick={() => { setQty(q => q + 1); setShowResult(false); }} className="w-11 h-11 rounded-xl border border-white/10 bg-charcoal-light text-offwhite font-bold text-xl hover:border-blue-500/40 transition-colors flex items-center justify-center">+</button>
+                  {qty > 1 && <span className="text-blue-400 text-sm font-medium">Fleet pricing applied ✓</span>}
+                </div>
+              </div>
+
+              {/* Calculate Button */}
+              {ready && !showResult && (
+                <div className="text-center py-6">
+                  <button
+                    onClick={() => setShowResult(true)}
+                    className="btn-primary px-12 py-4 text-base font-bold"
+                  >
+                    Get My Estimate →
+                  </button>
+                </div>
+              )}
+
+              {/* Result Card */}
+              {showResult && calc && (
+                <div className="mb-6 animate-fade-up">
+                  <div className="bg-blue-500/10 border border-blue-500/20 rounded-2xl p-8 text-center relative overflow-hidden">
+                    <div className="absolute top-[-60px] left-1/2 -translate-x-1/2 w-72 h-28 bg-[radial-gradient(ellipse,rgba(59,130,246,.15),transparent)] pointer-events-none" />
+
+                    <div className="text-xs font-semibold uppercase tracking-widest text-blue-400 mb-2">Estimated Price</div>
+                    <div className="font-display text-5xl font-bold text-offwhite mb-2">{fmt(calc.total)}</div>
+                    <div className="text-sm text-offwhite-dark mb-6">
+                      for {coverage.toLowerCase()} on {vehicle?.label}{qty > 1 ? ` × ${qty} vehicles` : ''}
+                    </div>
+
+                    {/* Stats */}
+                    <div className="grid grid-cols-3 gap-4 border-t border-white/10 pt-6 mb-6">
+                      <div>
+                        <div className="text-lg font-bold text-offwhite font-mono">{calc.impLow.toLocaleString()}–{calc.impHigh.toLocaleString()}</div>
+                        <div className="text-xs text-offwhite-dark uppercase tracking-wider mt-1">Daily Impressions</div>
+                      </div>
+                      <div>
+                        <div className="text-lg font-bold text-offwhite font-mono">~$0.04</div>
+                        <div className="text-xs text-offwhite-dark uppercase tracking-wider mt-1">Est. CPM</div>
+                      </div>
+                      <div>
+                        <div className="text-lg font-bold text-offwhite font-mono">5–7 yrs</div>
+                        <div className="text-xs text-offwhite-dark uppercase tracking-wider mt-1">Wrap Life</div>
+                      </div>
+                    </div>
+
+                    <p className="text-xs text-offwhite-dark bg-charcoal-light rounded-xl px-4 py-3 mb-6 text-left leading-relaxed">
+                      This is a ballpark estimate and includes custom design. Final pricing depends on vehicle condition, design complexity, and turnaround. We'll give you an exact quote after a quick look at the vehicle.
+                    </p>
+
+                    <a href="tel:7206791230" className="btn-primary inline-flex items-center gap-2 mb-4">
+                      📞 Call (720) 679-1230
+                    </a>
+
+                    <div>
+                      <button
+                        onClick={() => { setVehicleId(''); setCoverage('Full Wrap'); setMaterial('Premium Cast Vinyl (3M / Avery)'); setQty(1); setShowResult(false); window.scrollTo({ top: 0, behavior: 'smooth' }); }}
+                        className="btn-outline text-sm"
+                      >↺ Start Over</button>
+                    </div>
+                  </div>
+                </div>
+              )}
+
             </div>
 
-            {/* ── Right Column — Quote Summary ── */}
+            {/* ── Right Column — Quote Summary ─────────────────────────────── */}
             <div className="lg:w-80 xl:w-96">
               <div className="sticky top-24">
                 <div className="bg-charcoal border border-white/10 rounded-2xl p-6">
                   <h2 className="font-display text-lg font-bold text-offwhite mb-4">Quote Summary</h2>
 
-                  {/* Vehicle summary */}
                   <div className="bg-charcoal-light rounded-xl p-4 mb-4 text-sm space-y-2">
                     <div className="flex justify-between">
                       <span className="text-offwhite-dark">Vehicle:</span>
-                      <span className="text-offwhite">{VEHICLES[vehicleType].icon} {vehicleType}</span>
+                      <span className="text-offwhite text-right max-w-[180px] leading-tight">{vehicle ? vehicle.label : '—'}</span>
                     </div>
                     <div className="flex justify-between">
                       <span className="text-offwhite-dark">Coverage:</span>
-                      <span className="text-offwhite">{coverageType}</span>
+                      <span className="text-offwhite">{coverage}</span>
                     </div>
                     <div className="flex justify-between">
                       <span className="text-offwhite-dark">Material:</span>
-                      <span className="text-offwhite text-right max-w-[160px] leading-tight">{effectiveMaterial}</span>
+                      <span className="text-offwhite text-right max-w-[160px] leading-tight">{effMat}</span>
                     </div>
-                    <div className="flex justify-between">
-                      <span className="text-offwhite-dark">Est. Sqft:</span>
-                      <span className="text-offwhite">{calc.sqftLow}–{calc.sqftHigh} sqft</span>
-                    </div>
+                    {calc && (
+                      <div className="flex justify-between">
+                        <span className="text-offwhite-dark">Sqft:</span>
+                        <span className="text-offwhite">{calc.sqft} sqft</span>
+                      </div>
+                    )}
                     {qty > 1 && (
                       <div className="flex justify-between">
                         <span className="text-offwhite-dark">Vehicles:</span>
@@ -288,7 +372,7 @@ export default function WrapCalculator() {
                     <div className="space-y-2 mb-4 text-sm border-t border-white/10 pt-3">
                       <div className="flex justify-between">
                         <span className="text-offwhite-dark">Base Rate:</span>
-                        <span className="text-offwhite">${_RATE}/sqft</span>
+                        <span className="text-offwhite">${_R}/sqft</span>
                       </div>
                       <div className="flex justify-between">
                         <span className="text-offwhite-dark">Waste Buffer:</span>
@@ -296,11 +380,11 @@ export default function WrapCalculator() {
                       </div>
                       <div className="flex justify-between">
                         <span className="text-offwhite-dark">Design Fee:</span>
-                        <span className="text-offwhite">{fmt(_DESIGN_FEE)}</span>
+                        <span className="text-offwhite">{fmt(_D)}</span>
                       </div>
                       <div className="flex justify-between border-t border-white/10 pt-2">
-                        <span className="text-offwhite-dark">Total Range:</span>
-                        <span className="text-offwhite">{fmt(calc.priceLow)} – {fmt(calc.priceHigh)}</span>
+                        <span className="text-offwhite-dark">Markup:</span>
+                        <span className="text-offwhite">{_M}×</span>
                       </div>
                     </div>
                   )}
@@ -309,56 +393,54 @@ export default function WrapCalculator() {
                   <div className="bg-mint/10 border border-mint/30 rounded-xl p-4 mb-4">
                     <div className="text-offwhite-dark text-xs mb-1">Estimated Retail Price</div>
                     <div className="text-mint font-display text-2xl font-bold">
-                      {fmt(calc.priceLow)} – {fmt(calc.priceHigh)}
+                      {calc ? fmt(calc.total) : '—'}
                     </div>
-                    {qty > 1 && (
-                      <div className="text-offwhite-dark text-xs mt-1">
-                        {fmt(calc.unitLow)} – {fmt(calc.unitHigh)} per unit
-                      </div>
+                    {calc && qty > 1 && (
+                      <div className="text-offwhite-dark text-xs mt-1">{fmt(calc.unit)} per unit</div>
                     )}
                   </div>
 
                   {/* Impressions */}
-                  <div className="bg-charcoal-light rounded-xl p-4 mb-4 text-sm">
-                    <div className="text-offwhite-dark text-xs mb-2">Estimated Ad Impressions / Year</div>
-                    <div className="text-offwhite font-semibold">
-                      {calc.impressionsLow.toLocaleString()} – {calc.impressionsHigh.toLocaleString()}
+                  {calc && (
+                    <div className="bg-charcoal-light rounded-xl p-4 mb-4 text-sm">
+                      <div className="text-offwhite-dark text-xs mb-2">Estimated Daily Impressions</div>
+                      <div className="text-offwhite font-semibold">
+                        {calc.impLow.toLocaleString()} – {calc.impHigh.toLocaleString()}
+                      </div>
+                      <div className="flex justify-between text-xs text-offwhite-dark mt-2">
+                        <span>Est. CPM: ~$0.04</span>
+                        <span>Wrap Life: 5–7 yrs</span>
+                      </div>
                     </div>
-                    <div className="flex justify-between text-xs text-offwhite-dark mt-2">
-                      <span>Est. CPM: ~$0.04</span>
-                      <span>Wrap Life: 5–7 yrs</span>
-                    </div>
-                  </div>
+                  )}
 
-                  {/* Office-only section */}
-                  <div className="bg-orange-500/10 border border-orange-500/30 rounded-xl p-4 text-xs">
-                    <div className="flex items-center gap-2 text-orange-400 font-semibold mb-2">
-                      <AlertTriangle className="w-3.5 h-3.5" />
-                      FOR OFFICE USE ONLY — DO NOT SHARE WITH CLIENT
+                  {/* Office-only */}
+                  {calc && (
+                    <div className="bg-orange-500/10 border border-orange-500/30 rounded-xl p-4 text-xs mb-4">
+                      <div className="flex items-center gap-2 text-orange-400 font-semibold mb-2">
+                        <AlertTriangle className="w-3.5 h-3.5" />
+                        FOR OFFICE USE ONLY
+                      </div>
+                      <div className="flex justify-between text-offwhite-dark mb-1">
+                        <span>Internal Cost:</span>
+                        <span className="text-offwhite">{fmt(calc.cost)}</span>
+                      </div>
+                      <div className="flex justify-between text-offwhite-dark mb-1">
+                        <span>Profit:</span>
+                        <span className="text-offwhite">{fmt(calc.profit)}</span>
+                      </div>
+                      <div className="flex justify-between text-offwhite-dark mb-1">
+                        <span>Margin:</span>
+                        <span className="text-offwhite">{calc.margin}%</span>
+                      </div>
+                      <div className="flex justify-between text-offwhite-dark">
+                        <span>Markup:</span>
+                        <span className="text-offwhite">{_M}×</span>
+                      </div>
                     </div>
-                    <div className="flex justify-between text-offwhite-dark mb-1">
-                      <span>Internal Cost:</span>
-                      <span className="text-offwhite">{fmt(calc.costLow)} – {fmt(calc.costHigh)}</span>
-                    </div>
-                    <div className="flex justify-between text-offwhite-dark mb-1">
-                      <span>Profit:</span>
-                      <span className="text-offwhite">{fmt(calc.profitLow)} – {fmt(calc.profitHigh)}</span>
-                    </div>
-                    <div className="flex justify-between text-offwhite-dark mb-1">
-                      <span>Margin:</span>
-                      <span className="text-offwhite">{calc.marginLow}% – {calc.marginHigh}%</span>
-                    </div>
-                    <div className="flex justify-between text-offwhite-dark">
-                      <span>Markup:</span>
-                      <span className="text-offwhite">{_MARKUP}x</span>
-                    </div>
-                  </div>
+                  )}
 
-                  {/* CTA */}
-                  <a
-                    href="tel:+17206791230"
-                    className="btn-primary w-full text-center mt-4 block"
-                  >
+                  <a href="tel:+17206791230" className="btn-primary w-full text-center block">
                     Get Your Quote — (720) 679-1230
                   </a>
                 </div>
