@@ -1,13 +1,10 @@
 import { useEffect, useRef } from 'react';
 
-// Flipped and reversed Japanese Katakana characters
-const FLIPPED_KATAKANA = 'ᄀᄂᄃᄅᄆᄇᄉᄊᄋᄌᄍᄎᄏᄐᄑ하ᅢᅣᅤᅥᅦᅧᅨᅩᅪᅫᅬᅭᅮᅯᅰᅱᅲᅳᅴᅵᆨᆩᆪᆫᆬᆭᆯᆰᆱᆲᆳᆴᆵᆶᆷᆸᆹᆺᆻᆼᆽᆾᆿᇀᇁᇂ';
-
-// Additional flipped symbols and characters
-const FLIPPED_SYMBOLS = 'ƆƎƧИႱႧႰႳႵႷႸႹႺႻႼႽႾႿჀჁჂჃჄჅაბგდევზთიკლმნოპჟრსტუფქღყშჩცძწჭხჯჰ';
-
-// Combine all flipped characters
-const MATRIX_CHARS = FLIPPED_KATAKANA + FLIPPED_SYMBOLS;
+const IMG_SRC  = '/ikonic background banner.png';
+const IMG_W    = 80;   // width of each falling image tile (px)
+const COLS     = 10;   // number of columns across the screen
+const SPEED_MIN = 0.4;
+const SPEED_MAX = 1.2;
 
 export default function MatrixBackground() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -15,92 +12,61 @@ export default function MatrixBackground() {
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
-
     const ctx = canvas.getContext('2d');
     if (!ctx) return;
 
-    // Set canvas size
     const resizeCanvas = () => {
-      canvas.width = window.innerWidth;
+      canvas.width  = window.innerWidth;
       canvas.height = window.innerHeight;
     };
     resizeCanvas();
     window.addEventListener('resize', resizeCanvas);
 
-    // Font settings
-    const fontSize = 16;
-    const columns = Math.ceil(canvas.width / fontSize);
-    
-    // Initialize drops at random positions
-    const drops: number[] = [];
-    for (let i = 0; i < columns; i++) {
-      drops[i] = Math.random() * -canvas.height;
-    }
+    const img = new Image();
+    img.src = IMG_SRC;
 
-    // Speed variation for each column
-    const speeds: number[] = [];
-    for (let i = 0; i < columns; i++) {
-      speeds[i] = Math.random() * 2 + 1;
-    }
-
-    // Animation loop
     let animationId: number;
-    
-    const draw = () => {
-      // Create fade effect for trails
-      ctx.fillStyle = 'rgba(11, 13, 16, 0.08)';
-      ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-      // Set font
-      ctx.font = `bold ${fontSize}px monospace`;
-      ctx.textBaseline = 'top';
+    img.onload = () => {
+      const aspect = img.naturalHeight / img.naturalWidth;
+      const imgH   = Math.round(IMG_W * aspect);
+      const colGap = canvas.width / COLS;
 
-      // Draw characters for each column
-      for (let i = 0; i < drops.length; i++) {
-        // Pick random flipped character
-        const char = MATRIX_CHARS[Math.floor(Math.random() * MATRIX_CHARS.length)];
-        
-        const x = i * fontSize;
-        const y = drops[i];
+      type Drop = { x: number; y: number; speed: number; opacity: number };
 
-        // Draw the character with Matrix-style green
-        // Some characters are brighter (the "head" of the stream)
-        const isBright = Math.random() > 0.97;
-        
-        if (isBright) {
-          // Bright white-green for leading characters
-          ctx.fillStyle = '#ccffcc';
-          ctx.shadowColor = '#00ff41';
-          ctx.shadowBlur = 15;
-        } else {
-          // Matrix green for trailing characters
-          const brightness = Math.random() * 0.4 + 0.6;
-          ctx.fillStyle = `rgba(0, 255, 65, ${brightness})`;
-          ctx.shadowBlur = 0;
+      const drops: Drop[] = Array.from({ length: COLS }, (_, i) => ({
+        x:       i * colGap + (colGap - IMG_W) / 2,
+        y:       Math.random() * -canvas.height,
+        speed:   SPEED_MIN + Math.random() * (SPEED_MAX - SPEED_MIN),
+        opacity: 0.06 + Math.random() * 0.14,
+      }));
+
+      const draw = () => {
+        // Fade trail — dark overlay each frame
+        ctx.fillStyle = 'rgba(10, 14, 26, 0.18)';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+        for (const d of drops) {
+          ctx.save();
+          ctx.globalAlpha = d.opacity;
+          ctx.drawImage(img, d.x, d.y, IMG_W, imgH);
+          ctx.restore();
+
+          d.y += d.speed;
+
+          // Reset when fully off screen
+          if (d.y > canvas.height + imgH) {
+            d.y       = -imgH - Math.random() * canvas.height * 0.5;
+            d.speed   = SPEED_MIN + Math.random() * (SPEED_MAX - SPEED_MIN);
+            d.opacity = 0.06 + Math.random() * 0.14;
+          }
         }
-        
-        // Draw the flipped character
-        ctx.save();
-        ctx.translate(x + fontSize / 2, y + fontSize / 2);
-        ctx.scale(-1, -1); // Flip upside down and backward
-        ctx.translate(-(x + fontSize / 2), -(y + fontSize / 2));
-        ctx.fillText(char, x, y);
-        ctx.restore();
 
-        // Move drop down
-        drops[i] += speeds[i];
+        animationId = requestAnimationFrame(draw);
+      };
 
-        // Reset drop when it goes off screen
-        if (drops[i] > canvas.height) {
-          drops[i] = -fontSize;
-          speeds[i] = Math.random() * 2 + 1;
-        }
-      }
-
-      animationId = requestAnimationFrame(draw);
+      draw();
     };
-
-    draw();
 
     return () => {
       window.removeEventListener('resize', resizeCanvas);
@@ -112,11 +78,7 @@ export default function MatrixBackground() {
     <canvas
       ref={canvasRef}
       className="fixed inset-0 pointer-events-none"
-      style={{ 
-        opacity: 0.7,
-        zIndex: 0,
-        background: 'transparent'
-      }}
+      style={{ zIndex: 0, background: 'transparent' }}
     />
   );
 }
