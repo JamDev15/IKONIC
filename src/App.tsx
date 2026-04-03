@@ -21,6 +21,7 @@ import CRMAutomation from './pages/CRMAutomation';
 import ReputationManagement from './pages/ReputationManagement';
 import SpeedToLead from './pages/SpeedToLead';
 import MarketingSystems from './pages/MarketingSystems';
+import WrapCalculator from './pages/WrapCalculator';
 import './App.css';
 
 gsap.registerPlugin(ScrollTrigger);
@@ -92,6 +93,7 @@ function App() {
           <Route path="/services/reputation" element={<ReputationManagement />} />
           <Route path="/services/speed-to-lead" element={<SpeedToLead />} />
           <Route path="/services/marketing" element={<MarketingSystems />} />
+          <Route path="/wrap-calculator" element={<WrapCalculator />} />
         </Routes>
       </div>
     </Router>
