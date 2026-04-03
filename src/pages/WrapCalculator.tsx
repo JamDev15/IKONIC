@@ -3,7 +3,6 @@ import { useSearchParams } from 'react-router-dom';
 import Navigation from '../components/Navigation';
 import MatrixBackground from '../components/MatrixBackground';
 import Footer from '../components/Footer';
-import { ChevronDown, ChevronUp, AlertTriangle } from 'lucide-react';
 
 // ── Internal pricing constants (office use only) ──────────────────────────────
 const _R  = 15;   // $/sqft base rate
@@ -67,10 +66,11 @@ const VEH_MAP: Record<string, Vehicle> = {};
 CATS.forEach(c => c.vehicles.forEach((v: any) => { VEH_MAP[v.id] = v; }));
 
 // ── Coverage ──────────────────────────────────────────────────────────────────
-const COVERAGE: Record<string, { mult: number; desc: string; spot?: boolean }> = {
-  'Full Wrap':                 { mult: 1.00, desc: 'Complete coverage — maximum impact' },
-  'Half Wrap':                 { mult: 0.55, desc: 'Strategic panels — great ROI' },
-  'Spot Graphics / Lettering': { mult: 0.25, desc: 'Logo, phone, essentials — starting at $800', spot: true },
+const COVERAGE: Record<string, { mult: number; desc: string; spot?: boolean; reflectiveSpot?: boolean }> = {
+  'Full Wrap':                       { mult: 1.00, desc: 'Complete coverage — maximum impact' },
+  'Half Wrap':                       { mult: 0.55, desc: 'Strategic panels — great ROI' },
+  'Spot Graphics / Lettering':       { mult: 0.25, desc: 'Logo, phone, essentials — starting at $800', spot: true },
+  'Reflective Spot Graphics':        { mult: 0.25, desc: 'High-visibility reflective lettering & logos', reflectiveSpot: true },
 };
 
 // ── Materials ─────────────────────────────────────────────────────────────────
@@ -91,7 +91,6 @@ export default function WrapCalculator() {
   const [coverage, setCoverage]     = useState(fromWrap && COVERAGE[fromWrap] ? fromWrap : 'Full Wrap');
   const [material, setMaterial]     = useState('Premium Cast Vinyl (3M / Avery)');
   const [qty, setQty]               = useState(1);
-  const [showBreakdown, setShowBreakdown] = useState(false);
   const [showResult, setShowResult] = useState(false);
 
   const vehicle  = vehicleId ? VEH_MAP[vehicleId] : null;
@@ -108,18 +107,17 @@ export default function WrapCalculator() {
     let unit: number;
     if (cov.spot) {
       unit = Math.round(800 + Math.max(0, sqft - 50) * 8);
+    } else if (cov.reflectiveSpot) {
+      // Reflective spot: same base as spot graphics but with reflective vinyl multiplier (2x)
+      unit = Math.round((800 + Math.max(0, sqft - 50) * 8) * 2);
     } else {
       unit = Math.round((sqft * cov.mult * _O * _R * mat._m + _D) * _M);
     }
-    const total = unit * qty;
+    const total  = unit * qty;
+    const impLow  = Math.round(sqft * 500);
+    const impHigh = Math.round(sqft * 900);
 
-    const cost        = Math.round(sqft * cov.mult * _O * _R * mat._m + _D) * qty;
-    const profit      = total - cost;
-    const margin      = total > 0 ? ((profit / total) * 100).toFixed(1) : '0';
-    const impLow      = Math.round(sqft * 500);
-    const impHigh     = Math.round(sqft * 900);
-
-    return { unit, total, cost, profit, margin, impLow, impHigh, sqft };
+    return { unit, total, impLow, impHigh, sqft };
   }, [vehicleId, coverage, effMat, qty, vehicle]);
 
   const fmt = (n: number) => `$${n.toLocaleString()}`;
@@ -345,12 +343,7 @@ export default function WrapCalculator() {
                       <span className="text-offwhite-dark">Material:</span>
                       <span className="text-offwhite text-right max-w-[160px] leading-tight">{effMat}</span>
                     </div>
-                    {calc && (
-                      <div className="flex justify-between">
-                        <span className="text-offwhite-dark">Sqft:</span>
-                        <span className="text-offwhite">{calc.sqft} sqft</span>
-                      </div>
-                    )}
+
                     {qty > 1 && (
                       <div className="flex justify-between">
                         <span className="text-offwhite-dark">Vehicles:</span>
@@ -360,35 +353,6 @@ export default function WrapCalculator() {
                   </div>
 
                   {/* Cost Breakdown toggle */}
-                  <button
-                    onClick={() => setShowBreakdown(!showBreakdown)}
-                    className="flex items-center justify-between w-full text-sm text-offwhite-dark hover:text-offwhite transition-colors mb-3"
-                  >
-                    <span>Cost Breakdown</span>
-                    {showBreakdown ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
-                  </button>
-
-                  {showBreakdown && (
-                    <div className="space-y-2 mb-4 text-sm border-t border-white/10 pt-3">
-                      <div className="flex justify-between">
-                        <span className="text-offwhite-dark">Base Rate:</span>
-                        <span className="text-offwhite">${_R}/sqft</span>
-                      </div>
-                      <div className="flex justify-between">
-                        <span className="text-offwhite-dark">Waste Buffer:</span>
-                        <span className="text-offwhite">15%</span>
-                      </div>
-                      <div className="flex justify-between">
-                        <span className="text-offwhite-dark">Design Fee:</span>
-                        <span className="text-offwhite">{fmt(_D)}</span>
-                      </div>
-                      <div className="flex justify-between border-t border-white/10 pt-2">
-                        <span className="text-offwhite-dark">Markup:</span>
-                        <span className="text-offwhite">{_M}×</span>
-                      </div>
-                    </div>
-                  )}
-
                   {/* Retail Price */}
                   <div className="bg-mint/10 border border-mint/30 rounded-xl p-4 mb-4">
                     <div className="text-offwhite-dark text-xs mb-1">Estimated Retail Price</div>
@@ -414,31 +378,6 @@ export default function WrapCalculator() {
                     </div>
                   )}
 
-                  {/* Office-only */}
-                  {calc && (
-                    <div className="bg-orange-500/10 border border-orange-500/30 rounded-xl p-4 text-xs mb-4">
-                      <div className="flex items-center gap-2 text-orange-400 font-semibold mb-2">
-                        <AlertTriangle className="w-3.5 h-3.5" />
-                        FOR OFFICE USE ONLY
-                      </div>
-                      <div className="flex justify-between text-offwhite-dark mb-1">
-                        <span>Internal Cost:</span>
-                        <span className="text-offwhite">{fmt(calc.cost)}</span>
-                      </div>
-                      <div className="flex justify-between text-offwhite-dark mb-1">
-                        <span>Profit:</span>
-                        <span className="text-offwhite">{fmt(calc.profit)}</span>
-                      </div>
-                      <div className="flex justify-between text-offwhite-dark mb-1">
-                        <span>Margin:</span>
-                        <span className="text-offwhite">{calc.margin}%</span>
-                      </div>
-                      <div className="flex justify-between text-offwhite-dark">
-                        <span>Markup:</span>
-                        <span className="text-offwhite">{_M}×</span>
-                      </div>
-                    </div>
-                  )}
 
                   <a href="tel:+17206791230" className="btn-primary w-full text-center block">
                     Get Your Quote — (720) 679-1230
