@@ -1,4 +1,5 @@
 import { useRef, useLayoutEffect, useState, useCallback, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { Check, Phone, ArrowRight, Car, Truck, Van, Upload, Sparkles, Send, RefreshCw, Palette, Type, Image as ImageIcon, FileImage, Box, FileOutput, Wrench, Plus, X, ExternalLink, Download, Mail } from 'lucide-react';
@@ -65,6 +66,7 @@ const suggestedServices: {[key: string]: string[]} = {
 };
 
 export default function CommercialWraps() {
+  const navigate = useNavigate();
   const heroRef = useRef<HTMLDivElement>(null);
   const funnelRef = useRef<HTMLDivElement>(null);
   const benefitsRef = useRef<HTMLDivElement>(null);
@@ -1295,7 +1297,31 @@ We will prepare production-ready vector files and contact you at ${formData.emai
                 )}
               </div>
 
-              <div className="flex justify-between mt-6">
+              {/* Get Wrap Quote CTA */}
+              <div className="mt-6 p-5 bg-gradient-to-r from-mint/20 to-mint/5 border border-mint/40 rounded-xl">
+                <p className="text-offwhite font-semibold mb-1">Love your design? Get an instant price quote!</p>
+                <p className="text-offwhite-dark text-sm mb-4">We'll pre-fill your wrap details in our calculator so you get an accurate estimate in seconds.</p>
+                <button
+                  onClick={() => {
+                    const coverageMap: Record<string, string> = {
+                      full: 'Full Wrap',
+                      partial: 'Partial Wrap',
+                      decals: 'Spot Graphics / Lettering',
+                    };
+                    const params = new URLSearchParams({
+                      coverage: coverageMap[formData.wrapStyle] || 'Full Wrap',
+                      business: formData.businessName,
+                    });
+                    navigate(`/wrap-calculator?${params.toString()}`);
+                  }}
+                  className="btn-primary inline-flex items-center gap-2 w-full justify-center"
+                >
+                  <ArrowRight className="w-4 h-4" />
+                  Get Your Wrap Quote →
+                </button>
+              </div>
+
+              <div className="flex justify-between mt-4">
                 <button
                   onClick={() => setCurrentStep(7)}
                   className="btn-outline"

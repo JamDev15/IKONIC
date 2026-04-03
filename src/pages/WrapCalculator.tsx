@@ -1,4 +1,5 @@
 import { useState, useMemo } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import Navigation from '../components/Navigation';
 import MatrixBackground from '../components/MatrixBackground';
 import Footer from '../components/Footer';
@@ -39,8 +40,12 @@ const MATERIALS: Record<string, { multiplier: number; flatOnly: boolean; desc: s
 
 // ── Component ─────────────────────────────────────────────────────────────────
 export default function WrapCalculator() {
+  const [searchParams] = useSearchParams();
+  const fromWrap     = searchParams.get('coverage');
+  const fromBusiness = searchParams.get('business');
+
   const [vehicleType, setVehicleType]   = useState('Sedan / Coupe');
-  const [coverageType, setCoverageType] = useState('Full Wrap');
+  const [coverageType, setCoverageType] = useState(fromWrap && COVERAGE[fromWrap] ? fromWrap : 'Full Wrap');
   const [material, setMaterial]         = useState('Premium Cast Vinyl (3M / Avery)');
   const [qty, setQty]                   = useState(1);
   const [showBreakdown, setShowBreakdown] = useState(false);
@@ -119,7 +124,16 @@ export default function WrapCalculator() {
       <div className="relative z-10 pt-28 pb-20 px-[4vw]">
         <div className="max-w-7xl mx-auto">
           <h1 className="font-display text-3xl font-bold text-offwhite mb-1">Wrap Calculator</h1>
-          <p className="text-offwhite-dark mb-8">Configure your wrap project and get instant pricing</p>
+          <p className="text-offwhite-dark mb-4">Configure your wrap project and get instant pricing</p>
+          {fromBusiness && (
+            <div className="bg-mint/10 border border-mint/30 rounded-xl px-5 py-4 mb-6 flex items-center gap-3">
+              <span className="text-2xl">✅</span>
+              <div>
+                <p className="text-mint font-semibold">Design imported from AI Wrap Generator</p>
+                <p className="text-offwhite-dark text-sm">Business: <span className="text-offwhite">{fromBusiness}</span> · Coverage pre-filled to <span className="text-offwhite">{coverageType}</span></p>
+              </div>
+            </div>
+          )}
 
           <div className="flex flex-col lg:flex-row gap-6">
 
