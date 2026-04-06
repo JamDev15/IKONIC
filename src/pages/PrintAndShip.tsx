@@ -102,24 +102,27 @@ function getToggleStyle(active: boolean): React.CSSProperties {
 export default function PrintAndShip() {
   const [searchParams] = useSearchParams();
 
-  const [w, setW]                     = useState('');
-  const [h, setH]                     = useState('');
-  const [mat, setMat]                 = useState('');
-  const [lamType, setLamType]         = useState('gloss');
-  const [qty, setQty]                 = useState(1);
-  const [needDesign, setNeedDesign]   = useState(false);
-  const [aiRework, setAiRework]       = useState(false);
-  const [vehicleInfo, setVehicleInfo] = useState('');
-  const [notes, setNotes]             = useState('');
-  const [files, setFiles]             = useState<File[]>([]);
-  const [zip, setZip]                 = useState('');
-  const [showResult, setShowResult]   = useState(false);
-  const [mounted, setMounted]         = useState(false);
-  const [paying, setPaying]           = useState(false);
-  const [payError, setPayError]       = useState('');
+  const [w, setW]                       = useState('');
+  const [h, setH]                       = useState('');
+  const [mat, setMat]                   = useState('');
+  const [lamType, setLamType]           = useState('gloss');
+  const [qty, setQty]                   = useState(1);
+  const [needDesign, setNeedDesign]     = useState(false);
+  const [aiRework, setAiRework]         = useState(false);
+  const [vehicleInfo, setVehicleInfo]   = useState('');
+  const [notes, setNotes]               = useState('');
+  const [files, setFiles]               = useState<File[]>([]);
+  const [zip, setZip]                   = useState('');
+  const [customerName, setCustomerName] = useState('');
+  const [customerEmail, setCustomerEmail] = useState('');
+  const [customerPhone, setCustomerPhone] = useState('');
+  const [showResult, setShowResult]     = useState(false);
+  const [mounted, setMounted]           = useState(false);
+  const [paying, setPaying]             = useState(false);
+  const [payError, setPayError]         = useState('');
   const resultRef = useRef<HTMLDivElement>(null);
 
-  // Payment status from Stripe redirect
+  // Payment status from GHL redirect
   const paymentStatus = searchParams.get('payment'); // 'success' | 'cancelled'
 
   useEffect(() => { document.title = 'Print & Ship — Ikonic'; }, []);
@@ -181,11 +184,15 @@ export default function PrintAndShip() {
   const reset = () => {
     setW(''); setH(''); setMat(''); setLamType('gloss'); setQty(1);
     setNeedDesign(false); setAiRework(false); setVehicleInfo(''); setNotes('');
-    setFiles([]); setZip(''); setShowResult(false); setPayError('');
+    setFiles([]); setZip('');
+    setCustomerName(''); setCustomerEmail(''); setCustomerPhone('');
+    setShowResult(false); setPayError('');
   };
 
   const handlePayNow = async () => {
     if (!est) return;
+    if (!customerName.trim()) { setPayError('Please enter your name before paying.'); return; }
+    if (!customerEmail.trim()) { setPayError('Please enter your email before paying.'); return; }
     setPaying(true);
     setPayError('');
     try {
@@ -195,18 +202,9 @@ export default function PrintAndShip() {
         body: JSON.stringify({
           total: est.total,
           description: `${qty}× ${w}"×${h}" ${selectedMat?.name}${lamType !== 'none' ? ` + ${selectedLam?.name} Lam` : ''}`,
-          metadata: {
-            width: w, height: h, qty: String(qty),
-            material: selectedMat?.name ?? '',
-            lamination: lamType !== 'none' ? (selectedLam?.name ?? '') : 'none',
-            design: needDesign ? 'yes' : 'no',
-            ai_rework: aiRework ? 'yes' : 'no',
-            vehicle: vehicleInfo,
-            zip,
-            notes,
-          },
-          successUrl: `${window.location.origin}/print-and-ship?payment=success`,
-          cancelUrl:  `${window.location.origin}/print-and-ship?payment=cancelled`,
+          customerName: customerName.trim(),
+          customerEmail: customerEmail.trim(),
+          customerPhone: customerPhone.trim() || undefined,
         }),
       });
       const data = await res.json();
@@ -223,7 +221,8 @@ export default function PrintAndShip() {
   };
 
   const est = calculate();
-  const ready = w && h && mat && lamType && parseFloat(w) > 0 && parseFloat(h) > 0;
+  const ready = w && h && mat && lamType && parseFloat(w) > 0 && parseFloat(h) > 0
+    && customerName.trim() && customerEmail.trim();
 
   return (
     <div className="relative min-h-screen bg-charcoal">
@@ -400,6 +399,20 @@ export default function PrintAndShip() {
           {/* Zip */}
           <Label text="Shipping Zip Code" />
           <InputField value={zip} onChange={v => { setZip(v); setShowResult(false); }} placeholder="e.g. 80033" />
+          <div style={{ height: 24 }} />
+
+          {/* Contact Info */}
+          <div style={{ borderTop: '1px solid rgba(255,255,255,.06)', paddingTop: 24, marginTop: 8 }}>
+            <div style={{ fontSize: 13, fontWeight: 700, color: '#3b82f6', textTransform: 'uppercase', letterSpacing: '.08em', marginBottom: 16 }}>Your Contact Info</div>
+            <Label text="Full Name" />
+            <InputField value={customerName} onChange={setCustomerName} placeholder="Jane Smith" />
+            <div style={{ height: 14 }} />
+            <Label text="Email" />
+            <InputField value={customerEmail} onChange={setCustomerEmail} placeholder="jane@company.com" type="email" />
+            <div style={{ height: 14 }} />
+            <Label text="Phone (optional)" />
+            <InputField value={customerPhone} onChange={setCustomerPhone} placeholder="(720) 555-0100" type="tel" />
+          </div>
 
           {/* Calculate Button */}
           {ready && !showResult && (
@@ -470,7 +483,7 @@ export default function PrintAndShip() {
               )}
 
               <div style={{ fontSize: 12, color: '#4b5563', marginBottom: 20 }}>
-                Secure checkout via Stripe · All major cards accepted
+                Secure checkout · All major cards accepted
               </div>
 
               <div style={{ width: '100%', height: 1, background: 'rgba(255,255,255,.06)', marginBottom: 18 }} />
