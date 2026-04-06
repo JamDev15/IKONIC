@@ -10,6 +10,16 @@ const _O  = 1.15; // 15% overprint/waste buffer
 const _D  = 500;  // flat design fee
 const _M  = 2.5;  // final markup multiplier
 
+// ── Box truck & pickup identifiers ───────────────────────────────────────────
+const BOX_TRUCK_IDS = new Set(['box_10','box_12','box_14','box_16','box_20','box_24','box_26']);
+const PICKUP_IDS    = new Set(['reg_cab_pickup','crew_short_pickup','crew_long_pickup']);
+const CAB_SQFT_BOX  = 40; // extra sqft when box truck cab is included
+const PICKUP_CAB_SQFT: Record<string, number> = {
+  'reg_cab_pickup':    20,
+  'crew_short_pickup': 22,
+  'crew_long_pickup':  22,
+};
+
 // ── Vehicle categories with exact sqft ───────────────────────────────────────
 const CATS = [
   { name: 'Cars', icon: '🚗', vehicles: [
@@ -23,9 +33,9 @@ const CATS = [
     { id: 'fullsize_suv',  label: 'Full-Size SUV (Tahoe, Expedition)',       sqft: 80  },
   ]},
   { name: 'Pickup Trucks', icon: '🛻', vehicles: [
-    { id: 'reg_cab_pickup',   label: 'Regular / Extended Cab',              sqft: 50  },
-    { id: 'crew_short_pickup',label: 'Crew Cab – Short Bed',                sqft: 58  },
-    { id: 'crew_long_pickup', label: 'Crew Cab – Long Bed',                 sqft: 65  },
+    { id: 'reg_cab_pickup',    label: 'Regular / Extended Cab',             sqft: 50  },
+    { id: 'crew_short_pickup', label: 'Crew Cab – Short Bed',               sqft: 58  },
+    { id: 'crew_long_pickup',  label: 'Crew Cab – Long Bed',                sqft: 65  },
   ]},
   { name: 'Cargo Vans', icon: '🚐', vehicles: [
     { id: 'compact_cargo',  label: 'Compact (Transit Connect, NV200)',      sqft: 60  },
@@ -49,13 +59,13 @@ const CATS = [
     { id: 'box_26', label: '26 ft Box Truck', sqft: 370, flat: true },
   ]},
   { name: 'Enclosed Trailers', icon: '🚛', vehicles: [
-    { id: 'trailer_6x12',  label: '6×12 Enclosed Trailer',  sqft: 120, flat: true },
-    { id: 'trailer_7x14',  label: '7×14 Enclosed Trailer',  sqft: 155, flat: true },
-    { id: 'trailer_7x16',  label: '7×16 Enclosed Trailer',  sqft: 178, flat: true },
-    { id: 'trailer_8x20',  label: '8×20 Enclosed Trailer',  sqft: 232, flat: true },
-    { id: 'trailer_8x24',  label: '8×24 Enclosed Trailer',  sqft: 278, flat: true },
-    { id: 'trailer_48_semi',label: '48 ft Semi Trailer',     sqft: 500, flat: true },
-    { id: 'trailer_53_semi',label: '53 ft Semi Trailer',     sqft: 560, flat: true },
+    { id: 'trailer_6x12',   label: '6×12 Enclosed Trailer', sqft: 120, flat: true },
+    { id: 'trailer_7x14',   label: '7×14 Enclosed Trailer', sqft: 155, flat: true },
+    { id: 'trailer_7x16',   label: '7×16 Enclosed Trailer', sqft: 178, flat: true },
+    { id: 'trailer_8x20',   label: '8×20 Enclosed Trailer', sqft: 232, flat: true },
+    { id: 'trailer_8x24',   label: '8×24 Enclosed Trailer', sqft: 278, flat: true },
+    { id: 'trailer_48_semi', label: '48 ft Semi Trailer',   sqft: 500, flat: true },
+    { id: 'trailer_53_semi', label: '53 ft Semi Trailer',   sqft: 560, flat: true },
   ]},
 ] as const;
 
@@ -66,11 +76,12 @@ const VEH_MAP: Record<string, Vehicle> = {};
 CATS.forEach(c => c.vehicles.forEach((v: any) => { VEH_MAP[v.id] = v; }));
 
 // ── Coverage ──────────────────────────────────────────────────────────────────
-const COVERAGE: Record<string, { mult: number; desc: string; spot?: boolean; reflectiveSpot?: boolean }> = {
-  'Full Wrap':                       { mult: 1.00, desc: 'Complete coverage — maximum impact' },
-  'Half Wrap':                       { mult: 0.55, desc: 'Strategic panels — great ROI' },
-  'Spot Graphics / Lettering':       { mult: 0.25, desc: 'Logo, phone, essentials — starting at $800', spot: true },
-  'Reflective Spot Graphics':        { mult: 0.25, desc: 'High-visibility reflective lettering & logos', reflectiveSpot: true },
+const COVERAGE: Record<string, { mult: number; desc: string; spot?: boolean; reflectiveSpot?: boolean; cabOnly?: boolean }> = {
+  'Full Wrap':                 { mult: 1.00, desc: 'Complete coverage — maximum impact' },
+  'Half Wrap':                 { mult: 0.55, desc: 'Strategic panels — great ROI' },
+  'Cab Only':                  { mult: 1.00, desc: 'Cab wrap only — pickup trucks', cabOnly: true },
+  'Spot Graphics / Lettering': { mult: 0.25, desc: 'Logo, phone, essentials — starting at $800', spot: true },
+  'Reflective Spot Graphics':  { mult: 0.25, desc: 'High-visibility reflective lettering & logos', reflectiveSpot: true },
 };
 
 // ── Materials ─────────────────────────────────────────────────────────────────
@@ -81,46 +92,109 @@ const MATERIALS: Record<string, { _m: number; flatOnly?: boolean; desc: string }
   'Chrome / Specialty Finish':       { _m: 2.0, desc: 'Head-turning metallic & specialty looks — 1 year warranty' },
 };
 
+// ── Finishes ──────────────────────────────────────────────────────────────────
+const FINISHES: Record<string, { mult: number; desc: string }> = {
+  'Gloss':             { mult: 1.00, desc: 'Classic high-shine finish — most popular' },
+  'Satin':             { mult: 1.06, desc: 'Smooth matte sheen — premium look' },
+  'Satin / Gloss Mix': { mult: 1.10, desc: 'Contrast gloss & satin panels for a custom two-tone effect' },
+};
+
+// ── Toggle Button ─────────────────────────────────────────────────────────────
+function Toggle({ on, onToggle }: { on: boolean; onToggle: () => void }) {
+  return (
+    <button
+      onClick={onToggle}
+      className={`relative w-12 h-6 rounded-full transition-colors flex-shrink-0 ${on ? 'bg-blue-500' : 'bg-white/20'}`}
+    >
+      <span className={`absolute top-0.5 left-0.5 w-5 h-5 rounded-full bg-white shadow transition-transform ${on ? 'translate-x-6' : 'translate-x-0'}`} />
+    </button>
+  );
+}
+
 // ── Component ─────────────────────────────────────────────────────────────────
 export default function WrapCalculator() {
   const [searchParams] = useSearchParams();
   const fromWrap     = searchParams.get('coverage');
   const fromBusiness = searchParams.get('business');
 
-  const [vehicleId, setVehicleId]   = useState('');
-  const [coverage, setCoverage]     = useState(fromWrap && COVERAGE[fromWrap] ? fromWrap : 'Full Wrap');
-  const [material, setMaterial]     = useState('Premium Cast Vinyl (3M / Avery)');
-  const [qty, setQty]               = useState(1);
-  const [showResult, setShowResult] = useState(false);
+  const [vehicleId, setVehicleId]                   = useState('');
+  const [coverage, setCoverage]                     = useState(fromWrap && COVERAGE[fromWrap] ? fromWrap : 'Full Wrap');
+  const [material, setMaterial]                     = useState('Premium Cast Vinyl (3M / Avery)');
+  const [qty, setQty]                               = useState(1);
+  const [showResult, setShowResult]                 = useState(false);
+  const [cabWrap, setCabWrap]                       = useState(true);
+  const [reflectiveOverlay, setReflectiveOverlay]   = useState(false);
+  const [finish, setFinish]                         = useState('Gloss');
 
-  const vehicle  = vehicleId ? VEH_MAP[vehicleId] : null;
-  const isFlat   = !!vehicle?.flat;
-  const effMat   = MATERIALS[material]?.flatOnly && !isFlat ? 'Premium Cast Vinyl (3M / Avery)' : material;
-  const ready    = !!vehicle;
+  const vehicle    = vehicleId ? VEH_MAP[vehicleId] : null;
+  const isFlat     = !!vehicle?.flat;
+  const isBoxTruck = BOX_TRUCK_IDS.has(vehicleId);
+  const isPickup   = PICKUP_IDS.has(vehicleId);
+  const effMat     = MATERIALS[material]?.flatOnly && !isFlat ? 'Premium Cast Vinyl (3M / Avery)' : material;
+  const ready      = !!vehicle;
 
   const calc = useMemo(() => {
     if (!vehicle) return null;
-    const sqft = vehicle.sqft;
-    const cov  = COVERAGE[coverage];
-    const mat  = MATERIALS[effMat];
+    const cov = COVERAGE[coverage];
+    if (!cov) return null;
+
+    // Effective sqft
+    let sqft = vehicle.sqft;
+    if (isBoxTruck && cabWrap) sqft += CAB_SQFT_BOX;
+    if (cov.cabOnly && isPickup) sqft = PICKUP_CAB_SQFT[vehicleId] ?? 20;
+
+    const mat     = MATERIALS[effMat];
+    const finMult = (!cov.spot && !cov.reflectiveSpot) ? FINISHES[finish].mult : 1;
 
     let unit: number;
     if (cov.spot) {
       unit = Math.round(800 + Math.max(0, sqft - 50) * 8);
     } else if (cov.reflectiveSpot) {
-      // Reflective spot: same base as spot graphics but with reflective vinyl multiplier (2x)
       unit = Math.round((800 + Math.max(0, sqft - 50) * 8) * 2);
     } else {
-      unit = Math.round((sqft * cov.mult * _O * _R * mat._m + _D) * _M);
+      unit = Math.round((sqft * cov.mult * _O * _R * mat._m + _D) * _M * finMult);
     }
-    const total  = unit * qty;
+
+    // Reflective overlay surcharge over full wrap (+25%)
+    if (coverage === 'Full Wrap' && reflectiveOverlay) {
+      unit = Math.round(unit * 1.25);
+    }
+
+    const total   = unit * qty;
     const impLow  = Math.round(sqft * 500);
     const impHigh = Math.round(sqft * 900);
 
     return { unit, total, impLow, impHigh, sqft };
-  }, [vehicleId, coverage, effMat, qty, vehicle]);
+  }, [vehicleId, coverage, effMat, qty, vehicle, cabWrap, reflectiveOverlay, finish, isBoxTruck, isPickup]);
 
   const fmt = (n: number) => `$${n.toLocaleString()}`;
+
+  const handleVehicleSelect = (v: any) => {
+    setVehicleId(v.id);
+    if (!v.flat && MATERIALS[material]?.flatOnly) setMaterial('Premium Cast Vinyl (3M / Avery)');
+    // If we're leaving a pickup and Cab Only was selected, reset coverage
+    if (!PICKUP_IDS.has(v.id) && coverage === 'Cab Only') setCoverage('Full Wrap');
+    setShowResult(false);
+  };
+
+  const handleCoverageSelect = (name: string) => {
+    setCoverage(name);
+    // Clear reflective overlay when leaving Full Wrap
+    if (name !== 'Full Wrap') setReflectiveOverlay(false);
+    setShowResult(false);
+  };
+
+  const handleStartOver = () => {
+    setVehicleId('');
+    setCoverage('Full Wrap');
+    setMaterial('Premium Cast Vinyl (3M / Avery)');
+    setQty(1);
+    setShowResult(false);
+    setCabWrap(true);
+    setReflectiveOverlay(false);
+    setFinish('Gloss');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
 
   return (
     <div className="relative min-h-screen bg-charcoal">
@@ -166,11 +240,7 @@ export default function WrapCalculator() {
                       {cat.vehicles.map((v: any) => (
                         <button
                           key={v.id}
-                          onClick={() => {
-                            setVehicleId(v.id);
-                            if (!v.flat && MATERIALS[material]?.flatOnly) setMaterial('Premium Cast Vinyl (3M / Avery)');
-                            setShowResult(false);
-                          }}
+                          onClick={() => handleVehicleSelect(v)}
                           className={`p-3 rounded-xl border text-left text-sm transition-all ${
                             vehicleId === v.id
                               ? 'border-blue-500/40 bg-blue-500/10 text-offwhite'
@@ -183,6 +253,24 @@ export default function WrapCalculator() {
                     </div>
                   </div>
                 ))}
+
+                {/* Box Truck — Cab Wrap Toggle */}
+                {isBoxTruck && (
+                  <div className="mt-2 border-t border-white/10 pt-4">
+                    <div className="flex items-center justify-between gap-4">
+                      <div>
+                        <div className="text-sm font-semibold text-offwhite">Include Cab Wrap?</div>
+                        <div className="text-xs text-offwhite-dark mt-0.5">
+                          Wraps the driver cab area — adds ~{CAB_SQFT_BOX} sqft to pricing
+                        </div>
+                      </div>
+                      <Toggle on={cabWrap} onToggle={() => { setCabWrap(w => !w); setShowResult(false); }} />
+                    </div>
+                    <div className="text-xs mt-2 text-offwhite-dark/60">
+                      {cabWrap ? '✓ Cab included in pricing' : '— Box body only pricing'}
+                    </div>
+                  </div>
+                )}
               </div>
 
               {/* Step 2 — Coverage */}
@@ -191,12 +279,14 @@ export default function WrapCalculator() {
                   <span className="text-xs font-semibold text-blue-400 font-mono opacity-70">02</span>
                   <h2 className="font-display text-lg font-bold text-offwhite">Wrap Coverage</h2>
                 </div>
-                <div className="flex flex-col sm:flex-row gap-3">
-                  {Object.entries(COVERAGE).map(([name, data]) => (
+                <div className="flex flex-col sm:flex-row gap-3 flex-wrap">
+                  {Object.entries(COVERAGE)
+                    .filter(([, data]) => !data.cabOnly || isPickup)
+                    .map(([name, data]) => (
                     <button
                       key={name}
-                      onClick={() => { setCoverage(name); setShowResult(false); }}
-                      className={`flex-1 py-4 px-4 rounded-xl border text-left transition-all flex items-center justify-between ${
+                      onClick={() => handleCoverageSelect(name)}
+                      className={`flex-1 py-4 px-4 rounded-xl border text-left transition-all flex items-center justify-between min-w-[140px] ${
                         coverage === name
                           ? 'border-blue-500/40 bg-blue-500/10'
                           : 'border-white/10 bg-charcoal-light hover:border-white/30'
@@ -212,6 +302,24 @@ export default function WrapCalculator() {
                     </button>
                   ))}
                 </div>
+
+                {/* Reflective Overlay Toggle — only when Full Wrap is selected */}
+                {coverage === 'Full Wrap' && (
+                  <div className="mt-4 border-t border-white/10 pt-4">
+                    <div className="flex items-center justify-between gap-4">
+                      <div>
+                        <div className="text-sm font-semibold text-offwhite">Add Reflective Graphics Overlay?</div>
+                        <div className="text-xs text-offwhite-dark mt-0.5">
+                          High-visibility reflective accents applied over the full wrap — adds 25%
+                        </div>
+                      </div>
+                      <Toggle on={reflectiveOverlay} onToggle={() => { setReflectiveOverlay(o => !o); setShowResult(false); }} />
+                    </div>
+                    {reflectiveOverlay && (
+                      <div className="text-xs text-blue-400 mt-2">✓ Reflective overlay included — ideal for emergency, utility & service fleets</div>
+                    )}
+                  </div>
+                )}
               </div>
 
               {/* Step 3 — Material */}
@@ -250,10 +358,44 @@ export default function WrapCalculator() {
                 </div>
               </div>
 
-              {/* Step 4 — Quantity */}
+              {/* Step 4 — Finish */}
               <div className={`bg-charcoal border border-white/10 rounded-2xl p-6 mb-4 transition-opacity duration-500 ${ready ? 'opacity-100' : 'opacity-30 pointer-events-none'}`}>
                 <div className="flex items-baseline gap-3 mb-4">
                   <span className="text-xs font-semibold text-blue-400 font-mono opacity-70">04</span>
+                  <h2 className="font-display text-lg font-bold text-offwhite">Finish</h2>
+                </div>
+                <div className="flex flex-col sm:flex-row gap-3">
+                  {Object.entries(FINISHES).map(([name, data]) => (
+                    <button
+                      key={name}
+                      onClick={() => { setFinish(name); setShowResult(false); }}
+                      className={`flex-1 py-4 px-4 rounded-xl border text-left transition-all flex items-center justify-between ${
+                        finish === name
+                          ? 'border-blue-500/40 bg-blue-500/10'
+                          : 'border-white/10 bg-charcoal-light hover:border-white/30'
+                      }`}
+                    >
+                      <div>
+                        <div className={`font-semibold text-sm mb-1 ${finish === name ? 'text-offwhite' : 'text-offwhite-dark'}`}>
+                          {name}
+                          {data.mult > 1 && (
+                            <span className="ml-2 text-xs text-orange-400">+{Math.round((data.mult - 1) * 100)}%</span>
+                          )}
+                        </div>
+                        <div className="text-xs text-offwhite-dark/60">{data.desc}</div>
+                      </div>
+                      {finish === name && (
+                        <div className="w-5 h-5 rounded-full bg-blue-500 flex items-center justify-center text-white text-xs font-bold flex-shrink-0 ml-2">✓</div>
+                      )}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              {/* Step 5 — Quantity */}
+              <div className={`bg-charcoal border border-white/10 rounded-2xl p-6 mb-4 transition-opacity duration-500 ${ready ? 'opacity-100' : 'opacity-30 pointer-events-none'}`}>
+                <div className="flex items-baseline gap-3 mb-4">
+                  <span className="text-xs font-semibold text-blue-400 font-mono opacity-70">05</span>
                   <h2 className="font-display text-lg font-bold text-offwhite">How Many Vehicles?</h2>
                 </div>
                 <div className="flex items-center gap-4">
@@ -285,7 +427,11 @@ export default function WrapCalculator() {
                     <div className="text-xs font-semibold uppercase tracking-widest text-blue-400 mb-2">Estimated Price</div>
                     <div className="font-display text-5xl font-bold text-offwhite mb-2">{fmt(calc.total)}</div>
                     <div className="text-sm text-offwhite-dark mb-6">
-                      for {coverage.toLowerCase()} on {vehicle?.label}{qty > 1 ? ` × ${qty} vehicles` : ''}
+                      {coverage.toLowerCase()} on {vehicle?.label}
+                      {isBoxTruck && ` (${cabWrap ? 'cab included' : 'box body only'})`}
+                      {qty > 1 ? ` × ${qty} vehicles` : ''}
+                      {reflectiveOverlay && ' · reflective overlay'}
+                      {finish !== 'Gloss' && ` · ${finish} finish`}
                     </div>
 
                     {/* Stats */}
@@ -313,10 +459,7 @@ export default function WrapCalculator() {
                     </a>
 
                     <div>
-                      <button
-                        onClick={() => { setVehicleId(''); setCoverage('Full Wrap'); setMaterial('Premium Cast Vinyl (3M / Avery)'); setQty(1); setShowResult(false); window.scrollTo({ top: 0, behavior: 'smooth' }); }}
-                        className="btn-outline text-sm"
-                      >↺ Start Over</button>
+                      <button onClick={handleStartOver} className="btn-outline text-sm">↺ Start Over</button>
                     </div>
                   </div>
                 </div>
@@ -335,15 +478,39 @@ export default function WrapCalculator() {
                       <span className="text-offwhite-dark">Vehicle:</span>
                       <span className="text-offwhite text-right max-w-[180px] leading-tight">{vehicle ? vehicle.label : '—'}</span>
                     </div>
+                    {isBoxTruck && (
+                      <div className="flex justify-between">
+                        <span className="text-offwhite-dark">Cab Wrap:</span>
+                        <span className={cabWrap ? 'text-offwhite' : 'text-offwhite-dark'}>
+                          {cabWrap ? 'Yes (included)' : 'No (box only)'}
+                        </span>
+                      </div>
+                    )}
                     <div className="flex justify-between">
                       <span className="text-offwhite-dark">Coverage:</span>
                       <span className="text-offwhite">{coverage}</span>
                     </div>
+                    {coverage === 'Full Wrap' && (
+                      <div className="flex justify-between">
+                        <span className="text-offwhite-dark">Reflective Overlay:</span>
+                        <span className={reflectiveOverlay ? 'text-blue-400' : 'text-offwhite-dark'}>
+                          {reflectiveOverlay ? 'Yes (+25%)' : 'No'}
+                        </span>
+                      </div>
+                    )}
                     <div className="flex justify-between">
                       <span className="text-offwhite-dark">Material:</span>
                       <span className="text-offwhite text-right max-w-[160px] leading-tight">{effMat}</span>
                     </div>
-
+                    <div className="flex justify-between">
+                      <span className="text-offwhite-dark">Finish:</span>
+                      <span className="text-offwhite">
+                        {finish}
+                        {FINISHES[finish].mult > 1 && (
+                          <span className="text-orange-400 text-xs ml-1">+{Math.round((FINISHES[finish].mult - 1) * 100)}%</span>
+                        )}
+                      </span>
+                    </div>
                     {qty > 1 && (
                       <div className="flex justify-between">
                         <span className="text-offwhite-dark">Vehicles:</span>
@@ -352,7 +519,6 @@ export default function WrapCalculator() {
                     )}
                   </div>
 
-                  {/* Cost Breakdown toggle */}
                   {/* Retail Price */}
                   <div className="bg-mint/10 border border-mint/30 rounded-xl p-4 mb-4">
                     <div className="text-offwhite-dark text-xs mb-1">Estimated Retail Price</div>
@@ -377,7 +543,6 @@ export default function WrapCalculator() {
                       </div>
                     </div>
                   )}
-
 
                   <a href="tel:+17206791230" className="btn-primary w-full text-center block">
                     Get Your Quote — (720) 679-1230
