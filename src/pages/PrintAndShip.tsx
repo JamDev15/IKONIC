@@ -102,27 +102,24 @@ function getToggleStyle(active: boolean): React.CSSProperties {
 export default function PrintAndShip() {
   const [searchParams] = useSearchParams();
 
-  const [w, setW]                       = useState('');
-  const [h, setH]                       = useState('');
-  const [mat, setMat]                   = useState('');
-  const [lamType, setLamType]           = useState('gloss');
-  const [qty, setQty]                   = useState(1);
-  const [needDesign, setNeedDesign]     = useState(false);
-  const [aiRework, setAiRework]         = useState(false);
-  const [vehicleInfo, setVehicleInfo]   = useState('');
-  const [notes, setNotes]               = useState('');
-  const [files, setFiles]               = useState<File[]>([]);
-  const [zip, setZip]                   = useState('');
-  const [customerName, setCustomerName] = useState('');
-  const [customerEmail, setCustomerEmail] = useState('');
-  const [customerPhone, setCustomerPhone] = useState('');
-  const [showResult, setShowResult]     = useState(false);
-  const [mounted, setMounted]           = useState(false);
-  const [paying, setPaying]             = useState(false);
-  const [payError, setPayError]         = useState('');
+  const [w, setW]                     = useState('');
+  const [h, setH]                     = useState('');
+  const [mat, setMat]                 = useState('');
+  const [lamType, setLamType]         = useState('gloss');
+  const [qty, setQty]                 = useState(1);
+  const [needDesign, setNeedDesign]   = useState(false);
+  const [aiRework, setAiRework]       = useState(false);
+  const [vehicleInfo, setVehicleInfo] = useState('');
+  const [notes, setNotes]             = useState('');
+  const [files, setFiles]             = useState<File[]>([]);
+  const [zip, setZip]                 = useState('');
+  const [showResult, setShowResult]   = useState(false);
+  const [mounted, setMounted]         = useState(false);
+  const [paying, setPaying]           = useState(false);
+  const [payError, setPayError]       = useState('');
   const resultRef = useRef<HTMLDivElement>(null);
 
-  // Payment status from GHL redirect
+  // Payment status from Square redirect
   const paymentStatus = searchParams.get('payment'); // 'success' | 'cancelled'
 
   useEffect(() => { document.title = 'Print & Ship — Ikonic'; }, []);
@@ -184,15 +181,11 @@ export default function PrintAndShip() {
   const reset = () => {
     setW(''); setH(''); setMat(''); setLamType('gloss'); setQty(1);
     setNeedDesign(false); setAiRework(false); setVehicleInfo(''); setNotes('');
-    setFiles([]); setZip('');
-    setCustomerName(''); setCustomerEmail(''); setCustomerPhone('');
-    setShowResult(false); setPayError('');
+    setFiles([]); setZip(''); setShowResult(false); setPayError('');
   };
 
   const handlePayNow = async () => {
     if (!est) return;
-    if (!customerName.trim()) { setPayError('Please enter your name before paying.'); return; }
-    if (!customerEmail.trim()) { setPayError('Please enter your email before paying.'); return; }
     setPaying(true);
     setPayError('');
     try {
@@ -202,9 +195,7 @@ export default function PrintAndShip() {
         body: JSON.stringify({
           total: est.total,
           description: `${qty}× ${w}"×${h}" ${selectedMat?.name}${lamType !== 'none' ? ` + ${selectedLam?.name} Lam` : ''}`,
-          customerName: customerName.trim(),
-          customerEmail: customerEmail.trim(),
-          customerPhone: customerPhone.trim() || undefined,
+          successUrl: `${window.location.origin}/print-and-ship?payment=success`,
         }),
       });
       const data = await res.json();
@@ -221,8 +212,7 @@ export default function PrintAndShip() {
   };
 
   const est = calculate();
-  const ready = w && h && mat && lamType && parseFloat(w) > 0 && parseFloat(h) > 0
-    && customerName.trim() && customerEmail.trim();
+  const ready = w && h && mat && lamType && parseFloat(w) > 0 && parseFloat(h) > 0;
 
   return (
     <div className="relative min-h-screen bg-charcoal">
@@ -399,20 +389,6 @@ export default function PrintAndShip() {
           {/* Zip */}
           <Label text="Shipping Zip Code" />
           <InputField value={zip} onChange={v => { setZip(v); setShowResult(false); }} placeholder="e.g. 80033" />
-          <div style={{ height: 24 }} />
-
-          {/* Contact Info */}
-          <div style={{ borderTop: '1px solid rgba(255,255,255,.06)', paddingTop: 24, marginTop: 8 }}>
-            <div style={{ fontSize: 13, fontWeight: 700, color: '#3b82f6', textTransform: 'uppercase', letterSpacing: '.08em', marginBottom: 16 }}>Your Contact Info</div>
-            <Label text="Full Name" />
-            <InputField value={customerName} onChange={setCustomerName} placeholder="Jane Smith" />
-            <div style={{ height: 14 }} />
-            <Label text="Email" />
-            <InputField value={customerEmail} onChange={setCustomerEmail} placeholder="jane@company.com" type="email" />
-            <div style={{ height: 14 }} />
-            <Label text="Phone (optional)" />
-            <InputField value={customerPhone} onChange={setCustomerPhone} placeholder="(720) 555-0100" type="tel" />
-          </div>
 
           {/* Calculate Button */}
           {ready && !showResult && (
@@ -449,7 +425,10 @@ export default function PrintAndShip() {
                 <Row label={`Printing — ${est.linearFeet} lf · ${selectedMat?.name}${lamType !== 'none' ? ` + ${selectedLam?.name} Lam` : ''}`} value={`$${est.printCost.toLocaleString()}`} />
                 {est.designCost > 0 && <Row label="Custom Design" value={`$${est.designCost.toLocaleString()}`} />}
                 {est.aiCost > 0 && <Row label="AI Art Rework" value={`$${est.aiCost.toLocaleString()}`} />}
-                {est.shipEst !== null && <Row label="Estimated Shipping (USPS Priority)" value={`~$${est.shipEst}`} />}
+                {est.shipEst !== null
+                  ? <Row label="Estimated Shipping (USPS Priority)" value={`~$${est.shipEst}`} />
+                  : <Row label="Shipping" value="Enter zip code above to estimate" />
+                }
               </div>
 
               <div style={{
@@ -457,7 +436,7 @@ export default function PrintAndShip() {
                 fontSize: 13, color: '#94a3b8', lineHeight: 1.6, marginBottom: 24,
                 border: '1px solid rgba(59,130,246,.08)', textAlign: 'left',
               }}>
-                This is an estimate. Final pricing confirmed after we review your files and specs. Shipping calculated at time of order based on destination.
+                This is an estimate. Final pricing confirmed after we review your files and specs. Shipping cost will be added at time of order if not estimated above.
               </div>
 
               {/* Pay Now */}
