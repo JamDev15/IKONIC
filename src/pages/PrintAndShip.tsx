@@ -1,4 +1,5 @@
 import { useState, useRef, useEffect } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import Navigation from '../components/Navigation';
 import MatrixBackground from '../components/MatrixBackground';
 import Footer from '../components/Footer';
@@ -99,6 +100,8 @@ function getToggleStyle(active: boolean): React.CSSProperties {
 // ── Main Component ────────────────────────────────────────────────────────────
 
 export default function PrintAndShip() {
+  const [searchParams] = useSearchParams();
+
   const [w, setW]                     = useState('');
   const [h, setH]                     = useState('');
   const [mat, setMat]                 = useState('');
@@ -112,7 +115,12 @@ export default function PrintAndShip() {
   const [zip, setZip]                 = useState('');
   const [showResult, setShowResult]   = useState(false);
   const [mounted, setMounted]         = useState(false);
+  const [paying, setPaying]           = useState(false);
+  const [payError, setPayError]       = useState('');
   const resultRef = useRef<HTMLDivElement>(null);
+
+  // Payment status from Stripe redirect
+  const paymentStatus = searchParams.get('payment'); // 'success' | 'cancelled'
 
   useEffect(() => { document.title = 'Print & Ship — Ikonic'; }, []);
   useEffect(() => { const t = setTimeout(() => setMounted(true), 100); return () => clearTimeout(t); }, []);
@@ -173,7 +181,45 @@ export default function PrintAndShip() {
   const reset = () => {
     setW(''); setH(''); setMat(''); setLamType('gloss'); setQty(1);
     setNeedDesign(false); setAiRework(false); setVehicleInfo(''); setNotes('');
-    setFiles([]); setZip(''); setShowResult(false);
+    setFiles([]); setZip(''); setShowResult(false); setPayError('');
+  };
+
+  const handlePayNow = async () => {
+    if (!est) return;
+    setPaying(true);
+    setPayError('');
+    try {
+      const res = await fetch('/api/create-checkout-session', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          total: est.total,
+          description: `${qty}× ${w}"×${h}" ${selectedMat?.name}${lamType !== 'none' ? ` + ${selectedLam?.name} Lam` : ''}`,
+          metadata: {
+            width: w, height: h, qty: String(qty),
+            material: selectedMat?.name ?? '',
+            lamination: lamType !== 'none' ? (selectedLam?.name ?? '') : 'none',
+            design: needDesign ? 'yes' : 'no',
+            ai_rework: aiRework ? 'yes' : 'no',
+            vehicle: vehicleInfo,
+            zip,
+            notes,
+          },
+          successUrl: `${window.location.origin}/print-and-ship?payment=success`,
+          cancelUrl:  `${window.location.origin}/print-and-ship?payment=cancelled`,
+        }),
+      });
+      const data = await res.json();
+      if (data.url) {
+        window.location.href = data.url;
+      } else {
+        setPayError(data.error || 'Could not start checkout. Please call us.');
+      }
+    } catch {
+      setPayError('Could not connect to payment server. Please call us.');
+    } finally {
+      setPaying(false);
+    }
   };
 
   const est = calculate();
@@ -185,6 +231,26 @@ export default function PrintAndShip() {
       <Navigation />
 
       <div style={{ position: 'relative', zIndex: 10, maxWidth: 600, margin: '0 auto', padding: '112px 20px 80px', fontFamily: "'Outfit', sans-serif", color: '#e8e8e8' }}>
+
+        {/* Payment Status Banner */}
+        {paymentStatus === 'success' && (
+          <div style={{ background: 'rgba(16,185,129,.1)', border: '1px solid rgba(16,185,129,.3)', borderRadius: 14, padding: '18px 22px', marginBottom: 24, display: 'flex', alignItems: 'center', gap: 14 }}>
+            <span style={{ fontSize: 28 }}>✅</span>
+            <div>
+              <div style={{ fontSize: 15, fontWeight: 700, color: '#10b981' }}>Payment received — thank you!</div>
+              <div style={{ fontSize: 13, color: '#64748b', marginTop: 4 }}>We'll review your order and reach out shortly to confirm details and get your files.</div>
+            </div>
+          </div>
+        )}
+        {paymentStatus === 'cancelled' && (
+          <div style={{ background: 'rgba(239,68,68,.08)', border: '1px solid rgba(239,68,68,.2)', borderRadius: 14, padding: '18px 22px', marginBottom: 24, display: 'flex', alignItems: 'center', gap: 14 }}>
+            <span style={{ fontSize: 28 }}>↩️</span>
+            <div>
+              <div style={{ fontSize: 15, fontWeight: 700, color: '#ef4444' }}>Payment cancelled</div>
+              <div style={{ fontSize: 13, color: '#64748b', marginTop: 4 }}>No charge was made. You can try again below or give us a call.</div>
+            </div>
+          </div>
+        )}
 
         {/* Header */}
         <header style={{
@@ -381,13 +447,40 @@ export default function PrintAndShip() {
                 This is an estimate. Final pricing confirmed after we review your files and specs. Shipping calculated at time of order based on destination.
               </div>
 
+              {/* Pay Now */}
+              <button
+                onClick={handlePayNow}
+                disabled={paying}
+                style={{
+                  display: 'inline-flex', alignItems: 'center', gap: 10,
+                  background: paying ? 'rgba(16,185,129,.4)' : 'linear-gradient(135deg,#10b981,#059669)',
+                  color: '#fff', border: 'none', borderRadius: 12, padding: '16px 36px',
+                  fontSize: 16, fontWeight: 700, fontFamily: 'inherit', cursor: paying ? 'not-allowed' : 'pointer',
+                  boxShadow: '0 0 40px rgba(16,185,129,.3),0 4px 20px rgba(0,0,0,.3)',
+                  transition: 'all .2s ease', marginBottom: 12, width: '100%', justifyContent: 'center',
+                }}
+              >
+                {paying ? '⏳ Redirecting to checkout…' : `💳 Pay Now — $${est.total.toLocaleString()}`}
+              </button>
+
+              {payError && (
+                <div style={{ fontSize: 13, color: '#ef4444', marginBottom: 12, background: 'rgba(239,68,68,.08)', borderRadius: 8, padding: '10px 14px', border: '1px solid rgba(239,68,68,.2)' }}>
+                  {payError}
+                </div>
+              )}
+
+              <div style={{ fontSize: 12, color: '#4b5563', marginBottom: 20 }}>
+                Secure checkout via Stripe · All major cards accepted
+              </div>
+
+              <div style={{ width: '100%', height: 1, background: 'rgba(255,255,255,.06)', marginBottom: 18 }} />
+
               <a href="tel:7206791230" style={{
                 display: 'inline-flex', alignItems: 'center', gap: 10,
-                background: 'linear-gradient(135deg,#3b82f6,#2563eb)', color: '#fff',
-                borderRadius: 12, padding: '14px 32px', fontSize: 16, fontWeight: 700,
+                background: 'rgba(59,130,246,.1)', color: '#93c5fd', border: '1px solid rgba(59,130,246,.2)',
+                borderRadius: 12, padding: '12px 28px', fontSize: 14, fontWeight: 600,
                 textDecoration: 'none', fontFamily: 'inherit',
-                boxShadow: '0 0 40px rgba(59,130,246,.25),0 4px 20px rgba(0,0,0,.3)',
-              }}>📞 Call (720) 679-1230</a>
+              }}>📞 Prefer to call? (720) 679-1230</a>
 
               <div style={{ marginTop: 14 }}>
                 <button onClick={reset} style={{
