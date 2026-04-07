@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { Calendar, User, Clock, Tag, ArrowLeft, Loader2 } from 'lucide-react';
+import { Calendar, Clock, Tag, ArrowLeft, Loader2 } from 'lucide-react';
 import Navigation from '../components/Navigation';
 import MatrixBackground from '../components/MatrixBackground';
 import Footer from '../components/Footer';
