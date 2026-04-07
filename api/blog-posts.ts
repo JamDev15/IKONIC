@@ -1,57 +1,59 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node';
 
-const GHL_BLOG_RSS = process.env.GHL_BLOG_RSS_URL || '';
+const GHL_BLOG_URL = 'https://go.ikonicmarketing303.com/blogs';
 
-function parseRSS(xml: string) {
-  const items: any[] = [];
-  const itemMatches = xml.matchAll(/<item>([\s\S]*?)<\/item>/g);
-
-  for (const match of itemMatches) {
-    const content = match[1];
-
-    const get = (tag: string) => {
-      const m = content.match(new RegExp(`<${tag}[^>]*><!\\[CDATA\\[([\\s\\S]*?)\\]\\]><\\/${tag}>|<${tag}[^>]*>([\\s\\S]*?)<\\/${tag}>`));
-      return m ? (m[1] || m[2] || '').trim() : '';
-    };
-
-    const imgMatch = content.match(/https?:\/\/[^\s"'<>]+\.(jpg|jpeg|png|webp|gif)/i);
-    const enclosureMatch = content.match(/<enclosure[^>]+url="([^"]+)"/);
-    const mediaMatch = content.match(/<media:content[^>]+url="([^"]+)"/);
-
-    items.push({
-      title: get('title'),
-      excerpt: get('description').replace(/<[^>]+>/g, '').slice(0, 200).trim(),
-      link: get('link'),
-      date: new Date(get('pubDate')).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }),
-      author: get('author') || get('dc:creator') || 'Ikonic Team',
-      category: get('category') || 'Marketing',
-      image: enclosureMatch?.[1] || mediaMatch?.[1] || imgMatch?.[0] || '',
-    });
+function resolveNuxtArr(arr: any[], idx: number, depth = 0): any {
+  if (depth > 12 || idx === -1 || idx === null || idx === undefined) return null;
+  if (idx >= arr.length) return idx;
+  const val = arr[idx];
+  if (typeof val === 'string' || typeof val === 'boolean' || val === null) return val;
+  if (typeof val === 'number') return val;
+  if (Array.isArray(val)) return val.map((i: any) => resolveNuxtArr(arr, i, depth + 1));
+  if (typeof val === 'object') {
+    const obj: any = {};
+    for (const [k, v] of Object.entries(val)) {
+      obj[k] = typeof v === 'number' ? resolveNuxtArr(arr, v as number, depth + 1) : v;
+    }
+    return obj;
   }
-
-  return items;
+  return val;
 }
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
-  if (!GHL_BLOG_RSS) {
-    return res.status(500).json({ error: 'GHL_BLOG_RSS_URL not configured' });
-  }
-
   try {
-    const response = await fetch(GHL_BLOG_RSS, {
-      headers: { 'User-Agent': 'Mozilla/5.0' },
-    });
+    const html = await fetch(GHL_BLOG_URL, {
+      headers: { 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36' },
+    }).then(r => r.text());
 
-    if (!response.ok) {
-      return res.status(502).json({ error: 'Failed to fetch RSS feed' });
-    }
+    const match = html.match(/__NUXT_DATA__">\[(.+?)\]<\/script/s);
+    if (!match) return res.status(502).json({ error: 'Could not find blog data in page' });
 
-    const xml = await response.text();
-    const posts = parseRSS(xml);
+    const arr: any[] = JSON.parse('[' + match[1] + ']');
+
+    // Find the blogPosts key index in the state object
+    const stateStr = JSON.stringify(arr);
+    const blogKeyMatch = stateStr.match(/"blogPosts-[^"]+":(\d+)/);
+    if (!blogKeyMatch) return res.status(502).json({ error: 'blogPosts key not found' });
+
+    const blogRootIdx = parseInt(blogKeyMatch[1]);
+    const blogData = resolveNuxtArr(arr, blogRootIdx);
+    const rawPosts: any[] = blogData?.blogPosts ?? [];
+
+    const posts = rawPosts.map((p: any) => ({
+      title: p.title ?? '',
+      excerpt: p.description ?? '',
+      link: p.canonicalLink ?? `https://go.ikonicmarketing303.com/post/${p.urlSlug}`,
+      date: p.publishedAt
+        ? new Date(p.publishedAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
+        : '',
+      author: p.author?.name ?? 'Ikonic Team',
+      category: p.categories?.[0]?.label?.replace(/-/g, ' ') ?? 'Marketing',
+      image: p.imageUrl ?? '',
+    }));
 
     res.setHeader('Cache-Control', 's-maxage=3600, stale-while-revalidate');
     return res.status(200).json({ posts });
-  } catch (err) {
-    return res.status(500).json({ error: 'RSS parse error' });
+  } catch (err: any) {
+    return res.status(500).json({ error: err.message ?? 'Failed to load blog posts' });
   }
 }
