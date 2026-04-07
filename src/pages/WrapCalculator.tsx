@@ -75,19 +75,29 @@ type Vehicle = { id: string; label: string; sqft: number; flat?: boolean };
 const VEH_MAP: Record<string, Vehicle> = {};
 CATS.forEach(c => c.vehicles.forEach((v: any) => { VEH_MAP[v.id] = v; }));
 
+// ── Fleet discount tiers ──────────────────────────────────────────────────────
+const FLEET_TIERS = [
+  { min: 10, pct: 0.15, label: '15% fleet discount' },
+  { min: 5,  pct: 0.10, label: '10% fleet discount' },
+  { min: 3,  pct: 0.05, label: '5% fleet discount'  },
+];
+function getFleetDiscount(qty: number) {
+  return FLEET_TIERS.find(t => qty >= t.min) ?? null;
+}
+
 // ── Coverage ──────────────────────────────────────────────────────────────────
 const COVERAGE: Record<string, { mult: number; desc: string; spot?: boolean; reflectiveSpot?: boolean; cabOnly?: boolean }> = {
   'Full Wrap':                 { mult: 1.00, desc: 'Complete coverage — maximum impact' },
   'Half Wrap':                 { mult: 0.55, desc: 'Strategic panels — great ROI' },
   'Cab Only':                  { mult: 1.00, desc: 'Cab wrap only — pickup trucks', cabOnly: true },
-  'Spot Graphics / Lettering': { mult: 0.25, desc: 'Logo, phone, essentials — starting at $800', spot: true },
+  'Spot Graphics / Lettering': { mult: 0.25, desc: 'Logo, phone, essentials — starting at $600', spot: true },
   'Reflective Spot Graphics':  { mult: 0.25, desc: 'High-visibility reflective lettering & logos', reflectiveSpot: true },
 };
 
 // ── Materials ─────────────────────────────────────────────────────────────────
 const MATERIALS: Record<string, { _m: number; flatOnly?: boolean; desc: string }> = {
   'Premium Cast Vinyl (3M / Avery)': { _m: 1.0, desc: 'Industry gold standard — vibrant, durable, 7+ year life' },
-  'Standard Calendered Vinyl':       { _m: 0.9, flatOnly: true, desc: 'Made for flat surfaces — trailers, storefronts & box trucks' },
+  'Standard Calendered Vinyl':       { _m: 0.9, flatOnly: true, desc: 'Budget-friendly for flat surfaces — box trucks, trailers & storefronts. 3–5 yr life.' },
   'Reflective Vinyl':                { _m: 2.0, desc: 'Visible day & night — ideal for service vehicles' },
   'Chrome / Specialty Finish':       { _m: 2.0, desc: 'Head-turning metallic & specialty looks — 1 year warranty' },
 };
@@ -148,9 +158,9 @@ export default function WrapCalculator() {
 
     let unit: number;
     if (cov.spot) {
-      unit = Math.round(800 + Math.max(0, sqft - 50) * 8);
+      unit = Math.round(600 + Math.max(0, sqft - 50) * 8);
     } else if (cov.reflectiveSpot) {
-      unit = Math.round((800 + Math.max(0, sqft - 50) * 8) * 2);
+      unit = Math.round((600 + Math.max(0, sqft - 50) * 8) * 2);
     } else {
       unit = Math.round((sqft * cov.mult * _O * _R * mat._m + _D) * _M * finMult);
     }
@@ -160,11 +170,16 @@ export default function WrapCalculator() {
       unit = Math.round(unit * 1.25);
     }
 
-    const total   = unit * qty;
-    const impLow  = Math.round(sqft * 500);
-    const impHigh = Math.round(sqft * 900);
+    // Fleet discount
+    const fleetDisc    = getFleetDiscount(qty);
+    const discMult     = fleetDisc ? (1 - fleetDisc.pct) : 1;
+    const subtotal     = unit * qty;
+    const savings      = fleetDisc ? Math.round(subtotal * fleetDisc.pct) : 0;
+    const total        = Math.round(subtotal * discMult);
+    const impLow       = Math.round(sqft * 500);
+    const impHigh      = Math.round(sqft * 900);
 
-    return { unit, total, impLow, impHigh, sqft };
+    return { unit, total, savings, fleetDisc, impLow, impHigh, sqft };
   }, [vehicleId, coverage, effMat, qty, vehicle, cabWrap, reflectiveOverlay, finish, isBoxTruck, isPickup]);
 
   const fmt = (n: number) => `$${n.toLocaleString()}`;
@@ -398,11 +413,21 @@ export default function WrapCalculator() {
                   <span className="text-xs font-semibold text-blue-400 font-mono opacity-70">05</span>
                   <h2 className="font-display text-lg font-bold text-offwhite">How Many Vehicles?</h2>
                 </div>
-                <div className="flex items-center gap-4">
+                <div className="flex items-center gap-4 mb-4">
                   <button onClick={() => { setQty(q => Math.max(1, q - 1)); setShowResult(false); }} className="w-11 h-11 rounded-xl border border-white/10 bg-charcoal-light text-offwhite font-bold text-xl hover:border-blue-500/40 transition-colors flex items-center justify-center">−</button>
                   <span className="text-3xl font-bold text-offwhite w-14 text-center font-mono">{qty}</span>
                   <button onClick={() => { setQty(q => q + 1); setShowResult(false); }} className="w-11 h-11 rounded-xl border border-white/10 bg-charcoal-light text-offwhite font-bold text-xl hover:border-blue-500/40 transition-colors flex items-center justify-center">+</button>
-                  {qty > 1 && <span className="text-blue-400 text-sm font-medium">Fleet pricing applied ✓</span>}
+                  {getFleetDiscount(qty) && (
+                    <span className="text-green-400 text-sm font-semibold">{getFleetDiscount(qty)!.label} applied ✓</span>
+                  )}
+                </div>
+                {/* Fleet tier ladder */}
+                <div className="flex gap-2 flex-wrap">
+                  {FLEET_TIERS.slice().reverse().map(t => (
+                    <div key={t.min} className={`text-xs px-3 py-1.5 rounded-lg border ${qty >= t.min ? 'border-green-500/40 bg-green-500/10 text-green-400' : 'border-white/10 text-offwhite-dark'}`}>
+                      {t.min}+ vehicles → {Math.round(t.pct * 100)}% off
+                    </div>
+                  ))}
                 </div>
               </div>
 
@@ -425,7 +450,10 @@ export default function WrapCalculator() {
                     <div className="absolute top-[-60px] left-1/2 -translate-x-1/2 w-72 h-28 bg-[radial-gradient(ellipse,rgba(59,130,246,.15),transparent)] pointer-events-none" />
 
                     <div className="text-xs font-semibold uppercase tracking-widest text-blue-400 mb-2">Estimated Price</div>
-                    <div className="font-display text-5xl font-bold text-offwhite mb-2">{fmt(calc.total)}</div>
+                    <div className="font-display text-5xl font-bold text-offwhite mb-1">{fmt(calc.total)}</div>
+                    {calc.savings > 0 && (
+                      <div className="text-green-400 text-sm font-semibold mb-1">You save {fmt(calc.savings)} with fleet pricing 🎉</div>
+                    )}
                     <div className="text-sm text-offwhite-dark mb-6">
                       {coverage.toLowerCase()} on {vehicle?.label}
                       {isBoxTruck && ` (${cabWrap ? 'cab included' : 'box body only'})`}
@@ -451,7 +479,7 @@ export default function WrapCalculator() {
                     </div>
 
                     <p className="text-xs text-offwhite-dark bg-charcoal-light rounded-xl px-4 py-3 mb-6 text-left leading-relaxed">
-                      This is a ballpark estimate and includes custom design. Final pricing depends on vehicle condition, design complexity, and turnaround. We'll give you an exact quote after a quick look at the vehicle.
+                      Custom design is <span className="text-offwhite font-semibold">included</span> in this price — design + print + install, all in. Final pricing depends on vehicle condition and turnaround. We'll confirm your exact quote after a quick look at the vehicle.
                     </p>
 
                     <a href="tel:7206791230" className="btn-primary inline-flex items-center gap-2 mb-4">
@@ -517,6 +545,12 @@ export default function WrapCalculator() {
                         <span className="text-offwhite">{qty} units</span>
                       </div>
                     )}
+                    {calc?.fleetDisc && (
+                      <div className="flex justify-between">
+                        <span className="text-offwhite-dark">Fleet Discount:</span>
+                        <span className="text-green-400 font-semibold">−{Math.round(calc.fleetDisc.pct * 100)}% (save {fmt(calc.savings)})</span>
+                      </div>
+                    )}
                   </div>
 
                   {/* Retail Price */}
@@ -526,7 +560,9 @@ export default function WrapCalculator() {
                       {calc ? fmt(calc.total) : '—'}
                     </div>
                     {calc && qty > 1 && (
-                      <div className="text-offwhite-dark text-xs mt-1">{fmt(calc.unit)} per unit</div>
+                      <div className="text-offwhite-dark text-xs mt-1">
+                        {fmt(Math.round(calc.total / qty))} per unit{calc.fleetDisc ? ` after ${Math.round(calc.fleetDisc.pct * 100)}% fleet discount` : ''}
+                      </div>
                     )}
                   </div>
 
