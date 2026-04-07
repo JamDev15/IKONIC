@@ -23,6 +23,7 @@ import SpeedToLead from './pages/SpeedToLead';
 import MarketingSystems from './pages/MarketingSystems';
 import WrapCalculator from './pages/WrapCalculator';
 import PrintAndShip from './pages/PrintAndShip';
+import BlogPost from './pages/BlogPost';
 import './App.css';
 
 gsap.registerPlugin(ScrollTrigger);
@@ -99,6 +100,7 @@ function App() {
           <Route path="/services/marketing" element={<MarketingSystems />} />
           <Route path="/wrap-calculator" element={<WrapCalculator />} />
           <Route path="/print-ship" element={<PrintAndShip />} />
+          <Route path="/post/:slug" element={<BlogPost />} />
         </Routes>
       </div>
     </Router>
