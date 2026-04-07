@@ -128,6 +128,12 @@ export default function Navigation() {
                   >
                     Print &amp; Ship
                   </Link>
+                  <Link
+                    to="/commercial-wraps"
+                    className="block px-4 py-3 text-sm text-offwhite-dark hover:bg-mint/10 hover:text-mint transition-colors border-t border-white/10"
+                  >
+                    Commercial Wraps
+                  </Link>
                 </div>
               )}
             </div>
@@ -135,11 +141,7 @@ export default function Navigation() {
             <Link to="/blogs" className="text-sm font-medium text-offwhite-dark hover:text-mint transition-colors">
               Blogs
             </Link>
-            
-            <Link to="/commercial-wraps" className="text-sm font-medium text-offwhite-dark hover:text-mint transition-colors">
-              Commercial Wrap
-            </Link>
-            
+
             <Link to="/careers" className="text-sm font-medium text-offwhite-dark hover:text-mint transition-colors">
               Career
             </Link>
@@ -200,13 +202,13 @@ export default function Navigation() {
             <Link to="/print-ship" className="block text-xl font-display font-bold text-offwhite-dark hover:text-mint transition-colors py-2">
               Print &amp; Ship
             </Link>
+            <Link to="/commercial-wraps" className="block text-xl font-display font-bold text-offwhite-dark hover:text-mint transition-colors py-2">
+              Commercial Wraps
+            </Link>
           </div>
 
           <Link to="/blogs" className="text-2xl font-display font-bold text-offwhite hover:text-mint transition-colors">
             Blogs
-          </Link>
-          <Link to="/commercial-wraps" className="text-2xl font-display font-bold text-offwhite hover:text-mint transition-colors">
-            Commercial Wrap
           </Link>
           <Link to="/careers" className="text-2xl font-display font-bold text-offwhite hover:text-mint transition-colors">
             Career
