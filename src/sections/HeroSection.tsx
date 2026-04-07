@@ -8,7 +8,7 @@ gsap.registerPlugin(ScrollTrigger);
 
 export default function HeroSection() {
   const sectionRef = useRef<HTMLElement>(null);
-  const headlineRef = useRef<HTMLDivElement>(null);
+  const headlineRef = useRef<HTMLHeadingElement>(null);
   const subheadRef = useRef<HTMLParagraphElement>(null);
   const ctaRef = useRef<HTMLDivElement>(null);
   const robotRef = useRef<HTMLDivElement>(null);
@@ -106,7 +106,7 @@ export default function HeroSection() {
         <div className="w-full px-[6vw] grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
           {/* Left - Text content */}
           <div className="max-w-2xl">
-            <div ref={headlineRef} className="space-y-2 mb-8">
+            <h1 ref={headlineRef} className="space-y-2 mb-8">
               <div className="headline-line text-headline text-4xl md:text-5xl lg:text-6xl text-offwhite leading-tight">
                 DIGITAL MARKETING
               </div>
@@ -117,15 +117,15 @@ export default function HeroSection() {
               <div className="headline-line text-headline text-4xl md:text-5xl lg:text-6xl text-offwhite leading-tight">
                 LEAD CAPTURE SYSTEM
               </div>
-            </div>
+            </h1>
 
-            <p 
+            <p
               ref={subheadRef}
               className="text-lg md:text-xl text-offwhite-dark leading-relaxed mb-10 max-w-xl"
             >
-              We Build & Manage Your Complete Business System — From High-Converting Websites 
-              and Sales Funnels to CRM, Automation, and Lead Flow — All Inside One Powerful, 
-              Custom Platform.
+              We help Denver-area businesses build complete automated sales systems — from
+              high-converting websites and sales funnels to CRM, automation, and lead flow —
+              all inside one powerful, custom platform.
             </p>
 
             <div ref={ctaRef} className="flex flex-wrap gap-4">

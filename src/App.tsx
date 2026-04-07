@@ -54,24 +54,27 @@ function App() {
 
   useEffect(() => {
     const scriptId = 'ghl-chat-widget-script';
+    if (document.getElementById(scriptId)) return;
 
-    // Add chat widget once for all routes.
-    if (document.getElementById(scriptId)) {
-      return;
-    }
-
-    const script = document.createElement('script');
-    script.id = scriptId;
-    script.src = 'https://widgets.leadconnectorhq.com/loader.js';
-    script.setAttribute('data-resources-url', 'https://widgets.leadconnectorhq.com/chat-widget/loader.js');
-    script.setAttribute('data-widget-id', '69965105f3036706b875cf61');
-    script.async = true;
-
-    document.body.appendChild(script);
-
-    return () => {
-      script.remove();
+    // Defer chat widget until after main content loads to improve Core Web Vitals
+    const load = () => {
+      if (document.getElementById(scriptId)) return;
+      const script = document.createElement('script');
+      script.id = scriptId;
+      script.src = 'https://widgets.leadconnectorhq.com/loader.js';
+      script.setAttribute('data-resources-url', 'https://widgets.leadconnectorhq.com/chat-widget/loader.js');
+      script.setAttribute('data-widget-id', '69965105f3036706b875cf61');
+      script.async = true;
+      document.body.appendChild(script);
     };
+
+    // Use requestIdleCallback if available, otherwise 3s delay
+    if ('requestIdleCallback' in window) {
+      (window as any).requestIdleCallback(load, { timeout: 3000 });
+    } else {
+      const t = setTimeout(load, 3000);
+      return () => clearTimeout(t);
+    }
   }, []);
 
   return (

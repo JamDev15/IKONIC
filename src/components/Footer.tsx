@@ -66,9 +66,9 @@ export default function Footer() {
 
           {/* Newsletter */}
           <div>
-            <h4 className="text-offwhite font-medium mb-4">Stay Connected</h4>
+            <h4 className="text-offwhite font-medium mb-4">Free GHL Setup Checklist</h4>
             <p className="text-offwhite-dark text-sm mb-4">
-              Get business growth tips and strategies straight to your inbox.
+              Get our free GHL setup checklist — join 500+ Colorado businesses automating their lead flow.
             </p>
             <div className="flex gap-2">
               <input
