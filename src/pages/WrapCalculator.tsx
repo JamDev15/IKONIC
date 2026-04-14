@@ -137,6 +137,8 @@ export default function WrapCalculator() {
   const [reflectiveOverlay, setReflectiveOverlay]   = useState(false);
   const [satinGlossOverlay, setSatinGlossOverlay]   = useState(false);
   const [finish, setFinish]                         = useState('Gloss');
+  const [needDesign, setNeedDesign]                 = useState<boolean | null>(null);
+  const [aiRework, setAiRework]                     = useState(false);
 
   const vehicle    = vehicleId ? VEH_MAP[vehicleId] : null;
   const isFlat     = !!vehicle?.flat;
@@ -182,17 +184,21 @@ export default function WrapCalculator() {
       unit = unit + spotBase;
     }
 
+    // Design add-ons
+    const designCost = needDesign ? 500 : 0;
+    const aiCost     = needDesign && aiRework ? 400 : 0;
+
     // Fleet discount
     const fleetDisc    = getFleetDiscount(qty);
     const discMult     = fleetDisc ? (1 - fleetDisc.pct) : 1;
     const subtotal     = unit * qty;
     const savings      = fleetDisc ? Math.round(subtotal * fleetDisc.pct) : 0;
-    const total        = Math.round(subtotal * discMult);
+    const total        = Math.round(subtotal * discMult) + designCost + aiCost;
     const impLow       = Math.round(sqft * 500);
     const impHigh      = Math.round(sqft * 900);
 
-    return { unit, total, savings, fleetDisc, impLow, impHigh, sqft };
-  }, [vehicleId, coverage, effMat, qty, vehicle, cabWrap, reflectiveOverlay, satinGlossOverlay, finish, isBoxTruck, isPickup]);
+    return { unit, total, savings, fleetDisc, impLow, impHigh, sqft, designCost, aiCost };
+  }, [vehicleId, coverage, effMat, qty, vehicle, cabWrap, reflectiveOverlay, satinGlossOverlay, finish, needDesign, aiRework, isBoxTruck, isPickup]);
 
   const fmt = (n: number) => `$${n.toLocaleString()}`;
 
@@ -221,6 +227,8 @@ export default function WrapCalculator() {
     setCabWrap(true);
     setReflectiveOverlay(false);
     setFinish('Gloss');
+    setNeedDesign(null);
+    setAiRework(false);
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
@@ -438,10 +446,64 @@ export default function WrapCalculator() {
                 </div>
               </div>
 
-              {/* Step 5 — Quantity */}
+              {/* Step 5 — Design */}
               <div className={`bg-charcoal border border-white/10 rounded-2xl p-6 mb-4 transition-opacity duration-500 ${ready ? 'opacity-100' : 'opacity-30 pointer-events-none'}`}>
                 <div className="flex items-baseline gap-3 mb-4">
                   <span className="text-xs font-semibold text-blue-400 font-mono opacity-70">05</span>
+                  <h2 className="font-display text-lg font-bold text-offwhite">Do You Need a Design?</h2>
+                </div>
+                <div className="flex flex-col sm:flex-row gap-3 mb-4">
+                  {[
+                    { val: false, label: 'No — I have artwork', desc: 'Provide your own print-ready file' },
+                    { val: true,  label: 'Yes — design for me', desc: 'Our team creates your wrap design (+$500)' },
+                  ].map(opt => (
+                    <button
+                      key={String(opt.val)}
+                      onClick={() => { setNeedDesign(opt.val); if (!opt.val) setAiRework(false); setShowResult(false); }}
+                      className={`flex-1 py-4 px-4 rounded-xl border text-left transition-all ${
+                        needDesign === opt.val
+                          ? 'border-mint bg-mint/10 text-offwhite'
+                          : 'border-white/10 bg-white/5 text-offwhite-dark hover:border-white/30'
+                      }`}
+                    >
+                      <div className="font-medium text-sm">{opt.label}</div>
+                      <div className="text-xs mt-1 opacity-70">{opt.desc}</div>
+                    </button>
+                  ))}
+                </div>
+                {needDesign && (
+                  <div className="border-t border-white/10 pt-4">
+                    <p className="text-sm font-medium text-offwhite mb-3">Is your artwork AI-generated?</p>
+                    <div className="flex gap-3">
+                      {[
+                        { val: false, label: 'No', desc: 'Standard design workflow' },
+                        { val: true,  label: 'Yes — AI artwork', desc: 'Requires rework for print quality (+$400)' },
+                      ].map(opt => (
+                        <button
+                          key={String(opt.val)}
+                          onClick={() => { setAiRework(opt.val); setShowResult(false); }}
+                          className={`flex-1 py-3 px-4 rounded-xl border text-left transition-all ${
+                            aiRework === opt.val
+                              ? 'border-mint bg-mint/10 text-offwhite'
+                              : 'border-white/10 bg-white/5 text-offwhite-dark hover:border-white/30'
+                          }`}
+                        >
+                          <div className="font-medium text-sm">{opt.label}</div>
+                          <div className="text-xs mt-1 opacity-70">{opt.desc}</div>
+                        </button>
+                      ))}
+                    </div>
+                    {aiRework && (
+                      <p className="text-xs text-mint mt-3">✓ AI artwork rework included — we prep your file for professional print output</p>
+                    )}
+                  </div>
+                )}
+              </div>
+
+              {/* Step 6 — Quantity */}
+              <div className={`bg-charcoal border border-white/10 rounded-2xl p-6 mb-4 transition-opacity duration-500 ${ready ? 'opacity-100' : 'opacity-30 pointer-events-none'}`}>
+                <div className="flex items-baseline gap-3 mb-4">
+                  <span className="text-xs font-semibold text-blue-400 font-mono opacity-70">06</span>
                   <h2 className="font-display text-lg font-bold text-offwhite">How Many Vehicles?</h2>
                 </div>
                 <div className="flex items-center gap-4 mb-4">
@@ -589,6 +651,18 @@ export default function WrapCalculator() {
                       <div className="flex justify-between">
                         <span className="text-offwhite-dark">Fleet Discount:</span>
                         <span className="text-green-400 font-semibold">−{Math.round(calc.fleetDisc.pct * 100)}% (save {fmt(calc.savings)})</span>
+                      </div>
+                    )}
+                    {needDesign && (
+                      <div className="flex justify-between">
+                        <span className="text-offwhite-dark">Custom Design:</span>
+                        <span className="text-mint">+{fmt(500)}</span>
+                      </div>
+                    )}
+                    {needDesign && aiRework && (
+                      <div className="flex justify-between">
+                        <span className="text-offwhite-dark">AI Artwork Rework:</span>
+                        <span className="text-mint">+{fmt(400)}</span>
                       </div>
                     )}
                   </div>
