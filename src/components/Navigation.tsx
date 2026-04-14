@@ -128,6 +128,12 @@ export default function Navigation() {
                   >
                     Print &amp; Ship
                   </Link>
+                  <Link
+                    to="/lost-call-calculator"
+                    className="block px-4 py-3 text-sm text-offwhite-dark hover:bg-mint/10 hover:text-mint transition-colors border-t border-white/10"
+                  >
+                    Lost Call Calculator
+                  </Link>
                 </div>
               )}
             </div>
@@ -199,6 +205,9 @@ export default function Navigation() {
             </Link>
             <Link to="/print-ship" className="block text-xl font-display font-bold text-offwhite-dark hover:text-mint transition-colors py-2">
               Print &amp; Ship
+            </Link>
+            <Link to="/lost-call-calculator" className="block text-xl font-display font-bold text-offwhite-dark hover:text-mint transition-colors py-2">
+              Lost Call Calculator
             </Link>
           </div>
 
