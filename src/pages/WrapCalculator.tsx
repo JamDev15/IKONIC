@@ -76,23 +76,14 @@ type Vehicle = { id: string; label: string; sqft: number; flat?: boolean; price?
 const VEH_MAP: Record<string, Vehicle> = {};
 CATS.forEach(c => c.vehicles.forEach((v: any) => { VEH_MAP[v.id] = v; }));
 
-// ── Fleet discount tiers ──────────────────────────────────────────────────────
-const FLEET_TIERS = [
-  { min: 10, pct: 0.15, label: '15% fleet discount' },
-  { min: 5,  pct: 0.10, label: '10% fleet discount' },
-  { min: 3,  pct: 0.05, label: '5% fleet discount'  },
-];
-function getFleetDiscount(qty: number) {
-  return FLEET_TIERS.find(t => qty >= t.min) ?? null;
-}
-
 // ── Coverage ──────────────────────────────────────────────────────────────────
-const COVERAGE: Record<string, { mult: number; desc: string; spot?: boolean; reflectiveSpot?: boolean; cabOnly?: boolean }> = {
+const COVERAGE: Record<string, { mult: number; desc: string; spot?: boolean; reflectiveSpot?: boolean; chromeSpot?: boolean; cabOnly?: boolean }> = {
   'Full Wrap':                 { mult: 1.00, desc: 'Complete coverage — maximum impact' },
   'Half Wrap':                 { mult: 0.55, desc: 'Strategic panels — great ROI' },
   'Cab Only':                  { mult: 1.00, desc: 'Cab wrap only — pickup trucks', cabOnly: true },
   'Spot Graphics / Lettering': { mult: 0.25, desc: 'Logo, phone, essentials — starting at $600', spot: true },
   'Reflective Spot Graphics':  { mult: 0.25, desc: 'High-visibility reflective lettering & logos', reflectiveSpot: true },
+  'Chrome Spot Graphics':      { mult: 0.25, desc: 'Premium chrome / specialty finish lettering & logos', chromeSpot: true },
 };
 
 // ── Materials ─────────────────────────────────────────────────────────────────
@@ -167,6 +158,8 @@ export default function WrapCalculator() {
       unit = spotBase;
     } else if (cov.reflectiveSpot) {
       unit = Math.round(spotBase * 2);
+    } else if (cov.chromeSpot) {
+      unit = Math.round(spotBase * 3);
     } else if (vehicle.price && !cov.cabOnly) {
       // Use exact price for full wrap, scale for partial coverage and material
       unit = Math.round(vehicle.price * cov.mult * mat._m * finMult);
@@ -180,7 +173,7 @@ export default function WrapCalculator() {
     }
 
     // Contrasting finish lettering add-on (gloss lettering on satin wrap or vice versa)
-    if (!cov.spot && !cov.reflectiveSpot && satinGlossOverlay) {
+    if (!cov.spot && !cov.reflectiveSpot && !cov.chromeSpot && satinGlossOverlay) {
       unit = unit + spotBase;
     }
 
@@ -188,17 +181,13 @@ export default function WrapCalculator() {
     const designCost = needDesign ? 500 : 0;
     const aiCost     = needDesign && aiRework ? 400 : 0;
 
-    // Fleet discount
-    const fleetDisc    = getFleetDiscount(qty);
-    const discMult     = fleetDisc ? (1 - fleetDisc.pct) : 1;
-    const subtotal     = unit * qty;
-    const savings      = fleetDisc ? Math.round(subtotal * fleetDisc.pct) : 0;
-    const total        = Math.round(subtotal * discMult) + designCost + aiCost;
-    const impLow       = Math.round(sqft * 500);
-    const impHigh      = Math.round(sqft * 900);
+    const subtotal = unit * qty;
+    const total    = subtotal + designCost + aiCost;
+    const impLow   = Math.round(sqft * 500);
+    const impHigh  = Math.round(sqft * 900);
 
-    return { unit, total, savings, fleetDisc, impLow, impHigh, sqft, designCost, aiCost };
-  }, [vehicleId, coverage, effMat, qty, vehicle, cabWrap, reflectiveOverlay, satinGlossOverlay, finish, needDesign, aiRework, isBoxTruck, isPickup]);
+    return { unit, total, impLow, impHigh, sqft, designCost, aiCost };
+  }, [vehicleId, coverage, effMat, qty, vehicle, cabWrap, reflectiveOverlay, satinGlossOverlay, finish, needDesign, aiRework, isBoxTruck, isPickup, vehicleId]);
 
   const fmt = (n: number) => `$${n.toLocaleString()}`;
 
@@ -214,7 +203,7 @@ export default function WrapCalculator() {
     setCoverage(name);
     // Clear overlays when switching coverage type
     if (name !== 'Full Wrap') setReflectiveOverlay(false);
-    if (name === 'Spot Graphics / Lettering' || name === 'Reflective Spot Graphics') setSatinGlossOverlay(false);
+    if (name === 'Spot Graphics / Lettering' || name === 'Reflective Spot Graphics' || name === 'Chrome Spot Graphics') setSatinGlossOverlay(false);
     setShowResult(false);
   };
 
@@ -340,7 +329,7 @@ export default function WrapCalculator() {
                 </div>
 
                 {/* Contrasting Finish Lettering — for any wrap coverage */}
-                {coverage !== 'Spot Graphics / Lettering' && coverage !== 'Reflective Spot Graphics' && (
+                {coverage !== 'Spot Graphics / Lettering' && coverage !== 'Reflective Spot Graphics' && coverage !== 'Chrome Spot Graphics' && (
                   <div className="mt-4 border-t border-white/10 pt-4">
                     <div className="flex items-center justify-between gap-4">
                       <div>
@@ -514,14 +503,6 @@ export default function WrapCalculator() {
                     <span className="text-green-400 text-sm font-semibold">{getFleetDiscount(qty)!.label} applied ✓</span>
                   )}
                 </div>
-                {/* Fleet tier ladder */}
-                <div className="flex gap-2 flex-wrap">
-                  {FLEET_TIERS.slice().reverse().map(t => (
-                    <div key={t.min} className={`text-xs px-3 py-1.5 rounded-lg border ${qty >= t.min ? 'border-green-500/40 bg-green-500/10 text-green-400' : 'border-white/10 text-offwhite-dark'}`}>
-                      {t.min}+ vehicles → {Math.round(t.pct * 100)}% off
-                    </div>
-                  ))}
-                </div>
               </div>
 
               {/* Calculate Button */}
@@ -544,9 +525,6 @@ export default function WrapCalculator() {
 
                     <div className="text-xs font-semibold uppercase tracking-widest text-blue-400 mb-2">Estimated Price</div>
                     <div className="font-display text-5xl font-bold text-offwhite mb-1">{fmt(calc.total)}</div>
-                    {calc.savings > 0 && (
-                      <div className="text-green-400 text-sm font-semibold mb-1">You save {fmt(calc.savings)} with fleet pricing 🎉</div>
-                    )}
                     <div className="text-sm text-offwhite-dark mb-6">
                       {coverage.toLowerCase()} on {vehicle?.label}
                       {isBoxTruck && ` (${cabWrap ? 'cab included' : 'box body only'})`}
@@ -612,7 +590,7 @@ export default function WrapCalculator() {
                       <span className="text-offwhite-dark">Coverage:</span>
                       <span className="text-offwhite">{coverage}</span>
                     </div>
-                    {coverage !== 'Spot Graphics / Lettering' && coverage !== 'Reflective Spot Graphics' && (
+                    {coverage !== 'Spot Graphics / Lettering' && coverage !== 'Reflective Spot Graphics' && coverage !== 'Chrome Spot Graphics' && (
                       <div className="flex justify-between">
                         <span className="text-offwhite-dark">Contrasting Lettering:</span>
                         <span className={satinGlossOverlay ? 'text-mint' : 'text-offwhite-dark'}>
@@ -647,12 +625,6 @@ export default function WrapCalculator() {
                         <span className="text-offwhite">{qty} units</span>
                       </div>
                     )}
-                    {calc?.fleetDisc && (
-                      <div className="flex justify-between">
-                        <span className="text-offwhite-dark">Fleet Discount:</span>
-                        <span className="text-green-400 font-semibold">−{Math.round(calc.fleetDisc.pct * 100)}% (save {fmt(calc.savings)})</span>
-                      </div>
-                    )}
                     {needDesign && (
                       <div className="flex justify-between">
                         <span className="text-offwhite-dark">Custom Design:</span>
@@ -675,7 +647,7 @@ export default function WrapCalculator() {
                     </div>
                     {calc && qty > 1 && (
                       <div className="text-offwhite-dark text-xs mt-1">
-                        {fmt(Math.round(calc.total / qty))} per unit{calc.fleetDisc ? ` after ${Math.round(calc.fleetDisc.pct * 100)}% fleet discount` : ''}
+                        {fmt(calc.unit)} per vehicle × {qty} vehicles
                       </div>
                     )}
                   </div>
