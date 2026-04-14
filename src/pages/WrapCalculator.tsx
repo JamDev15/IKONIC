@@ -135,6 +135,7 @@ export default function WrapCalculator() {
   const [showResult, setShowResult]                 = useState(false);
   const [cabWrap, setCabWrap]                       = useState(true);
   const [reflectiveOverlay, setReflectiveOverlay]   = useState(false);
+  const [satinGlossOverlay, setSatinGlossOverlay]   = useState(false);
   const [finish, setFinish]                         = useState('Gloss');
 
   const vehicle    = vehicleId ? VEH_MAP[vehicleId] : null;
@@ -157,11 +158,13 @@ export default function WrapCalculator() {
     const mat     = MATERIALS[effMat];
     const finMult = (!cov.spot && !cov.reflectiveSpot) ? FINISHES[finish].mult : 1;
 
+    const spotBase = Math.round(600 + Math.max(0, sqft - 50) * 8);
+
     let unit: number;
     if (cov.spot) {
-      unit = Math.round(600 + Math.max(0, sqft - 50) * 8);
+      unit = spotBase + (satinGlossOverlay ? spotBase : 0);
     } else if (cov.reflectiveSpot) {
-      unit = Math.round((600 + Math.max(0, sqft - 50) * 8) * 2);
+      unit = Math.round(spotBase * 2) + (satinGlossOverlay ? spotBase : 0);
     } else if (vehicle.price && !cov.cabOnly) {
       // Use exact price for full wrap, scale for partial coverage and material
       unit = Math.round(vehicle.price * cov.mult * mat._m * finMult);
@@ -184,7 +187,7 @@ export default function WrapCalculator() {
     const impHigh      = Math.round(sqft * 900);
 
     return { unit, total, savings, fleetDisc, impLow, impHigh, sqft };
-  }, [vehicleId, coverage, effMat, qty, vehicle, cabWrap, reflectiveOverlay, finish, isBoxTruck, isPickup]);
+  }, [vehicleId, coverage, effMat, qty, vehicle, cabWrap, reflectiveOverlay, satinGlossOverlay, finish, isBoxTruck, isPickup]);
 
   const fmt = (n: number) => `$${n.toLocaleString()}`;
 
@@ -198,8 +201,9 @@ export default function WrapCalculator() {
 
   const handleCoverageSelect = (name: string) => {
     setCoverage(name);
-    // Clear reflective overlay when leaving Full Wrap
+    // Clear overlays when switching coverage type
     if (name !== 'Full Wrap') setReflectiveOverlay(false);
+    if (name !== 'Spot Graphics / Lettering' && name !== 'Reflective Spot Graphics') setSatinGlossOverlay(false);
     setShowResult(false);
   };
 
@@ -321,6 +325,24 @@ export default function WrapCalculator() {
                     </button>
                   ))}
                 </div>
+
+                {/* Gloss/Satin Graphic Overlay Toggle — only for spot graphics */}
+                {(coverage === 'Spot Graphics / Lettering' || coverage === 'Reflective Spot Graphics') && (
+                  <div className="mt-4 border-t border-white/10 pt-4">
+                    <div className="flex items-center justify-between gap-4">
+                      <div>
+                        <div className="text-sm font-medium text-offwhite">Gloss / Satin Graphic Overlay</div>
+                        <div className="text-xs text-offwhite-dark mt-0.5">
+                          Premium finish overlay applied over spot graphics — adds the cost of a regular spot graphics package
+                        </div>
+                      </div>
+                      <Toggle on={satinGlossOverlay} onToggle={() => { setSatinGlossOverlay(o => !o); setShowResult(false); }} />
+                    </div>
+                    {satinGlossOverlay && (
+                      <div className="text-xs text-mint mt-2">✓ Gloss / Satin overlay included — premium layered finish</div>
+                    )}
+                  </div>
+                )}
 
                 {/* Reflective Overlay Toggle — only when Full Wrap is selected */}
                 {coverage === 'Full Wrap' && (
@@ -463,6 +485,7 @@ export default function WrapCalculator() {
                       {isBoxTruck && ` (${cabWrap ? 'cab included' : 'box body only'})`}
                       {qty > 1 ? ` × ${qty} vehicles` : ''}
                       {reflectiveOverlay && ' · reflective overlay'}
+                      {satinGlossOverlay && ' · gloss/satin overlay'}
                       {finish !== 'Gloss' && ` · ${finish} finish`}
                     </div>
 
@@ -522,6 +545,14 @@ export default function WrapCalculator() {
                       <span className="text-offwhite-dark">Coverage:</span>
                       <span className="text-offwhite">{coverage}</span>
                     </div>
+                    {(coverage === 'Spot Graphics / Lettering' || coverage === 'Reflective Spot Graphics') && (
+                      <div className="flex justify-between">
+                        <span className="text-offwhite-dark">Gloss/Satin Overlay:</span>
+                        <span className={satinGlossOverlay ? 'text-mint' : 'text-offwhite-dark'}>
+                          {satinGlossOverlay ? 'Yes (+spot graphics cost)' : 'No'}
+                        </span>
+                      </div>
+                    )}
                     {coverage === 'Full Wrap' && (
                       <div className="flex justify-between">
                         <span className="text-offwhite-dark">Reflective Overlay:</span>
