@@ -28,26 +28,26 @@ const CATS = [
     { id: 'fullsize_sedan',  label: 'Full-Size Sedan (Charger, Impala)',     sqft: 60  },
   ]},
   { name: 'SUVs & Crossovers', icon: '🚙', vehicles: [
-    { id: 'compact_suv',   label: 'Compact SUV (RAV4, CR-V)',               sqft: 55  },
-    { id: 'midsize_suv',   label: 'Mid-Size SUV (4Runner, Explorer)',        sqft: 65  },
+    { id: 'compact_suv',   label: 'Compact SUV (RAV4, CR-V)',               sqft: 55,  price: 4036 },
+    { id: 'midsize_suv',   label: 'Mid-Size SUV (4Runner, Explorer)',        sqft: 65,  price: 4527 },
     { id: 'fullsize_suv',  label: 'Full-Size SUV (Tahoe, Expedition)',       sqft: 80  },
   ]},
   { name: 'Pickup Trucks', icon: '🛻', vehicles: [
-    { id: 'reg_cab_pickup',    label: 'Regular / Extended Cab',             sqft: 50  },
-    { id: 'crew_short_pickup', label: 'Crew Cab – Short Bed',               sqft: 58  },
-    { id: 'crew_long_pickup',  label: 'Crew Cab – Long Bed',                sqft: 65  },
+    { id: 'reg_cab_pickup',    label: 'Regular / Extended Cab',             sqft: 50,  price: 3867 },
+    { id: 'crew_short_pickup', label: 'Crew Cab – Short Bed',               sqft: 58,  price: 4129 },
+    { id: 'crew_long_pickup',  label: 'Crew Cab – Long Bed',                sqft: 65,  price: 4485 },
   ]},
   { name: 'Cargo Vans', icon: '🚐', vehicles: [
     { id: 'compact_cargo',  label: 'Compact (Transit Connect, NV200)',      sqft: 60  },
-    { id: 'std_cargo',      label: 'Standard (Express, E-Series)',          sqft: 90  },
-    { id: 'extended_cargo', label: 'Extended (Express LWB, E-350 Ext)',     sqft: 105 },
+    { id: 'std_cargo',      label: 'Standard (Express, E-Series)',          sqft: 90,  price: 4528 },
+    { id: 'extended_cargo', label: 'Extended (Express LWB, E-350 Ext)',     sqft: 105, price: 5280 },
   ]},
   { name: 'Sprinter / Transit Vans', icon: '🚌', vehicles: [
-    { id: 'sprinter_sr_short', label: 'Standard Roof – Short (144" WB)',    sqft: 105 },
-    { id: 'sprinter_sr_long',  label: 'Standard Roof – Long (170" WB)',     sqft: 120 },
-    { id: 'sprinter_hr_short', label: 'High Roof – Short (144" WB)',        sqft: 130 },
-    { id: 'sprinter_hr_long',  label: 'High Roof – Long (170" WB)',         sqft: 148 },
-    { id: 'sprinter_hr_ext',   label: 'High Roof – Extended (170E WB)',     sqft: 168 },
+    { id: 'sprinter_sr_short', label: 'Standard Roof – Short (144" WB)',    sqft: 105, price: 4637 },
+    { id: 'sprinter_sr_long',  label: 'Standard Roof – Long (170" WB)',     sqft: 120, price: 5173 },
+    { id: 'sprinter_hr_short', label: 'High Roof – Short (144" WB)',        sqft: 130, price: 4863 },
+    { id: 'sprinter_hr_long',  label: 'High Roof – Long (170" WB)',         sqft: 148, price: 5475 },
+    { id: 'sprinter_hr_ext',   label: 'High Roof – Extended (170E WB)',     sqft: 168, price: 5838 },
   ]},
   { name: 'Box Trucks', icon: '📦', vehicles: [
     { id: 'box_10', label: '10 ft Box Truck', sqft: 150, flat: true },
@@ -69,7 +69,7 @@ const CATS = [
   ]},
 ] as const;
 
-type Vehicle = { id: string; label: string; sqft: number; flat?: boolean };
+type Vehicle = { id: string; label: string; sqft: number; flat?: boolean; price?: number };
 
 // Flat lookup map
 const VEH_MAP: Record<string, Vehicle> = {};
@@ -161,6 +161,9 @@ export default function WrapCalculator() {
       unit = Math.round(600 + Math.max(0, sqft - 50) * 8);
     } else if (cov.reflectiveSpot) {
       unit = Math.round((600 + Math.max(0, sqft - 50) * 8) * 2);
+    } else if (vehicle.price && !cov.cabOnly) {
+      // Use exact price for full wrap, scale for partial coverage and material
+      unit = Math.round(vehicle.price * cov.mult * mat._m * finMult);
     } else {
       unit = Math.round((sqft * cov.mult * _O * _R * mat._m + _D) * _M * finMult);
     }
