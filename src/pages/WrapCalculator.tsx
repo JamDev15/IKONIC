@@ -499,9 +499,6 @@ export default function WrapCalculator() {
                   <button onClick={() => { setQty(q => Math.max(1, q - 1)); setShowResult(false); }} className="w-11 h-11 rounded-xl border border-white/10 bg-charcoal-light text-offwhite font-bold text-xl hover:border-blue-500/40 transition-colors flex items-center justify-center">−</button>
                   <span className="text-3xl font-bold text-offwhite w-14 text-center font-mono">{qty}</span>
                   <button onClick={() => { setQty(q => q + 1); setShowResult(false); }} className="w-11 h-11 rounded-xl border border-white/10 bg-charcoal-light text-offwhite font-bold text-xl hover:border-blue-500/40 transition-colors flex items-center justify-center">+</button>
-                  {getFleetDiscount(qty) && (
-                    <span className="text-green-400 text-sm font-semibold">{getFleetDiscount(qty)!.label} applied ✓</span>
-                  )}
                 </div>
               </div>
 
