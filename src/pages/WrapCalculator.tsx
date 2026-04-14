@@ -59,9 +59,10 @@ const CATS = [
     { id: 'box_26', label: '26 ft Box Truck', sqft: 370, flat: true },
   ]},
   { name: 'Enclosed Trailers', icon: '🚛', vehicles: [
+    { id: 'trailer_5x12',   label: '5×12 Enclosed Trailer', sqft: 100, flat: true, price: 3217 },
     { id: 'trailer_6x12',   label: '6×12 Enclosed Trailer', sqft: 120, flat: true },
-    { id: 'trailer_7x14',   label: '7×14 Enclosed Trailer', sqft: 155, flat: true },
-    { id: 'trailer_7x16',   label: '7×16 Enclosed Trailer', sqft: 178, flat: true },
+    { id: 'trailer_7x14',   label: '7×14 Enclosed Trailer', sqft: 155, flat: true, price: 4038 },
+    { id: 'trailer_7x16',   label: '7×16 Enclosed Trailer', sqft: 178, flat: true, price: 4124 },
     { id: 'trailer_8x20',   label: '8×20 Enclosed Trailer', sqft: 232, flat: true },
     { id: 'trailer_8x24',   label: '8×24 Enclosed Trailer', sqft: 278, flat: true },
     { id: 'trailer_48_semi', label: '48 ft Semi Trailer',   sqft: 500, flat: true },
