@@ -162,9 +162,9 @@ export default function WrapCalculator() {
 
     let unit: number;
     if (cov.spot) {
-      unit = spotBase + (satinGlossOverlay ? spotBase : 0);
+      unit = spotBase;
     } else if (cov.reflectiveSpot) {
-      unit = Math.round(spotBase * 2) + (satinGlossOverlay ? spotBase : 0);
+      unit = Math.round(spotBase * 2);
     } else if (vehicle.price && !cov.cabOnly) {
       // Use exact price for full wrap, scale for partial coverage and material
       unit = Math.round(vehicle.price * cov.mult * mat._m * finMult);
@@ -175,6 +175,11 @@ export default function WrapCalculator() {
     // Reflective overlay surcharge over full wrap (+25%)
     if (coverage === 'Full Wrap' && reflectiveOverlay) {
       unit = Math.round(unit * 1.25);
+    }
+
+    // Contrasting finish lettering add-on (gloss lettering on satin wrap or vice versa)
+    if (!cov.spot && !cov.reflectiveSpot && satinGlossOverlay) {
+      unit = unit + spotBase;
     }
 
     // Fleet discount
@@ -203,7 +208,7 @@ export default function WrapCalculator() {
     setCoverage(name);
     // Clear overlays when switching coverage type
     if (name !== 'Full Wrap') setReflectiveOverlay(false);
-    if (name !== 'Spot Graphics / Lettering' && name !== 'Reflective Spot Graphics') setSatinGlossOverlay(false);
+    if (name === 'Spot Graphics / Lettering' || name === 'Reflective Spot Graphics') setSatinGlossOverlay(false);
     setShowResult(false);
   };
 
@@ -326,20 +331,20 @@ export default function WrapCalculator() {
                   ))}
                 </div>
 
-                {/* Gloss/Satin Graphic Overlay Toggle — only for spot graphics */}
-                {(coverage === 'Spot Graphics / Lettering' || coverage === 'Reflective Spot Graphics') && (
+                {/* Contrasting Finish Lettering — for any wrap coverage */}
+                {coverage !== 'Spot Graphics / Lettering' && coverage !== 'Reflective Spot Graphics' && (
                   <div className="mt-4 border-t border-white/10 pt-4">
                     <div className="flex items-center justify-between gap-4">
                       <div>
-                        <div className="text-sm font-medium text-offwhite">Gloss / Satin Graphic Overlay</div>
+                        <div className="text-sm font-medium text-offwhite">Add Contrasting Finish Lettering</div>
                         <div className="text-xs text-offwhite-dark mt-0.5">
-                          Premium finish overlay applied over spot graphics — adds the cost of a regular spot graphics package
+                          Gloss lettering on a satin wrap — or satin lettering on a gloss wrap. Adds spot graphics pricing.
                         </div>
                       </div>
                       <Toggle on={satinGlossOverlay} onToggle={() => { setSatinGlossOverlay(o => !o); setShowResult(false); }} />
                     </div>
                     {satinGlossOverlay && (
-                      <div className="text-xs text-mint mt-2">✓ Gloss / Satin overlay included — premium layered finish</div>
+                      <div className="text-xs text-mint mt-2">✓ Contrasting finish lettering included — custom two-tone effect</div>
                     )}
                   </div>
                 )}
@@ -485,7 +490,7 @@ export default function WrapCalculator() {
                       {isBoxTruck && ` (${cabWrap ? 'cab included' : 'box body only'})`}
                       {qty > 1 ? ` × ${qty} vehicles` : ''}
                       {reflectiveOverlay && ' · reflective overlay'}
-                      {satinGlossOverlay && ' · gloss/satin overlay'}
+                      {satinGlossOverlay && ' · contrasting finish lettering'}
                       {finish !== 'Gloss' && ` · ${finish} finish`}
                     </div>
 
@@ -545,9 +550,9 @@ export default function WrapCalculator() {
                       <span className="text-offwhite-dark">Coverage:</span>
                       <span className="text-offwhite">{coverage}</span>
                     </div>
-                    {(coverage === 'Spot Graphics / Lettering' || coverage === 'Reflective Spot Graphics') && (
+                    {coverage !== 'Spot Graphics / Lettering' && coverage !== 'Reflective Spot Graphics' && (
                       <div className="flex justify-between">
-                        <span className="text-offwhite-dark">Gloss/Satin Overlay:</span>
+                        <span className="text-offwhite-dark">Contrasting Lettering:</span>
                         <span className={satinGlossOverlay ? 'text-mint' : 'text-offwhite-dark'}>
                           {satinGlossOverlay ? 'Yes (+spot graphics cost)' : 'No'}
                         </span>
