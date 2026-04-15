@@ -25,6 +25,8 @@ import WrapCalculator from './pages/WrapCalculator';
 import PrintAndShip from './pages/PrintAndShip';
 import BlogPost from './pages/BlogPost';
 import LostCallCalculator from './pages/LostCallCalculator';
+import ProofManager from './pages/ProofManager';
+import ProofClient from './pages/ProofClient';
 import './App.css';
 
 gsap.registerPlugin(ScrollTrigger);
@@ -48,17 +50,12 @@ function HomePage() {
 function App() {
   useEffect(() => {
     ScrollTrigger.refresh();
-    
-    return () => {
-      ScrollTrigger.getAll().forEach(st => st.kill());
-    };
+    return () => { ScrollTrigger.getAll().forEach(st => st.kill()); };
   }, []);
 
   useEffect(() => {
     const scriptId = 'ghl-chat-widget-script';
     if (document.getElementById(scriptId)) return;
-
-    // Defer chat widget until after main content loads to improve Core Web Vitals
     const load = () => {
       if (document.getElementById(scriptId)) return;
       const script = document.createElement('script');
@@ -69,8 +66,6 @@ function App() {
       script.async = true;
       document.body.appendChild(script);
     };
-
-    // Use requestIdleCallback if available, otherwise 3s delay
     if ('requestIdleCallback' in window) {
       (window as any).requestIdleCallback(load, { timeout: 3000 });
     } else {
@@ -83,7 +78,6 @@ function App() {
     <Router>
       <div className="relative bg-charcoal min-h-screen">
         <MatrixBackground />
-        
         <Routes>
           <Route path="/" element={<HomePage />} />
           <Route path="/about" element={<About />} />
@@ -93,7 +87,6 @@ function App() {
           <Route path="/commercial-wraps" element={<CommercialWraps />} />
           <Route path="/careers" element={<Careers />} />
           <Route path="/blogs" element={<Blogs />} />
-          {/* Service Pages */}
           <Route path="/services/web-design" element={<WebDesign />} />
           <Route path="/services/crm-automation" element={<CRMAutomation />} />
           <Route path="/services/reputation" element={<ReputationManagement />} />
@@ -103,6 +96,8 @@ function App() {
           <Route path="/print-ship" element={<PrintAndShip />} />
           <Route path="/lost-call-calculator" element={<LostCallCalculator />} />
           <Route path="/post/:slug" element={<BlogPost />} />
+          <Route path="/proof-manager" element={<ProofManager />} />
+          <Route path="/proof/:token" element={<ProofClient />} />
         </Routes>
       </div>
     </Router>
