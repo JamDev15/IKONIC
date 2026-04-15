@@ -30,7 +30,7 @@ interface Comment {
 }
 
 // ── GHL Webhook ───────────────────────────────────────────────────────────────
-const GHL_WEBHOOK = 'https://services.leadconnectorhq.com/hooks/YOUR_GHL_HOOK_ID/webhook-trigger/proof-created';
+const GHL_WEBHOOK = 'https://services.leadconnectorhq.com/hooks/DSt3GeDVV0wQXQt9iuGn/webhook-trigger/23d15f93-c4a0-49c3-9c90-79770f056cee';
 
 async function fireWebhook(payload: object) {
   try {
