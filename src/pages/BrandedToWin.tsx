@@ -78,7 +78,7 @@ export default function BrandedToWin() {
             <div className="relative">
               <div className="absolute -inset-4 rounded-3xl blur-3xl opacity-40" style={{ background: GOLD }} />
               <img
-                src="/branded-to-win-cover.png"
+                src="/branded.jpg"
                 alt="Branded to Win by Joshua Soderblom"
                 className="relative w-72 rounded-2xl shadow-2xl border border-white/10"
                 style={{ boxShadow: `0 25px 60px rgba(245,166,35,0.35)` }}
