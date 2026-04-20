@@ -33,7 +33,9 @@ export default function BrandedToWin() {
   const [openChapter, setOpenChapter] = useState<number | null>(null);
 
   return (
-    <div className="bg-[#0a0a0a] min-h-screen">
+    <div className="min-h-screen" style={{ position: 'relative', zIndex: 10, backgroundColor: '#0a0a0a' }}>
+      {/* Block the Matrix background completely */}
+      <div style={{ position: 'fixed', inset: 0, backgroundColor: '#0a0a0a', zIndex: -1 }} />
       <Navigation />
 
       {/* ── Hero ─────────────────────────────────────────────────────────────── */}
