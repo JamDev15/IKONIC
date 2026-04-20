@@ -149,7 +149,14 @@ export default function Navigation() {
             <Link to="/careers" className="text-sm font-medium text-offwhite-dark hover:text-mint transition-colors">
               Career
             </Link>
-            
+
+            <Link to="/branded-to-win" className="text-sm font-medium px-3 py-1.5 rounded-lg border transition-colors"
+              style={{ borderColor: '#F5A623', color: '#F5A623' }}
+              onMouseEnter={e => { (e.currentTarget as HTMLElement).style.background = '#F5A62320'; }}
+              onMouseLeave={e => { (e.currentTarget as HTMLElement).style.background = 'transparent'; }}>
+              Book
+            </Link>
+
             <Link to="/contact" className="btn-primary text-sm">
               Start Now
             </Link>
@@ -220,6 +227,9 @@ export default function Navigation() {
           </Link>
           <Link to="/careers" className="text-2xl font-display font-bold text-offwhite hover:text-mint transition-colors">
             Career
+          </Link>
+          <Link to="/branded-to-win" className="text-2xl font-display font-bold transition-colors" style={{ color: '#F5A623' }}>
+            Book
           </Link>
           <Link to="/contact" className="btn-primary mt-4">
             Start Now
