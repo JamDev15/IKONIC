@@ -198,6 +198,38 @@ export default function BrandedToWin() {
         </div>
       </section>
 
+      {/* ── Free Chapter Form ────────────────────────────────────────────────── */}
+      <section className="py-20 px-[6vw] bg-[#111111]/80">
+        <div className="max-w-3xl mx-auto">
+          <p className="text-center text-sm font-semibold uppercase tracking-widest mb-3" style={{ color: GOLD }}>
+            Free Download
+          </p>
+          <h2 className="font-display text-4xl font-bold text-white text-center mb-4">Read a Free Chapter</h2>
+          <p className="text-white/50 text-center mb-10">
+            Get an instant preview of the book — no credit card required.
+          </p>
+          <div style={{ height: '518px' }}>
+            <iframe
+              src="https://crm.ikonic303.com/widget/form/AiVNk0UN8mRga7Aw9ek2"
+              style={{ width: '100%', height: '100%', border: 'none', borderRadius: '8px' }}
+              id="inline-AiVNk0UN8mRga7Aw9ek2"
+              data-layout="{'id':'INLINE'}"
+              data-trigger-type="alwaysShow"
+              data-trigger-value=""
+              data-activation-type="alwaysActivated"
+              data-activation-value=""
+              data-deactivation-type="neverDeactivate"
+              data-deactivation-value=""
+              data-form-name="Free Chapter Download"
+              data-height="518"
+              data-layout-iframe-id="inline-AiVNk0UN8mRga7Aw9ek2"
+              data-form-id="AiVNk0UN8mRga7Aw9ek2"
+              title="Free Chapter Download"
+            />
+          </div>
+        </div>
+      </section>
+
       {/* ── About Joshua ─────────────────────────────────────────────────────── */}
       <section className="py-20 px-[6vw] bg-[#111111]/80">
         <div className="max-w-4xl mx-auto text-center">
