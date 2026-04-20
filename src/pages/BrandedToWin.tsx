@@ -82,9 +82,9 @@ export default function BrandedToWin() {
   const [openChapter, setOpenChapter] = useState<number | null>(null);
 
   return (
-    <div className="min-h-screen" style={{ position: 'relative', zIndex: 10, backgroundColor: '#0a0a0a' }}>
-      {/* Block the Matrix background completely */}
-      <div style={{ position: 'fixed', inset: 0, backgroundColor: '#0a0a0a', zIndex: -1 }} />
+    <div className="min-h-screen" style={{ position: 'relative', zIndex: 10 }}>
+      {/* Dark overlay — dims matrix without fully hiding it */}
+      <div style={{ position: 'fixed', inset: 0, backgroundColor: 'rgba(8,10,8,0.88)', zIndex: -1 }} />
       <Navigation />
 
       {/* ── Hero ─────────────────────────────────────────────────────────────── */}
@@ -140,7 +140,7 @@ export default function BrandedToWin() {
       </section>
 
       {/* ── What You'll Discover ──────────────────────────────────────────────── */}
-      <section className="py-20 px-[6vw] bg-[#111111]">
+      <section className="py-20 px-[6vw] bg-[#111111]/80">
         <div className="max-w-5xl mx-auto">
           <p className="text-center text-sm font-semibold uppercase tracking-widest mb-3" style={{ color: GOLD }}>
             Inside the Book
@@ -153,7 +153,7 @@ export default function BrandedToWin() {
           </p>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {benefits.map(b => (
-              <div key={b.title} className="bg-[#1a1a1a] border border-white/10 rounded-2xl p-8 hover:border-[#F5A623]/30 transition-all">
+              <div key={b.title} className="bg-[#1a1a1a]/80 border border-white/10 rounded-2xl p-8 hover:border-[#F5A623]/30 transition-all">
                 <div className="text-4xl mb-4">{b.icon}</div>
                 <h3 className="font-display text-xl font-bold text-white mb-3">{b.title}</h3>
                 <p className="text-white/50 text-sm leading-relaxed">{b.desc}</p>
@@ -199,7 +199,7 @@ export default function BrandedToWin() {
       </section>
 
       {/* ── About Joshua ─────────────────────────────────────────────────────── */}
-      <section className="py-20 px-[6vw] bg-[#111111]">
+      <section className="py-20 px-[6vw] bg-[#111111]/80">
         <div className="max-w-4xl mx-auto text-center">
           <p className="text-sm font-semibold uppercase tracking-widest mb-4" style={{ color: GOLD }}>The Author</p>
           <h2 className="font-display text-4xl font-bold text-white mb-8">Meet Joshua Soderblom</h2>
@@ -237,7 +237,7 @@ export default function BrandedToWin() {
           </p>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-2xl mx-auto">
             {/* Digital */}
-            <div className="bg-[#1a1a1a] border border-white/10 rounded-2xl p-8 flex flex-col">
+            <div className="bg-[#1a1a1a]/80 border border-white/10 rounded-2xl p-8 flex flex-col">
               <p className="text-white/60 text-sm font-semibold uppercase tracking-widest mb-2">Digital Edition</p>
               <div className="flex items-end gap-1 mb-6">
                 <span className="font-display text-5xl font-bold text-white">$19</span>
@@ -294,7 +294,7 @@ export default function BrandedToWin() {
       </section>
 
       {/* ── FAQ ───────────────────────────────────────────────────────────────── */}
-      <section className="py-20 px-[6vw] bg-[#111111]">
+      <section className="py-20 px-[6vw] bg-[#111111]/80">
         <div className="max-w-3xl mx-auto">
           <h2 className="font-display text-4xl font-bold text-white text-center mb-4">Frequently Asked Questions</h2>
           <p className="text-white/50 text-center mb-12">
