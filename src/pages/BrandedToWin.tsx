@@ -111,7 +111,7 @@ export default function BrandedToWin() {
               <span className="text-white/60 text-sm">Joined by 10,000+ readers</span>
             </div>
             <div className="flex flex-col sm:flex-row gap-4">
-              <a href="https://brandedtowin.com" target="_blank" rel="noopener noreferrer"
+              <a href="#pricing"
                 className="flex items-center justify-center gap-2 font-bold px-8 py-4 rounded-xl text-black transition-all hover:-translate-y-0.5 hover:shadow-lg text-lg"
                 style={{ background: GOLD }}>
                 <Package className="w-5 h-5" /> Get the Book Now
@@ -228,7 +228,7 @@ export default function BrandedToWin() {
       </section>
 
       {/* ── Pricing ───────────────────────────────────────────────────────────── */}
-      <section className="py-20 px-[6vw]">
+      <section id="pricing" className="py-20 px-[6vw]">
         <div className="max-w-4xl mx-auto">
           <p className="text-center text-sm font-semibold uppercase tracking-widest mb-3" style={{ color: GOLD }}>Pricing</p>
           <h2 className="font-display text-4xl font-bold text-white text-center mb-4">Choose Your Package</h2>
