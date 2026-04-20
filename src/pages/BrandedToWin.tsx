@@ -116,7 +116,7 @@ export default function BrandedToWin() {
                 style={{ background: GOLD }}>
                 <Package className="w-5 h-5" /> Get the Book Now
               </a>
-              <a href="https://brandedtowin.com" target="_blank" rel="noopener noreferrer"
+              <a href="#free-chapter"
                 className="flex items-center justify-center gap-2 font-bold px-8 py-4 rounded-xl border text-white transition-all hover:bg-white/10 text-lg"
                 style={{ borderColor: GOLD, color: GOLD }}>
                 <BookOpen className="w-5 h-5" /> Read a Free Chapter
@@ -199,7 +199,7 @@ export default function BrandedToWin() {
       </section>
 
       {/* ── Free Chapter Form ────────────────────────────────────────────────── */}
-      <section className="py-20 px-[6vw] bg-[#111111]/80">
+      <section id="free-chapter" className="py-20 px-[6vw] bg-[#111111]/80">
         <div className="max-w-3xl mx-auto">
           <p className="text-center text-sm font-semibold uppercase tracking-widest mb-3" style={{ color: GOLD }}>
             Free Download
