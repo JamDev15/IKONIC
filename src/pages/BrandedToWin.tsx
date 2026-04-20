@@ -250,7 +250,7 @@ export default function BrandedToWin() {
                   </li>
                 ))}
               </ul>
-              <a href="https://brandedtowin.com" target="_blank" rel="noopener noreferrer"
+              <a href="https://crm.ikonic303.com/payment-link/69e2b311557558e89e520b78" target="_blank" rel="noopener noreferrer"
                 className="w-full text-center font-bold py-3 rounded-xl border transition-all hover:bg-white/5 text-white"
                 style={{ borderColor: `${GOLD}50` }}>
                 Get Digital Edition
@@ -282,7 +282,7 @@ export default function BrandedToWin() {
                   </li>
                 ))}
               </ul>
-              <a href="https://brandedtowin.com" target="_blank" rel="noopener noreferrer"
+              <a href="https://crm.ikonic303.com/payment-link/69e2b301557558e89e520b77" target="_blank" rel="noopener noreferrer"
                 className="w-full text-center font-bold py-3 rounded-xl text-black transition-all hover:-translate-y-0.5 hover:shadow-lg"
                 style={{ background: GOLD }}>
                 Get the Complete Bundle
