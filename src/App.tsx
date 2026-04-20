@@ -27,6 +27,7 @@ import BlogPost from './pages/BlogPost';
 import LostCallCalculator from './pages/LostCallCalculator';
 import ProofManager from './pages/ProofManager';
 import ProofClient from './pages/ProofClient';
+import BrandedToWin from './pages/BrandedToWin';
 import './App.css';
 
 gsap.registerPlugin(ScrollTrigger);
@@ -98,6 +99,7 @@ function App() {
           <Route path="/post/:slug" element={<BlogPost />} />
           <Route path="/proof-manager" element={<ProofManager />} />
           <Route path="/proof/:token" element={<ProofClient />} />
+          <Route path="/branded-to-win" element={<BrandedToWin />} />
         </Routes>
       </div>
     </Router>
