@@ -76,21 +76,13 @@ export default function BrandedToWin() {
           {/* Book Cover */}
           <div className="flex-shrink-0">
             <div className="relative">
-              <div className="absolute inset-0 rounded-2xl blur-3xl opacity-30" style={{ background: GOLD }} />
-              <div className="relative w-72 h-96 rounded-2xl overflow-hidden border-2 shadow-2xl flex flex-col items-center justify-center text-center p-8"
-                style={{ borderColor: GOLD, background: 'linear-gradient(135deg, #1a1a1a 0%, #0a0a0a 100%)' }}>
-                <p className="text-xs font-semibold uppercase tracking-widest text-white/60 mb-3">BRANDED TO WIN</p>
-                <div className="w-24 h-24 rounded-full flex items-center justify-center mb-4 text-5xl"
-                  style={{ background: `${GOLD}20`, border: `2px solid ${GOLD}` }}>
-                  💲
-                </div>
-                <h2 className="font-display text-xl font-bold text-white mb-2 leading-tight">
-                  How Local Service Businesses Turn Image Into Income
-                </h2>
-                <div className="mt-4 pt-4 border-t border-white/10 w-full">
-                  <p className="font-bold text-white tracking-widest text-sm uppercase">JOSHUA SODERBLOM</p>
-                </div>
-              </div>
+              <div className="absolute -inset-4 rounded-3xl blur-3xl opacity-40" style={{ background: GOLD }} />
+              <img
+                src="/branded-to-win-cover.png"
+                alt="Branded to Win by Joshua Soderblom"
+                className="relative w-72 rounded-2xl shadow-2xl border border-white/10"
+                style={{ boxShadow: `0 25px 60px rgba(245,166,35,0.35)` }}
+              />
             </div>
           </div>
         </div>
