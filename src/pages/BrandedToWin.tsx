@@ -7,11 +7,60 @@ import { ChevronDown, ChevronUp, Star, BookOpen, Download, Package } from 'lucid
 const GOLD = '#F5A623';
 
 const chapters = [
-  { title: 'Part I: The Invisible Tax',      desc: 'Discover how a weak brand silently costs you jobs, customers, and credibility every single day.' },
-  { title: 'Part II: The Brand Equation',    desc: 'The simple formula that separates premium service businesses from those stuck competing on price.' },
-  { title: 'Part III: The Transformation',   desc: 'Step-by-step playbook for rebuilding your brand into one that commands attention and premium prices.' },
-  { title: 'Part IV: The Playbook',          desc: 'Actionable templates, scripts, and systems to roll out your new brand across every touchpoint.' },
-  { title: 'Part V: The Compound Effect',    desc: 'How a strong brand snowballs into reviews, referrals, and a reputation that does the selling for you.' },
+  {
+    title: 'Part I: The Invisible Tax',
+    chapters: [
+      { label: 'Intro', desc: "The author's origin story and the book's premise: your brand is either making or costing you money daily." },
+      { label: 'Ch. 1 – The Trust Tax', desc: 'Quantifies what invisibility costs — pricing gap, lost leads, close rate, and referrals.' },
+      { label: 'Ch. 2 – From Polishing Paint to Building Empires', desc: "Joshua's personal journey from detailer to brand strategist." },
+      { label: 'Ch. 3 – The Psychology of "I\'ll Call You Back"', desc: 'The neuroscience behind trust — 50-millisecond judgments, mere exposure effect, authority heuristics.' },
+      { label: 'Ch. 3.5 – The Invisible Competitor', desc: 'The customer who never called because they never noticed you.' },
+    ],
+  },
+  {
+    title: 'Part II: The Brand Equation',
+    chapters: [
+      { label: 'Ch. 4 – The Brand Equation', desc: 'Revenue = Visibility × Professionalism × Consistency ÷ Friction.' },
+      { label: 'Ch. 5 – Your Fleet Is a Goldmine', desc: 'Impression math, cost-per-thousand comparisons, and strategic parking.' },
+      { label: 'Ch. 6 – The Seven Touchpoints System', desc: 'Fleet, crew, digital, paperwork, job site, experience, and community.' },
+      { label: 'Ch. 7 – The Math That Changes Everything', desc: 'Full financial model showing a 21:1 ROI.' },
+      { label: 'Ch. 7.5 – The Objection Killer', desc: 'Rebuttals to every common excuse for not investing in your brand.' },
+    ],
+  },
+  {
+    title: 'Part III: The Transformation',
+    chapters: [
+      { label: 'Ch. 8 – Proof: Five Case Studies', desc: 'HVAC, landscaping, plumbing, cleaning, and roofing transformations with real numbers.' },
+      { label: 'Ch. 9 – The Pricing Power of Brand', desc: 'Three pricing levers — base rate premium, upsell acceptance, price objection elimination.' },
+      { label: 'Ch. 10 – The Mindset Shift: From Technician to CEO', desc: 'Identity work and the internal shift required to lead a brand-first business.' },
+      { label: 'Ch. 11 – Building a Brand-Led Team', desc: 'Brand as a hiring, retention, and culture tool.' },
+    ],
+  },
+  {
+    title: 'Part IV: The Playbook',
+    chapters: [
+      { label: 'Ch. 12 – The Ikonic Brand Audit', desc: '7-dimension, 70-point self-scoring framework.' },
+      { label: 'Ch. 13 – The 90-Day Brand Transformation', desc: 'Phase-by-phase implementation plan with costs.' },
+      { label: 'Ch. 14 – Designing Wraps That Print Money', desc: 'The 3-second rule, information hierarchy, and the 5-point checklist.' },
+      { label: 'Ch. 15 – From One Truck to Market Domination', desc: 'Fleet scaling strategy, tipping points, and hiring advantages.' },
+    ],
+  },
+  {
+    title: 'Part V: The Compound Effect',
+    chapters: [
+      { label: 'Ch. 16 – Digital Meets Physical', desc: 'Omnichannel alignment and closing the cognitive dissonance gap.' },
+      { label: 'Ch. 17 – The 17 Brand Killers', desc: 'Common mistakes that sabotage brand investment.' },
+      { label: 'Ch. 18 – The Compound Effect of Brand Equity', desc: 'Brand as an appreciating asset vs. advertising as a recurring expense.' },
+      { label: 'Ch. 19 – Your Move', desc: 'The fork-in-the-road close.' },
+      { label: 'Ch. 20 – Social Media That Actually Works', desc: 'The Four Pillars framework and 30-minute weekly system.' },
+      { label: 'Ch. 21 – The Review Engine', desc: 'Systematizing reviews as a compounding sales asset.' },
+      { label: 'Ch. 22 – Strategic Partnerships', desc: 'The Partnership Triangle and the real estate agent goldmine.' },
+      { label: 'Ch. 23 – The Franchise Effect', desc: 'Replicating national brand perception for $11K–$25K vs. $350K+ in franchise fees.' },
+      { label: 'Ch. 24 – Beyond the Truck', desc: 'Yard signs, door hangers, trailers, job site banners, wearables — every surface as a billboard.' },
+      { label: 'Ch. 25 – What to Do Monday Morning', desc: 'Five concrete actions totaling ~2.5 hours.' },
+      { label: 'Ch. 26 – A Letter to the Skeptic', desc: 'A direct address to readers still on the fence.' },
+    ],
+  },
 ];
 
 const benefits = [
@@ -122,20 +171,25 @@ export default function BrandedToWin() {
             Nearly 200 pages of dense, actionable insights. No fluff, just the exact frameworks you need to build a winning brand.
           </p>
           <div className="flex flex-col gap-3">
-            {chapters.map((ch, i) => (
+            {chapters.map((part, i) => (
               <div key={i} className="border border-white/10 rounded-xl overflow-hidden hover:border-[#F5A623]/30 transition-all">
                 <button
                   onClick={() => setOpenChapter(openChapter === i ? null : i)}
                   className="w-full flex items-center justify-between px-6 py-4 text-left"
                 >
-                  <span className="font-semibold text-white">{ch.title}</span>
+                  <span className="font-bold text-white" style={{ color: openChapter === i ? GOLD : undefined }}>{part.title}</span>
                   {openChapter === i
-                    ? <ChevronUp className="w-4 h-4 text-white/40 shrink-0" />
+                    ? <ChevronUp className="w-4 h-4 shrink-0" style={{ color: GOLD }} />
                     : <ChevronDown className="w-4 h-4 text-white/40 shrink-0" />}
                 </button>
                 {openChapter === i && (
-                  <div className="px-6 pb-4">
-                    <p className="text-white/50 text-sm">{ch.desc}</p>
+                  <div className="px-6 pb-5 flex flex-col gap-4 border-t border-white/10 pt-4">
+                    {part.chapters.map((ch, j) => (
+                      <div key={j}>
+                        <p className="text-sm font-semibold text-white/90 mb-0.5">{ch.label}</p>
+                        <p className="text-white/45 text-sm leading-relaxed">{ch.desc}</p>
+                      </div>
+                    ))}
                   </div>
                 )}
               </div>
