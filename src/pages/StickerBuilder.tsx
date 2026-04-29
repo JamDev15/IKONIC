@@ -88,7 +88,7 @@ function StickerPreview({ type, shape, sizeObj, material, finish, dataURL, file,
   const artwork =
     dataURL ? <img src={dataURL} className="w-full h-full object-contain p-3" alt="artwork" /> :
     file    ? <div className="text-center"><div className="text-4xl mb-2">📄</div><div className="text-sm font-semibold truncate px-2 max-w-[200px]">{file.name}</div><div className="text-xs text-gray-500 mt-1">Vector file ready</div></div> :
-              <div className="text-white/50 text-center"><div className="text-5xl mb-2">↑</div><div className="text-sm font-semibold">Upload your artwork</div><div className="text-xs">PNG · JPG · SVG · PDF</div></div>;
+              <div className="text-center" style={{color:'#6B7280'}}><div className="text-5xl mb-2">↑</div><div className="text-sm font-semibold" style={{color:'#374151'}}>Upload your artwork</div><div className="text-xs">PNG · JPG · SVG · PDF</div></div>;
 
   if (type === 'sheet') {
     const ratio  = sizeObj.h / sizeObj.w;
