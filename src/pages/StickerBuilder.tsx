@@ -88,7 +88,7 @@ function StickerPreview({ type, shape, sizeObj, material, finish, dataURL, file,
   const artwork =
     dataURL ? <img src={dataURL} className="w-full h-full object-contain p-3" alt="artwork" /> :
     file    ? <div className="text-center"><div className="text-4xl mb-2">📄</div><div className="text-sm font-semibold truncate px-2 max-w-[200px]">{file.name}</div><div className="text-xs text-gray-500 mt-1">Vector file ready</div></div> :
-              <div className="text-gray-400 text-center"><div className="text-5xl mb-2">↑</div><div className="text-sm font-semibold">Upload your artwork</div><div className="text-xs">PNG · JPG · SVG · PDF</div></div>;
+              <div className="text-white/50 text-center"><div className="text-5xl mb-2">↑</div><div className="text-sm font-semibold">Upload your artwork</div><div className="text-xs">PNG · JPG · SVG · PDF</div></div>;
 
   if (type === 'sheet') {
     const ratio  = sizeObj.h / sizeObj.w;
@@ -100,7 +100,7 @@ function StickerPreview({ type, shape, sizeObj, material, finish, dataURL, file,
       <div style={{ background:'white', boxShadow:'0 30px 60px rgba(10,22,40,0.25)', padding:14, borderRadius:4, display:'grid', width:sheetW, height:sheetH, gridTemplateColumns:`repeat(${cols},1fr)`, gridTemplateRows:`repeat(${rows},1fr)`, gap:8 }}>
         {Array.from({ length: perSheet }).map((_, i) => (
           <div key={i} className="sb-sheet-cell">
-            {dataURL ? <img src={dataURL} style={{ width:'100%',height:'100%',objectFit:'contain',padding:2 }} alt="" /> : file ? <span>📄</span> : <span style={{ fontSize:10,color:'#9CA3AF' }}>↑</span>}
+            {dataURL ? <img src={dataURL} style={{ width:'100%',height:'100%',objectFit:'contain',padding:2 }} alt="" /> : file ? <span>📄</span> : <span style={{ fontSize:10,color:'#a0a0b0' }}>↑</span>}
           </div>
         ))}
       </div>
@@ -284,7 +284,7 @@ export default function StickerBuilder() {
           {/* Specs strip */}
           <div className="mt-4 grid grid-cols-2 md:grid-cols-5 gap-2 text-center">
             {specs.map(s => (
-              <div key={s.label} className="bg-white rounded-lg p-3" style={{ border:`1px solid ${BORDER}` }}>
+              <div key={s.label} className="bg-white/10 rounded-lg p-3" style={{ border:`1px solid rgba(255,255,255,0.12)` }}>
                 <div className="sb-label mb-1">{s.label}</div>
                 <div className="text-sm font-bold">{s.value}</div>
               </div>
@@ -292,9 +292,9 @@ export default function StickerBuilder() {
           </div>
 
           {/* Trust badges */}
-          <div className="mt-4 bg-white rounded-xl p-4 space-y-1" style={{ border:`1px solid ${BORDER}` }}>
+          <div className="mt-4 bg-white/10 rounded-xl p-4 space-y-1" style={{ border:`1px solid rgba(255,255,255,0.1)` }}>
             {['Printed in Denver on premium 7-year vinyl','Waterproof, dishwasher-safe, UV-resistant','Free design review before print'].map(t => (
-              <div key={t} className="flex items-center gap-2 text-xs text-gray-600">
+              <div key={t} className="flex items-center gap-2 text-xs text-white/70">
                 <span className="text-green-600 font-bold">✓</span> {t}
               </div>
             ))}
@@ -305,7 +305,7 @@ export default function StickerBuilder() {
         <section className="lg:col-span-2 space-y-5">
           <div>
             <h1 className="sb-display text-3xl md:text-4xl mb-1">BUILD YOUR STICKER</h1>
-            <p className="text-sm text-gray-600">Live pricing · 3–5 day turnaround</p>
+            <p className="text-sm text-white/60">Live pricing · 3–5 day turnaround</p>
           </div>
 
           {/* 1. Type */}
@@ -369,14 +369,14 @@ export default function StickerBuilder() {
             </div>
             {cfg.customSize && (
               <details className="mt-2">
-                <summary className="text-xs text-gray-600 cursor-pointer" style={{ color:'#6B7280' }}>+ Custom size</summary>
+                <summary className="text-xs text-white/60 cursor-pointer" style={{ color:'#a0a0b0' }}>+ Custom size</summary>
                 <div className="grid grid-cols-2 gap-2 mt-2">
                   <input type="number" placeholder="Width (in)" step="0.5" min="1" max="24" value={customW ?? ''}
                     onChange={e => { setCustomW(parseFloat(e.target.value)||null); bump(); }}
-                    className="rounded-lg p-2 text-sm" style={{ border:`2px solid ${BORDER}` }} />
+                    className="rounded-lg p-2 text-sm" style={{ border:`2px solid rgba(255,255,255,0.15)`, background:'rgba(255,255,255,0.08)', color:'white' }} />
                   <input type="number" placeholder="Height (in)" step="0.5" min="1" max="48" value={customH ?? ''}
                     onChange={e => { setCustomH(parseFloat(e.target.value)||null); bump(); }}
-                    className="rounded-lg p-2 text-sm" style={{ border:`2px solid ${BORDER}` }} />
+                    className="rounded-lg p-2 text-sm" style={{ border:`2px solid rgba(255,255,255,0.15)`, background:'rgba(255,255,255,0.08)', color:'white' }} />
                 </div>
               </details>
             )}
@@ -437,9 +437,9 @@ export default function StickerBuilder() {
               ))}
             </div>
             <details className="mt-2">
-              <summary className="text-xs cursor-pointer" style={{ color:'#6B7280' }}>+ Custom quantity</summary>
+              <summary className="text-xs cursor-pointer" style={{ color:'#a0a0b0' }}>+ Custom quantity</summary>
               <input type="number" placeholder="Enter quantity" min="10"
-                className="rounded-lg p-2 text-sm w-full mt-2" style={{ border:`2px solid ${BORDER}` }}
+                className="rounded-lg p-2 text-sm w-full mt-2" style={{ border:`2px solid rgba(255,255,255,0.15)`, background:'rgba(255,255,255,0.08)', color:'white' }}
                 onChange={e => { const v=parseInt(e.target.value); if(v>=10){setQty(v);bump();} }} />
             </details>
           </div>
@@ -447,15 +447,15 @@ export default function StickerBuilder() {
           {/* Price summary */}
           <div className="rounded-2xl p-5 space-y-3 text-white" style={{ background: NAVY }}>
             <div className="flex justify-between items-baseline">
-              <span className="sb-label" style={{ color:'#9CA3AF' }}>Per {cfg.unit}</span>
+              <span className="sb-label" style={{ color:'#a0a0b0' }}>Per {cfg.unit}</span>
               <span className="font-bold">${perPiece.toFixed(2)}</span>
             </div>
             <div className="flex justify-between items-baseline">
-              <span className="sb-label" style={{ color:'#9CA3AF' }}>Subtotal</span>
-              <span className="font-bold">${subtotal.toFixed(2)} <span className="text-xs font-normal" style={{ color:'#9CA3AF' }}>({qty.toLocaleString()} {cfg.qtyUnit})</span></span>
+              <span className="sb-label" style={{ color:'#a0a0b0' }}>Subtotal</span>
+              <span className="font-bold">${subtotal.toFixed(2)} <span className="text-xs font-normal" style={{ color:'#a0a0b0' }}>({qty.toLocaleString()} {cfg.qtyUnit})</span></span>
             </div>
             <div className="flex justify-between items-baseline">
-              <span className="sb-label" style={{ color:'#9CA3AF' }}>Shipping (3–5 days)</span>
+              <span className="sb-label" style={{ color:'#a0a0b0' }}>Shipping (3–5 days)</span>
               <span className="font-bold">{shipping===0 ? 'FREE' : `$${shipping.toFixed(2)}`}</span>
             </div>
             {savings && <div className="text-xs font-bold" style={{ color:'#4ade80' }}>↓ You save ${savings.amount} ({savings.pct}% bulk discount)</div>}
@@ -465,7 +465,7 @@ export default function StickerBuilder() {
                 ${total.toFixed(2)}
               </span>
             </div>
-            <div className="text-[10px]" style={{ color:'#9CA3AF' }}>Sales tax calculated at Square checkout · Free shipping on orders $75+</div>
+            <div className="text-[10px]" style={{ color:'#a0a0b0' }}>Sales tax calculated at Square checkout · Free shipping on orders $75+</div>
           </div>
 
           <button disabled={!file} onClick={() => setShowModal(true)}
@@ -484,31 +484,31 @@ export default function StickerBuilder() {
           style={{ background:'rgba(10,22,40,0.85)', backdropFilter:'blur(8px)' }}>
           <div className="bg-white rounded-2xl max-w-md w-full p-6 relative">
             <button onClick={() => setShowModal(false)}
-              className="absolute top-3 right-4 text-2xl text-gray-400 hover:text-gray-700">×</button>
+              className="absolute top-3 right-4 text-2xl text-white/50 hover:text-gray-700">×</button>
             <h2 className="sb-display text-2xl mb-1">ALMOST THERE</h2>
-            <p className="text-sm text-gray-600 mb-5">We'll email a proof before printing.</p>
+            <p className="text-sm text-white/60 mb-5">We'll email a proof before printing.</p>
             <div className="space-y-3">
               <div>
                 <label className="sb-label block mb-1">Email *</label>
                 <input type="email" value={custEmail} onChange={e=>setCustEmail(e.target.value)}
-                  placeholder="you@business.com" className="w-full rounded-lg p-3 text-sm" style={{ border:`2px solid ${BORDER}` }} />
+                  placeholder="you@business.com" className="w-full rounded-lg p-3 text-sm" style={{ border:`2px solid rgba(255,255,255,0.15)`, background:'rgba(255,255,255,0.08)', color:'white' }} />
               </div>
               <div className="grid grid-cols-2 gap-3">
                 <div>
                   <label className="sb-label block mb-1">First name *</label>
                   <input type="text" value={custFirst} onChange={e=>setCustFirst(e.target.value)}
-                    className="w-full rounded-lg p-3 text-sm" style={{ border:`2px solid ${BORDER}` }} />
+                    className="w-full rounded-lg p-3 text-sm" style={{ border:`2px solid rgba(255,255,255,0.15)`, background:'rgba(255,255,255,0.08)', color:'white' }} />
                 </div>
                 <div>
                   <label className="sb-label block mb-1">Last name</label>
                   <input type="text" value={custLast} onChange={e=>setCustLast(e.target.value)}
-                    className="w-full rounded-lg p-3 text-sm" style={{ border:`2px solid ${BORDER}` }} />
+                    className="w-full rounded-lg p-3 text-sm" style={{ border:`2px solid rgba(255,255,255,0.15)`, background:'rgba(255,255,255,0.08)', color:'white' }} />
                 </div>
               </div>
               <div>
                 <label className="sb-label block mb-1">Phone</label>
                 <input type="tel" value={custPhone} onChange={e=>setCustPhone(e.target.value)}
-                  placeholder="(720) 555-1234" className="w-full rounded-lg p-3 text-sm" style={{ border:`2px solid ${BORDER}` }} />
+                  placeholder="(720) 555-1234" className="w-full rounded-lg p-3 text-sm" style={{ border:`2px solid rgba(255,255,255,0.15)`, background:'rgba(255,255,255,0.08)', color:'white' }} />
               </div>
             </div>
             {formError && <p className="text-sm text-red-600 mt-3">{formError}</p>}
