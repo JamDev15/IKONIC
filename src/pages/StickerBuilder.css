@@ -1,0 +1,82 @@
+@import url('https://fonts.googleapis.com/css2?family=Archivo+Black&family=Manrope:wght@400;500;600;700;800&display=swap');
+
+.sb-wrap { font-family: 'Manrope', sans-serif; background: #FAFAF7; color: #1A1A1A; min-height: 100vh; }
+.sb-display { font-family: 'Archivo Black', sans-serif; letter-spacing: -0.02em; }
+.sb-label { font-size: 11px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: #6B7280; }
+
+.sb-preview-bg {
+  background-image:
+    linear-gradient(45deg, #f0ede4 25%, transparent 25%),
+    linear-gradient(-45deg, #f0ede4 25%, transparent 25%),
+    linear-gradient(45deg, transparent 75%, #f0ede4 75%),
+    linear-gradient(-45deg, transparent 75%, #f0ede4 75%);
+  background-size: 24px 24px;
+  background-position: 0 0, 0 12px, 12px -12px, 12px 0;
+}
+
+.sb-shadow {
+  background: white;
+  box-shadow: 0 30px 60px rgba(10,22,40,0.25), 0 0 0 1px rgba(0,0,0,0.04);
+  overflow: hidden;
+}
+
+.sb-holo-bg {
+  background: linear-gradient(135deg, #ff006e, #fb5607, #ffbe0b, #06ffa5, #8338ec, #3a86ff, #ff006e);
+  background-size: 400% 400%;
+  animation: sb-holo 6s ease infinite;
+}
+@keyframes sb-holo {
+  0%, 100% { background-position: 0% 50%; }
+  50%       { background-position: 100% 50%; }
+}
+
+.sb-glitter-bg {
+  background-image:
+    radial-gradient(circle at 15% 25%, white 1.5px, transparent 2px),
+    radial-gradient(circle at 75% 35%, white 1px,   transparent 2px),
+    radial-gradient(circle at 35% 75%, white 1.5px, transparent 2px),
+    radial-gradient(circle at 85% 80%, white 1px,   transparent 2px),
+    radial-gradient(circle at 50% 50%, white 1px,   transparent 1.5px),
+    linear-gradient(135deg, #d4d4d4, #f5f5f5, #d4d4d4);
+  background-size: 30px 30px, 25px 25px, 35px 35px, 28px 28px, 40px 40px, 100% 100%;
+}
+
+.sb-transparent-bg {
+  background:
+    repeating-linear-gradient(45deg, rgba(0,0,0,0.04) 0 8px, transparent 8px 16px),
+    rgba(220,220,220,0.15);
+}
+
+.sb-gloss { background: linear-gradient(135deg, rgba(255,255,255,0.55) 0%, rgba(255,255,255,0) 45%, rgba(255,255,255,0) 55%, rgba(255,255,255,0.35) 100%); }
+.sb-satin { background: linear-gradient(135deg, rgba(255,255,255,0.2) 0%, rgba(255,255,255,0.05) 100%); }
+
+@keyframes sb-pulse { 0%,100%{transform:scale(1)} 50%{transform:scale(1.06)} }
+.sb-pulse { animation: sb-pulse 0.4s ease; }
+
+.sb-opt {
+  border: 2px solid #E5E2D9; background: white;
+  transition: all 0.15s; cursor: pointer; text-align: center;
+}
+.sb-opt:hover { border-color: #1A1A1A; }
+.sb-opt.active { border-color: #0A1628; background: #0A1628; color: white; }
+
+.sb-type-card {
+  border: 2px solid #E5E2D9; background: white;
+  transition: all 0.15s; cursor: pointer;
+  display: flex; flex-direction: column; align-items: center;
+  justify-content: center; padding: 12px 8px; border-radius: 12px;
+  text-align: center; min-height: 90px;
+}
+.sb-type-card:hover { border-color: #1A1A1A; }
+.sb-type-card.active { border-color: #0A1628; background: #0A1628; color: white; }
+
+.sb-cta { background: #FF6B35; color: white; transition: all 0.2s; cursor: pointer; }
+.sb-cta:hover:not(:disabled) { background: #E5552A; transform: translateY(-2px); box-shadow: 0 12px 30px rgba(255,107,53,0.4); }
+.sb-cta:disabled { background: #9CA3AF; cursor: not-allowed; }
+
+.sb-drop-active { border-color: #FF6B35 !important; background: #FFF4ED !important; }
+
+.sb-sheet-cell {
+  display: flex; align-items: center; justify-content: center;
+  border: 1px dashed #d1d5db; border-radius: 6px; overflow: hidden; padding: 4px;
+}
