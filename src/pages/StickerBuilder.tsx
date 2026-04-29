@@ -268,7 +268,8 @@ export default function StickerBuilder() {
 
   // ── Render ─────────────────────────────────────────────────────────────────
   return (
-    <div className="sb-wrap">
+    <div className="sb-wrap" style={{ position: 'relative', zIndex: 10 }}>
+      <div style={{ position: 'fixed', inset: 0, backgroundColor: '#FAFAF7', zIndex: -1 }} />
       {/* Ikonic nav header */}
       <header className="text-white px-6 py-4 sticky top-0 z-50" style={{ background: NAVY }}>
         <div className="max-w-7xl mx-auto flex items-center justify-between">
@@ -283,7 +284,7 @@ export default function StickerBuilder() {
         </div>
       </header>
 
-      <div className="max-w-7xl mx-auto px-4 md:px-6 py-6 grid grid-cols-1 lg:grid-cols-5 gap-6">
+      <div className="max-w-7xl mx-auto px-4 md:px-6 py-6 grid grid-cols-1 lg:grid-cols-5 gap-6" style={{ minHeight: 'calc(100vh - 64px)' }}>
 
         {/* ── Preview Panel ─────────────────────────────────────────────── */}
         <section className="lg:col-span-3 lg:sticky lg:top-20 lg:self-start">
