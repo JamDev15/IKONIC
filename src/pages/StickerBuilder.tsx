@@ -270,7 +270,7 @@ export default function StickerBuilder() {
   // ── Render ─────────────────────────────────────────────────────────────────
   return (
     <div className="sb-wrap" style={{ position: 'relative', zIndex: 10 }}>
-      <div style={{ position: 'fixed', inset: 0, backgroundColor: 'rgba(250,250,247,0.78)', zIndex: -1 }} />
+      <div style={{ position: 'fixed', inset: 0, backgroundColor: 'rgba(250,250,247,0.55)', zIndex: -1 }} />
       <Navigation />
 
       <div className="max-w-7xl mx-auto px-4 md:px-6 pt-28 pb-6 grid grid-cols-1 lg:grid-cols-5 gap-6" style={{ minHeight: 'calc(100vh - 64px)' }}>
