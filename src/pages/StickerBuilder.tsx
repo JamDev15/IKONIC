@@ -1,5 +1,4 @@
 import { useState, useCallback, useRef } from 'react';
-import Navigation from '../components/Navigation';
 import Footer from '../components/Footer';
 import './StickerBuilder.css';
 
@@ -211,7 +210,7 @@ export default function StickerBuilder() {
     setCustomW(null); setCustomH(null);
     if (!c.materials.includes(material as any)) setMaterial(c.materials[0]);
     if (!c.finishes.includes(finish as any))    setFinish(c.finishes[0]);
-    if (!c.qtyTiers.includes(qty))              setQty(c.qtyTiers[1] ?? c.qtyTiers[0]);
+    if (!(c.qtyTiers as unknown as number[]).includes(qty)) setQty(c.qtyTiers[1] ?? c.qtyTiers[0]);
     bump();
   };
 
