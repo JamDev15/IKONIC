@@ -269,7 +269,7 @@ export default function StickerBuilder() {
   // ── Render ─────────────────────────────────────────────────────────────────
   return (
     <div className="sb-wrap" style={{ position: 'relative', zIndex: 10 }}>
-      <div style={{ position: 'fixed', inset: 0, backgroundColor: 'rgba(250,250,247,0.82)', zIndex: -1 }} />
+      <div style={{ position: 'fixed', inset: 0, backgroundColor: 'rgba(250,250,247,0.92)', zIndex: -1 }} />
       {/* Ikonic nav header */}
       <header className="text-white px-6 py-4 sticky top-0 z-50" style={{ background: NAVY }}>
         <div className="max-w-7xl mx-auto flex items-center justify-between">
