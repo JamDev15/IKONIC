@@ -1,4 +1,5 @@
 import { useState, useCallback, useRef } from 'react';
+import Navigation from '../components/Navigation';
 import Footer from '../components/Footer';
 import './StickerBuilder.css';
 
@@ -270,21 +271,9 @@ export default function StickerBuilder() {
   return (
     <div className="sb-wrap" style={{ position: 'relative', zIndex: 10 }}>
       <div style={{ position: 'fixed', inset: 0, backgroundColor: 'rgba(250,250,247,0.92)', zIndex: -1 }} />
-      {/* Ikonic nav header */}
-      <header className="text-white px-6 py-4 sticky top-0 z-50" style={{ background: NAVY }}>
-        <div className="max-w-7xl mx-auto flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <img src="/logo-ikonic.webp" alt="Ikonic" style={{ height: 40 }} />
-            <span className="hidden sm:inline sb-label" style={{ color:'#9CA3AF' }}>Custom Stickers</span>
-          </div>
-          <a href="tel:7206791230" className="text-sm font-semibold" style={{ color:'white' }}
-            onMouseEnter={e=>(e.currentTarget.style.color=ORANGE)} onMouseLeave={e=>(e.currentTarget.style.color='white')}>
-            720.679.1230
-          </a>
-        </div>
-      </header>
+      <Navigation />
 
-      <div className="max-w-7xl mx-auto px-4 md:px-6 py-6 grid grid-cols-1 lg:grid-cols-5 gap-6" style={{ minHeight: 'calc(100vh - 64px)' }}>
+      <div className="max-w-7xl mx-auto px-4 md:px-6 pt-28 pb-6 grid grid-cols-1 lg:grid-cols-5 gap-6" style={{ minHeight: 'calc(100vh - 64px)' }}>
 
         {/* ── Preview Panel ─────────────────────────────────────────────── */}
         <section className="lg:col-span-3 lg:sticky lg:top-20 lg:self-start">
