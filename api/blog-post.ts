@@ -30,7 +30,7 @@ function parseNuxtData(html: string): any[] | null {
 
 // ── GHL REST API (requires GHL_API_KEY env var) ───────────────────────────────
 async function fetchContentViaAPI(slug: string): Promise<string> {
-  const key = process.env.GHL_API_KEY;
+  const key = process.env.GHL ?? process.env.GHL_API_KEY;
   if (!key) return '';
 
   // Try v2 API first
