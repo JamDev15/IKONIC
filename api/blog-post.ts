@@ -121,7 +121,11 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     const blogData = resolveNuxtArr(arr, parseInt(blogKeyMatch[1]));
     const rawPosts: any[] = blogData?.blogPosts ?? [];
     const post = rawPosts.find((p: any) => p.urlSlug === slug);
-    if (!post) return res.status(404).json({ error: 'Post not found' });
+    if (!post) return res.status(404).json({
+      error: 'Post not found',
+      requestedSlug: slug,
+      availableSlugs: rawPosts.map((p: any) => p.urlSlug),
+    });
 
     const postId: string = post._id ?? '';
     const { content, debug } = await fetchContent(slug, postId);
