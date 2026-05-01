@@ -1,6 +1,8 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node';
 
-const GHL_BASE_URL = 'https://go.ikonicmarketing303.com';
+const GHL_BASE_URL  = 'https://go.ikonicmarketing303.com';
+const GHL_BLOG_ID   = '882';
+const GHL_LOCATION  = 'DSt3GeDVV0wQXQt9iuGn';
 const UA = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36';
 
 function resolveNuxtArr(arr: any[], idx: number, depth = 0): any {
@@ -26,70 +28,38 @@ function parseNuxtData(html: string): any[] | null {
   try { return JSON.parse('[' + match[1] + ']'); } catch { return null; }
 }
 
-async function extractContentFromPostPage(slug: string): Promise<string> {
-  let html = '';
+// ── GHL REST API (requires GHL_API_KEY env var) ───────────────────────────────
+async function fetchContentViaAPI(slug: string): Promise<string> {
+  const key = process.env.GHL_API_KEY;
+  if (!key) return '';
+
+  // Try v2 API first
   try {
-    const res = await fetch(`${GHL_BASE_URL}/post/${slug}`, {
-      headers: { 'User-Agent': UA, 'Accept': 'text/html,application/xhtml+xml', 'Accept-Language': 'en-US,en;q=0.9' },
-    });
-    if (!res.ok) return '';
-    html = await res.text();
-  } catch { return ''; }
-
-  // ── Strategy A: NUXT_DATA — scan every string in the array ──────────────────
-  const arr = parseNuxtData(html);
-  if (arr) {
-    // A1: look for any string with block-level HTML tags, pick the longest
-    let best = '';
-    for (const val of arr) {
-      if (
-        typeof val === 'string' &&
-        val.length > best.length &&
-        val.length > 150 &&
-        /<(?:p|h[1-6]|ul|ol|div|section|blockquote)[\s>]/i.test(val)
-      ) {
-        best = val;
-      }
+    const v2 = await fetch(
+      `https://services.leadconnectorhq.com/blogs/posts?blogId=${GHL_BLOG_ID}&urlSlug=${encodeURIComponent(slug)}&locationId=${GHL_LOCATION}`,
+      { headers: { Authorization: `Bearer ${key}`, Version: '2021-07-28', 'Content-Type': 'application/json' } }
+    );
+    if (v2.ok) {
+      const data = await v2.json();
+      const post = data?.posts?.[0] ?? data?.post ?? data;
+      const content = post?.rawHtml ?? post?.content ?? post?.htmlContent ?? '';
+      if (content && content.length > 50) return content;
     }
-    if (best.length > 150) return best;
+  } catch {}
 
-    // A2: resolve all objects and look for rawHtml / content fields
-    const stateStr = JSON.stringify(arr);
-    const allNumKeys = [...stateStr.matchAll(/"(?:rawHtml|htmlContent|content|body|postBody)":(\d+)/g)];
-    for (const km of allNumKeys) {
-      const resolved = resolveNuxtArr(arr, parseInt(km[1]));
-      if (typeof resolved === 'string' && resolved.length > 150) return resolved;
+  // Fall back to v1 API
+  try {
+    const v1 = await fetch(
+      `https://rest.gohighlevel.com/v1/blogs/${GHL_BLOG_ID}/posts?urlSlug=${encodeURIComponent(slug)}&locationId=${GHL_LOCATION}`,
+      { headers: { Authorization: `Bearer ${key}` } }
+    );
+    if (v1.ok) {
+      const data = await v1.json();
+      const post = data?.posts?.[0] ?? data?.post ?? data;
+      const content = post?.rawHtml ?? post?.content ?? post?.htmlContent ?? '';
+      if (content && content.length > 50) return content;
     }
-  }
-
-  // ── Strategy B: rendered HTML extraction ────────────────────────────────────
-  // Strip scripts & styles so we don't accidentally grab JS strings
-  const clean = html
-    .replace(/<script[\s\S]*?<\/script>/gi, '')
-    .replace(/<style[\s\S]*?<\/style>/gi, '');
-
-  // B1: <article> tag (most semantic)
-  const article = clean.match(/<article[\s\S]*?<\/article>/i)?.[0] ?? '';
-  if (article.replace(/<[^>]*>/g, '').trim().length > 80) return article;
-
-  // B2: <main> tag
-  const mainTag = clean.match(/<main[\s\S]*?<\/main>/i)?.[0] ?? '';
-  if (mainTag.replace(/<[^>]*>/g, '').trim().length > 80) return mainTag;
-
-  // B3: GHL-specific class patterns
-  for (const cls of ['blog-post-content', 'post-content', 'entry-content', 'hl-blog-post', 'blog-content', 'post-body']) {
-    const re = new RegExp(`class="[^"]*${cls}[^"]*"[\\s\\S]*?>([\\s\\S]+?)</div>`, 'i');
-    const m = clean.match(re);
-    if (m && m[1].replace(/<[^>]*>/g, '').trim().length > 80) return m[1];
-  }
-
-  // B4: collect all <p> tags with real text (≥40 chars) as fallback
-  const ps = [...(clean.matchAll(/<p(?:\s[^>]*)?>([\s\S]*?)<\/p>/gi) ?? [])];
-  const body = ps
-    .filter(m => m[1].replace(/<[^>]*>/g, '').trim().length >= 40)
-    .map(m => `<p>${m[1]}</p>`)
-    .join('\n');
-  if (body.length > 80) return body;
+  } catch {}
 
   return '';
 }
@@ -99,10 +69,10 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   if (!slug || typeof slug !== 'string') return res.status(400).json({ error: 'slug required' });
 
   try {
-    // Fetch listing metadata + individual post content in parallel
-    const [listingHtml, content] = await Promise.all([
+    // Fetch listing metadata + content in parallel
+    const [listingHtml, apiContent] = await Promise.all([
       fetch(`${GHL_BASE_URL}/blogs`, { headers: { 'User-Agent': UA } }).then(r => r.text()),
-      extractContentFromPostPage(slug),
+      fetchContentViaAPI(slug),
     ]);
 
     const arr = parseNuxtData(listingHtml);
@@ -117,17 +87,11 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     const post = rawPosts.find((p: any) => p.urlSlug === slug);
     if (!post) return res.status(404).json({ error: 'Post not found' });
 
-    // Also check if listing data itself has rawHtml (some GHL configs include it)
-    const listingContent = post.rawHtml ?? post.htmlContent ?? post.content ?? '';
-    const finalContent = (listingContent && listingContent.length > content.length)
-      ? listingContent
-      : content;
-
     res.setHeader('Cache-Control', 's-maxage=1800, stale-while-revalidate');
     return res.status(200).json({
       title: post.title ?? '',
       description: post.description ?? '',
-      content: finalContent,
+      content: apiContent,
       urlSlug: post.urlSlug ?? '',
       image: post.imageUrl ?? '',
       imageAlt: post.imageAltText ?? '',
@@ -136,7 +100,6 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       category: post.categories?.[0]?.label?.replace(/-/g, ' ') ?? 'Marketing',
       tags: post.tags ?? [],
       readTime: post.readTimeInMinutes ? Math.ceil(post.readTimeInMinutes) : null,
-      externalUrl: post.canonicalLink ?? `${GHL_BASE_URL}/post/${slug}`,
     });
   } catch (err: any) {
     return res.status(500).json({ error: err.message ?? 'Failed to load post' });

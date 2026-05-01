@@ -17,7 +17,6 @@ interface Post {
   category: string;
   tags: string[];
   readTime: number | null;
-  externalUrl?: string;
 }
 
 export default function BlogPost() {
@@ -127,16 +126,8 @@ export default function BlogPost() {
                 />
               ) : (
                 <div className="mb-10 text-center py-16 border border-white/10 rounded-2xl">
-                  <p className="text-offwhite text-lg font-semibold mb-3">Read the full article</p>
-                  <p className="text-offwhite-dark text-sm mb-6">This post is hosted on our GHL blog platform.</p>
-                  <a
-                    href={post.externalUrl ?? `https://go.ikonicmarketing303.com/post/${post.urlSlug}`}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="btn-primary inline-block"
-                  >
-                    Open Full Article →
-                  </a>
+                  <p className="text-offwhite text-lg font-semibold mb-3">Full content coming soon</p>
+                  <p className="text-offwhite-dark text-sm">Our blog system is being updated. Check back shortly.</p>
                 </div>
               )}
 
