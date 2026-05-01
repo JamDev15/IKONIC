@@ -42,6 +42,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     const posts = rawPosts.map((p: any) => ({
       title: p.title ?? '',
       excerpt: p.description ?? '',
+      slug: p.urlSlug ?? '',
       link: p.canonicalLink ?? `https://go.ikonicmarketing303.com/post/${p.urlSlug}`,
       date: p.publishedAt
         ? new Date(p.publishedAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })

@@ -1,4 +1,5 @@
 import { useRef, useLayoutEffect, useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { ArrowRight, Calendar, User, Loader2 } from 'lucide-react';
@@ -11,6 +12,7 @@ gsap.registerPlugin(ScrollTrigger);
 interface BlogPost {
   title: string;
   excerpt: string;
+  slug: string;
   link: string;
   date: string;
   author: string;
@@ -120,11 +122,9 @@ export default function Blogs() {
           {!loading && !error && (
             <div ref={postsRef} className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
               {posts.map((post, index) => (
-                <a
+                <Link
                   key={index}
-                  href={post.link}
-                  target="_blank"
-                  rel="noopener noreferrer"
+                  to={post.slug ? `/post/${post.slug}` : post.link}
                   className="blog-card group bg-charcoal border border-white/10 rounded-xl overflow-hidden hover:border-mint/30 transition-all duration-300 block"
                 >
                   {/* Image */}
@@ -172,7 +172,7 @@ export default function Blogs() {
                       Read More <ArrowRight className="w-3 h-3" />
                     </div>
                   </div>
-                </a>
+                </Link>
               ))}
             </div>
           )}

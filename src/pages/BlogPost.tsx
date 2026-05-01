@@ -8,6 +8,7 @@ import Footer from '../components/Footer';
 interface Post {
   title: string;
   description: string;
+  content: string;
   urlSlug: string;
   image: string;
   imageAlt: string;
@@ -114,8 +115,30 @@ export default function BlogPost() {
 
               {/* Description / Excerpt */}
               <div className="bg-charcoal-light border border-white/10 rounded-2xl p-8 mb-10">
-                <p className="text-offwhite-dark text-lg leading-relaxed">{post.description}</p>
+                <p className="text-offwhite-dark text-lg leading-relaxed italic">{post.description}</p>
               </div>
+
+              {/* Full Article Content */}
+              {post.content ? (
+                <div
+                  className="blog-post-content mb-10"
+                  dangerouslySetInnerHTML={{ __html: post.content }}
+                />
+              ) : (
+                <div className="mb-10 text-center py-12 border border-white/10 rounded-2xl">
+                  <p className="text-offwhite-dark text-sm">
+                    Full article available on{' '}
+                    <a
+                      href={`https://go.ikonicmarketing303.com/post/${post.urlSlug}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-mint underline"
+                    >
+                      our blog
+                    </a>.
+                  </p>
+                </div>
+              )}
 
               {/* Tags */}
               {post.tags.length > 0 && (
