@@ -297,7 +297,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     const debug = result.debug;
     const content = result.content || await fetchRenderedPostContent(slug, post.canonicalLink, debug);
 
-    res.setHeader('Cache-Control', 's-maxage=1800, stale-while-revalidate');
+    res.setHeader('Cache-Control', 'no-store, max-age=0');
     return res.status(200).json({
       title: post.title ?? '',
       description: post.description ?? '',

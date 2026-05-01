@@ -27,7 +27,7 @@ export default function BlogPost() {
 
   useEffect(() => {
     if (!slug) return;
-    fetch(`/api/blog-post?slug=${slug}`)
+    fetch(`/api/blog-post?slug=${encodeURIComponent(slug)}&_t=${Date.now()}`, { cache: 'no-store' })
       .then(r => {
         if (r.status === 404) { setNotFound(true); return null; }
         return r.json();
