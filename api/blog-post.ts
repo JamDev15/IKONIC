@@ -193,17 +193,13 @@ async function fetchContent(slug: string, postId: string, blogApiId: string): Pr
   };
 
   const base = 'https://services.leadconnectorhq.com';
-  const postQuery = new URLSearchParams({
-    locationId: GHL_LOC,
-    blogId: blogApiId,
-    limit: '100',
-    offset: '0',
-    search: slug,
-  });
-
   const attempts = uniqueStrings([
     `${base}/blogs/site/all?locationId=${encodeURIComponent(GHL_LOC)}`,
-    `${base}/blogs/posts/all?${postQuery.toString()}`,
+    `${base}/blogs/posts/all?blogId=${encodeURIComponent(blogApiId)}&locationId=${encodeURIComponent(GHL_LOC)}&limit=20&skip=0`,
+    `${base}/blogs/posts/all?blogId=${encodeURIComponent(blogApiId)}&locationId=${encodeURIComponent(GHL_LOC)}&limit=20&offset=0`,
+    `${base}/blogs/posts/all?blogId=${encodeURIComponent(blogApiId)}&locationId=${encodeURIComponent(GHL_LOC)}&limit=20`,
+    `${base}/blogs/posts/all?blogId=${encodeURIComponent(blogApiId)}&limit=20&skip=0`,
+    `${base}/blogs/posts/all?locationId=${encodeURIComponent(GHL_LOC)}&blogId=${encodeURIComponent(blogApiId)}&limit=20&skip=0&status=PUBLISHED`,
     `${base}/blogs/posts/all?blogId=${encodeURIComponent(blogApiId)}&locationId=${encodeURIComponent(GHL_LOC)}`,
     `${base}/blogs/posts/${postId}`,
     `${base}/blogs/${blogApiId}/posts/${postId}`,
@@ -219,7 +215,14 @@ async function fetchContent(slug: string, postId: string, blogApiId: string): Pr
   for (let i = 0; i < attempts.length; i += 1) {
     const url = attempts[i];
     const result = await tryFetch(url, v2Headers);
-    debug.push({ url, ok: result.ok, status: result.status, error: result.error });
+    debug.push({
+      url,
+      ok: result.ok,
+      status: result.status,
+      error: result.error,
+      message: result.data?.message,
+      errors: result.data?.errors,
+    });
 
     if (!result.ok) continue;
 
@@ -236,10 +239,17 @@ async function fetchContent(slug: string, postId: string, blogApiId: string): Pr
       });
 
       for (const id of foundBlogIds) {
-        const discoveredUrl = `${base}/blogs/posts/all?blogId=${encodeURIComponent(id)}&locationId=${encodeURIComponent(GHL_LOC)}&limit=100&offset=0&search=${encodeURIComponent(slug)}`;
-        if (!queued.has(discoveredUrl)) {
-          queued.add(discoveredUrl);
-          attempts.push(discoveredUrl);
+        const discoveredUrls = [
+          `${base}/blogs/posts/all?blogId=${encodeURIComponent(id)}&locationId=${encodeURIComponent(GHL_LOC)}&limit=20&skip=0`,
+          `${base}/blogs/posts/all?blogId=${encodeURIComponent(id)}&locationId=${encodeURIComponent(GHL_LOC)}&limit=20&offset=0`,
+          `${base}/blogs/posts/all?blogId=${encodeURIComponent(id)}&limit=20&skip=0`,
+        ];
+
+        for (const discoveredUrl of discoveredUrls) {
+          if (!queued.has(discoveredUrl)) {
+            queued.add(discoveredUrl);
+            attempts.push(discoveredUrl);
+          }
         }
       }
     }
