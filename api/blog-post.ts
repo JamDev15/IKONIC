@@ -1,8 +1,7 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node';
 
-const GHL_BASE_URL = 'https://go.ikonicmarketing303.com';
-const GHL_LOC      = 'DSt3GeDVV0wQXQt9iuGn';
-const GHL_API      = 'https://services.leadconnectorhq.com';
+const GHL_BASE_URL    = 'https://go.ikonicmarketing303.com';
+const GHL_PREVIEW_LOC = 'ZFg6wMxjGeRh7lGwtZDW';
 const UA = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36';
 
 // ── Helpers ──────────────────────────────────────────────────────────────────
@@ -30,83 +29,81 @@ function parseNuxtData(html: string): any[] | null {
   try { return JSON.parse('[' + match[1] + ']'); } catch { return null; }
 }
 
-// ── GHL API content fetch ────────────────────────────────────────────────────
+// ── Preview-page content scrape ───────────────────────────────────────────────
 
-async function fetchGhlContent(slug: string, postId: string): Promise<{ content: string; debug: any[] }> {
-  const key = process.env.GHL ?? process.env.GHL_API_KEY ?? '';
+async function fetchFromPreview(slug: string): Promise<{ content: string; debug: any[] }> {
   const debug: any[] = [];
+  const url = `https://app.gohighlevel.com/v2/preview/${GHL_PREVIEW_LOC}/post-preview/${slug}`;
 
-  if (!key) {
-    debug.push({ step: 'no_api_key' });
+  try {
+    const res = await fetch(url, { headers: { 'User-Agent': UA } });
+    debug.push({ step: 'preview_fetch', status: res.status, url });
+
+    if (!res.ok) return { content: '', debug };
+
+    const html = await res.text();
+    debug.push({ step: 'preview_html_length', length: html.length });
+
+    // Strip non-content nodes
+    const stripped = html
+      .replace(/<script[\s\S]*?<\/script>/gi, '')
+      .replace(/<style[\s\S]*?<\/style>/gi, '')
+      .replace(/<noscript[\s\S]*?<\/noscript>/gi, '')
+      .replace(/<nav[\s\S]*?<\/nav>/gi, '')
+      .replace(/<header[\s\S]*?<\/header>/gi, '')
+      .replace(/<footer[\s\S]*?<\/footer>/gi, '');
+
+    // 1) Try <article> tag
+    const articleMatch = stripped.match(/<article[\s\S]*?<\/article>/i);
+    if (articleMatch) {
+      const text = articleMatch[0].replace(/<[^>]*>/g, '').trim();
+      if (text.length > 200) {
+        debug.push({ step: 'article_tag', length: articleMatch[0].length });
+        return { content: articleMatch[0], debug };
+      }
+    }
+
+    // 2) Try <main> tag
+    const mainMatch = stripped.match(/<main[\s\S]*?<\/main>/i);
+    if (mainMatch) {
+      const text = mainMatch[0].replace(/<[^>]*>/g, '').trim();
+      if (text.length > 200) {
+        debug.push({ step: 'main_tag', length: mainMatch[0].length });
+        return { content: mainMatch[0], debug };
+      }
+    }
+
+    // 3) Try common GHL blog content wrapper classes
+    for (const cls of ['blog-post-content', 'post-content', 'blog-content', 'article-content', 'entry-content', 'hl-blog-post']) {
+      const re = new RegExp(`<div[^>]+class="[^"]*${cls}[^"]*"[\\s\\S]*?</div>`, 'i');
+      const m = stripped.match(re);
+      if (m && m[0].replace(/<[^>]*>/g, '').trim().length > 200) {
+        debug.push({ step: 'class_match', cls, length: m[0].length });
+        return { content: m[0], debug };
+      }
+    }
+
+    // 4) Collect all meaningful block-level elements
+    const blocks: string[] = [];
+    const blockRe = /<(h[1-6]|p|ul|ol|blockquote|figure)(?:\s[^>]*)?>[\s\S]*?<\/\1>/gi;
+    let m: RegExpExecArray | null;
+    while ((m = blockRe.exec(stripped)) !== null) {
+      const inner = m[0].replace(/<[^>]*>/g, '').trim();
+      if (inner.length > 15) blocks.push(m[0]);
+    }
+
+    if (blocks.length > 0) {
+      const joined = blocks.join('\n');
+      debug.push({ step: 'blocks_collected', count: blocks.length, totalLength: joined.length });
+      return { content: joined, debug };
+    }
+
+    debug.push({ step: 'no_content_found' });
+    return { content: '', debug };
+  } catch (e: any) {
+    debug.push({ step: 'preview_error', error: e.message });
     return { content: '', debug };
   }
-
-  const headers = {
-    Authorization: `Bearer ${key}`,
-    Version: '2021-07-28',
-    Accept: 'application/json',
-  };
-
-  // Step 1 — search ALL blog sites for the post
-  const sites: any[] = [];
-  try {
-    const sitesRes = await fetch(
-      `${GHL_API}/blogs/site/all?locationId=${GHL_LOC}&skip=0&limit=10`,
-      { headers }
-    );
-    const sitesData = await sitesRes.json();
-    sites.push(...(sitesData?.data ?? sitesData?.blogs ?? sitesData?.sites ?? []));
-    debug.push({ step: 'all_sites', count: sites.length, ids: sites.map((s: any) => ({ id: s._id, name: s.name })) });
-  } catch (e: any) {
-    debug.push({ step: 'sites_list_error', error: e.message });
-  }
-
-  const allBlogIds = [...new Set(sites.map((s: any) => s._id ?? s.id).filter(Boolean))];
-
-  // Build URL variants to try for each blogId
-  const urlVariants = (bid: string) => [
-    `${GHL_API}/blogs/posts/all?locationId=${GHL_LOC}&blogId=${bid}&limit=50&offset=0`,
-    `${GHL_API}/blogs/posts/all?locationId=${GHL_LOC}&blogId=${bid}&limit=50&skip=0`,
-    `${GHL_API}/blogs/posts/all?locationId=${GHL_LOC}&blogId=${bid}&limit=50&offset=0&status=PUBLISHED`,
-  ];
-
-  // Also try without blogId
-  const noIdVariants = [
-    `${GHL_API}/blogs/posts/all?locationId=${GHL_LOC}&limit=50&offset=0`,
-    `${GHL_API}/blogs/posts/all?locationId=${GHL_LOC}&limit=50&skip=0`,
-  ];
-
-  const allUrls = [...allBlogIds.flatMap(urlVariants), ...noIdVariants];
-
-  for (const url of allUrls) {
-    try {
-      const postsRes = await fetch(url, { headers });
-      const postsData = await postsRes.json();
-      const posts: any[] = postsData?.blogs ?? postsData?.posts ?? postsData?.data ?? postsData?.items ?? [];
-      debug.push({ step: 'posts_try', url: url.replace(GHL_API, ''), status: postsRes.status, count: posts.length });
-
-      if (posts.length === 0) continue;
-
-      const post = posts.find((p: any) => p.urlSlug === slug || p._id === postId);
-      if (post) {
-        debug.push({ step: 'matched', keys: Object.keys(post) });
-        for (const field of ['rawHtml', 'rawHTML', 'htmlContent', 'content', 'body', 'postBody', 'html']) {
-          const val = post[field];
-          if (typeof val === 'string' && val.length > 100 && /<\w/i.test(val)) {
-            debug.push({ step: 'content_found', field, length: val.length });
-            return { content: val, debug };
-          }
-        }
-        debug.push({ step: 'post_found_no_html', allKeys: Object.keys(post), sample: Object.fromEntries(Object.entries(post).map(([k, v]) => [k, typeof v === 'string' ? (v as string).substring(0, 80) : v])) });
-      } else {
-        debug.push({ step: 'not_matched', totalPosts: posts.length, slugs: posts.slice(0, 5).map((p: any) => p.urlSlug) });
-      }
-    } catch (e: any) {
-      debug.push({ step: 'posts_error', url: url.replace(GHL_API, ''), error: (e as any).message });
-    }
-  }
-
-  return { content: '', debug };
 }
 
 // ── Main handler ─────────────────────────────────────────────────────────────
@@ -135,8 +132,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       availableSlugs: rawPosts.map((p: any) => p.urlSlug),
     });
 
-    const postId: string = post._id ?? '';
-    const { content, debug } = await fetchGhlContent(slug, postId);
+    const { content, debug } = await fetchFromPreview(slug);
 
     res.setHeader('Cache-Control', 'no-store');
     return res.status(200).json({
@@ -151,7 +147,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       category: post.categories?.[0]?.label?.replace(/-/g, ' ') ?? 'Marketing',
       tags: post.tags ?? [],
       readTime: post.readTimeInMinutes ? Math.ceil(post.readTimeInMinutes) : null,
-      ...(_debug === '1' ? { _debug: { postId, debug } } : {}),
+      ...(_debug === '1' ? { _debug: { slug, debug } } : {}),
     });
   } catch (err: any) {
     return res.status(500).json({ error: err.message ?? 'Failed to load post' });
