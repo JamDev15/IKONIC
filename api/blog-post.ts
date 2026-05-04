@@ -51,7 +51,12 @@ async function fetchFromPreview(slug: string): Promise<{ content: string; debug:
       .replace(/<noscript[\s\S]*?<\/noscript>/gi, '')
       .replace(/<nav[\s\S]*?<\/nav>/gi, '')
       .replace(/<header[\s\S]*?<\/header>/gi, '')
-      .replace(/<footer[\s\S]*?<\/footer>/gi, '');
+      .replace(/<footer[\s\S]*?<\/footer>/gi, '')
+      // Remove elements with nav/menu class names
+      .replace(/<div[^>]+class="[^"]*(?:navbar|nav-bar|nav-menu|main-menu|site-menu|mobile-menu|hamburger|menu-open|header-nav)[^"]*"[\s\S]*?<\/div>/gi, '')
+      // Remove the GHL preview close/nav bar (contains × and nav links)
+      .replace(/<[^>]+>[^<]*×[^<]*(?:Home|About|Services|Contact)[^<]*<\/[^>]+>/gi, '')
+      .replace(/<div[^>]*>[^<]*×\s*<\/div>/gi, '');
 
     // 1) Try <article> tag
     const articleMatch = stripped.match(/<article[\s\S]*?<\/article>/i);
@@ -89,7 +94,10 @@ async function fetchFromPreview(slug: string): Promise<{ content: string; debug:
     let m: RegExpExecArray | null;
     while ((m = blockRe.exec(stripped)) !== null) {
       const inner = m[0].replace(/<[^>]*>/g, '').trim();
-      if (inner.length > 15) blocks.push(m[0]);
+      // Skip nav-looking blocks: contain × symbol or are just link sequences
+      if (inner.length > 15 && !inner.includes('×') && !/^(Home|About|Services|Contact)/.test(inner)) {
+        blocks.push(m[0]);
+      }
     }
 
     if (blocks.length > 0) {
