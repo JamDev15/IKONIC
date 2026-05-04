@@ -47,61 +47,47 @@ async function fetchGhlContent(slug: string, postId: string): Promise<{ content:
     Accept: 'application/json',
   };
 
-  // Step 1 — get the blog site ID from GHL
-  let blogId = '';
+  // Step 1 — search ALL blog sites for the post
+  const sites: any[] = [];
   try {
     const sitesRes = await fetch(
       `${GHL_API}/blogs/site/all?locationId=${GHL_LOC}&skip=0&limit=10`,
       { headers }
     );
     const sitesData = await sitesRes.json();
-    debug.push({ step: 'sites', status: sitesRes.status, data: sitesData });
-
-    const sites: any[] = sitesData?.data ?? sitesData?.blogs ?? sitesData?.sites ?? [];
-    blogId = sites[0]?._id ?? sites[0]?.id ?? '';
+    sites.push(...(sitesData?.data ?? sitesData?.blogs ?? sitesData?.sites ?? []));
+    debug.push({ step: 'all_sites', count: sites.length, ids: sites.map((s: any) => ({ id: s._id, name: s.name })) });
   } catch (e: any) {
-    debug.push({ step: 'sites_error', error: e.message });
+    debug.push({ step: 'sites_list_error', error: e.message });
   }
 
-  if (!blogId) {
-    debug.push({ step: 'no_blog_id' });
-    return { content: '', debug };
-  }
+  const allBlogIds = [...new Set(sites.map((s: any) => s._id ?? s.id).filter(Boolean))];
 
-  // Step 2 — list all posts for this blog and find by slug
-  try {
-    const postsRes = await fetch(
-      `${GHL_API}/blogs/posts/all?locationId=${GHL_LOC}&blogId=${blogId}&limit=50&offset=0`,
-      { headers }
-    );
-    const postsData = await postsRes.json();
-    debug.push({
-      step: 'posts',
-      status: postsRes.status,
-      blogId,
-      count: postsData?.blogs?.length ?? postsData?.posts?.length ?? 0,
-      sampleKeys: postsData?.blogs?.[0] ? Object.keys(postsData.blogs[0]) : [],
-    });
+  for (const bid of allBlogIds) {
+    try {
+      const postsRes = await fetch(
+        `${GHL_API}/blogs/posts/all?locationId=${GHL_LOC}&blogId=${bid}&limit=50&offset=0`,
+        { headers }
+      );
+      const postsData = await postsRes.json();
+      const posts: any[] = postsData?.blogs ?? postsData?.posts ?? postsData?.data ?? [];
+      debug.push({ step: 'posts', blogId: bid, status: postsRes.status, count: posts.length });
 
-    const posts: any[] = postsData?.blogs ?? postsData?.posts ?? postsData?.data ?? [];
-    const post = posts.find((p: any) => p.urlSlug === slug || p._id === postId);
-
-    if (post) {
-      debug.push({ step: 'matched', keys: Object.keys(post) });
-      // Try every possible content field name
-      for (const field of ['rawHtml', 'rawHTML', 'htmlContent', 'content', 'body', 'postBody', 'html', 'description']) {
-        const val = post[field];
-        if (typeof val === 'string' && val.length > 100 && /<\w/i.test(val)) {
-          debug.push({ step: 'content_found', field, length: val.length });
-          return { content: val, debug };
+      const post = posts.find((p: any) => p.urlSlug === slug || p._id === postId);
+      if (post) {
+        debug.push({ step: 'matched', blogId: bid, keys: Object.keys(post) });
+        for (const field of ['rawHtml', 'rawHTML', 'htmlContent', 'content', 'body', 'postBody', 'html']) {
+          const val = post[field];
+          if (typeof val === 'string' && val.length > 100 && /<\w/i.test(val)) {
+            debug.push({ step: 'content_found', field, length: val.length });
+            return { content: val, debug };
+          }
         }
+        debug.push({ step: 'post_found_no_html', allKeys: Object.keys(post), values: Object.fromEntries(Object.entries(post).map(([k, v]) => [k, typeof v === 'string' ? v.substring(0, 80) : v])) });
       }
-      debug.push({ step: 'post_found_no_html', postKeys: Object.keys(post) });
-    } else {
-      debug.push({ step: 'post_not_in_list', totalPosts: posts.length, slugs: posts.map((p: any) => p.urlSlug) });
+    } catch (e: any) {
+      debug.push({ step: 'posts_error', blogId: bid, error: (e as any).message });
     }
-  } catch (e: any) {
-    debug.push({ step: 'posts_error', error: e.message });
   }
 
   return { content: '', debug };
