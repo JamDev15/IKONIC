@@ -63,19 +63,33 @@ async function fetchGhlContent(slug: string, postId: string): Promise<{ content:
 
   const allBlogIds = [...new Set(sites.map((s: any) => s._id ?? s.id).filter(Boolean))];
 
-  for (const bid of allBlogIds) {
+  // Build URL variants to try for each blogId
+  const urlVariants = (bid: string) => [
+    `${GHL_API}/blogs/posts/all?locationId=${GHL_LOC}&blogId=${bid}&limit=50&offset=0`,
+    `${GHL_API}/blogs/posts/all?locationId=${GHL_LOC}&blogId=${bid}&limit=50&skip=0`,
+    `${GHL_API}/blogs/posts/all?locationId=${GHL_LOC}&blogId=${bid}&limit=50&offset=0&status=PUBLISHED`,
+  ];
+
+  // Also try without blogId
+  const noIdVariants = [
+    `${GHL_API}/blogs/posts/all?locationId=${GHL_LOC}&limit=50&offset=0`,
+    `${GHL_API}/blogs/posts/all?locationId=${GHL_LOC}&limit=50&skip=0`,
+  ];
+
+  const allUrls = [...allBlogIds.flatMap(urlVariants), ...noIdVariants];
+
+  for (const url of allUrls) {
     try {
-      const postsRes = await fetch(
-        `${GHL_API}/blogs/posts/all?locationId=${GHL_LOC}&blogId=${bid}&limit=50&offset=0`,
-        { headers }
-      );
+      const postsRes = await fetch(url, { headers });
       const postsData = await postsRes.json();
-      const posts: any[] = postsData?.blogs ?? postsData?.posts ?? postsData?.data ?? [];
-      debug.push({ step: 'posts', blogId: bid, status: postsRes.status, count: posts.length });
+      const posts: any[] = postsData?.blogs ?? postsData?.posts ?? postsData?.data ?? postsData?.items ?? [];
+      debug.push({ step: 'posts_try', url: url.replace(GHL_API, ''), status: postsRes.status, count: posts.length });
+
+      if (posts.length === 0) continue;
 
       const post = posts.find((p: any) => p.urlSlug === slug || p._id === postId);
       if (post) {
-        debug.push({ step: 'matched', blogId: bid, keys: Object.keys(post) });
+        debug.push({ step: 'matched', keys: Object.keys(post) });
         for (const field of ['rawHtml', 'rawHTML', 'htmlContent', 'content', 'body', 'postBody', 'html']) {
           const val = post[field];
           if (typeof val === 'string' && val.length > 100 && /<\w/i.test(val)) {
@@ -83,10 +97,12 @@ async function fetchGhlContent(slug: string, postId: string): Promise<{ content:
             return { content: val, debug };
           }
         }
-        debug.push({ step: 'post_found_no_html', allKeys: Object.keys(post), values: Object.fromEntries(Object.entries(post).map(([k, v]) => [k, typeof v === 'string' ? v.substring(0, 80) : v])) });
+        debug.push({ step: 'post_found_no_html', allKeys: Object.keys(post), sample: Object.fromEntries(Object.entries(post).map(([k, v]) => [k, typeof v === 'string' ? (v as string).substring(0, 80) : v])) });
+      } else {
+        debug.push({ step: 'not_matched', totalPosts: posts.length, slugs: posts.slice(0, 5).map((p: any) => p.urlSlug) });
       }
     } catch (e: any) {
-      debug.push({ step: 'posts_error', blogId: bid, error: (e as any).message });
+      debug.push({ step: 'posts_error', url: url.replace(GHL_API, ''), error: (e as any).message });
     }
   }
 
