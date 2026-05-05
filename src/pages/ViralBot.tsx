@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { Link } from 'react-router-dom';
 import Navigation from '../components/Navigation';
 import Footer from '../components/Footer';
 import {
@@ -542,11 +543,11 @@ export default function ViralBot() {
             ViralBot finds trending content in your niche and automatically posts it to your social media accounts. Grow your audience while you sleep.
           </p>
           <div className="flex flex-wrap justify-center gap-4">
-            <a href="https://viralbot.tech" target="_blank" rel="noopener noreferrer"
+            <Link to="/contact"
               className="inline-flex items-center gap-2 bg-purple-600 hover:bg-purple-700 text-white font-semibold px-6 py-3 rounded-lg transition-colors">
               Start Free Trial <ArrowRight className="w-4 h-4" />
-            </a>
-            <a href="https://viralbot.tech" target="_blank" rel="noopener noreferrer"
+            </Link>
+            <a href="#viral-bot-demo"
               className="inline-flex items-center gap-2 border border-white/20 hover:border-white/40 text-white px-6 py-3 rounded-lg transition-colors">
               View Demo
             </a>
@@ -609,7 +610,7 @@ export default function ViralBot() {
       </section>
 
       {/* ── App Demo ── */}
-      <section className="py-16 px-[6vw] bg-zinc-950 relative z-10">
+      <section id="viral-bot-demo" className="py-16 px-[6vw] bg-zinc-950 relative z-10">
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-10">
             <h2 className="font-display text-3xl font-bold text-white mb-3">See ViralBot in action</h2>
