@@ -1,27 +1,16 @@
-import { useState } from 'react';
-import Navigation from '../components/Navigation';
-import Footer from '../components/Footer';
+import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import {
   LayoutDashboard, Rss, Send, BarChart2, Settings, Shield,
   TrendingUp, Share2, Bot, Check, Plus, Bell, LogOut,
   RefreshCw, Download, X, Pencil, ExternalLink, Users, Activity,
-  Calendar, Eye, Flame, Heart, MessageCircle, Save, Database, Zap, ArrowRight
+  Calendar, Eye, Flame, Heart, MessageCircle, Save, Database, Zap
 } from 'lucide-react';
+import { getCurrentUser, getTrialStatus, logout } from '../lib/viralbot-auth';
 
 type AppView = 'dashboard' | 'discovery' | 'autoposter' | 'analytics' | 'settings' | 'admin';
 
-const features = [
-  { icon: TrendingUp, title: 'Trend Discovery', description: "Our AI scans Reddit, HackerNews, and Twitter to find content that's guaranteed to perform well." },
-  { icon: Share2, title: 'Auto-Posting', description: 'Connect your accounts once. Set your schedule, and let ViralBot handle the publishing automatically.' },
-  { icon: Bot, title: 'AI Rewriting', description: 'Automatically rewrite viral posts in your own brand voice so your content always feels authentic.' },
-];
-
-const pricingPlans = [
-  { name: 'Starter', subtitle: 'Perfect for trying out.', price: 'Free', period: '', features: ['1 Automation Rule', '10 Posts/day', 'Standard Support'], cta: 'Get Started', popular: false },
-  { name: 'Pro', subtitle: 'For serious creators.', price: '$29', period: '/mo', features: ['10 Automation Rules', 'Unlimited Posts', 'AI Content Rewriting', 'Priority Support'], cta: 'Start 7-Day Trial', popular: true },
-  { name: 'Enterprise', subtitle: 'For large agencies.', price: '$99', period: '/mo', features: ['30 Automation Rules', 'Custom Proxies', 'White-label Reports', '24/7 Phone Support'], cta: 'Get Started', popular: false },
-];
-
+// ── Data ───────────────────────────────────────────────────────────────────────
 const viralPosts = [
   { id: 1, source: 'Reddit', sourceCls: 'bg-orange-600', viral: 99, viralCls: 'text-orange-400', user: 'u/AIbuilder', tag: '#tech', title: "I made an AI that watches your screen and completes tasks automatically. Here's the open-source repo", likes: '55.0k', comments: '6.7k', shares: '4.4k' },
   { id: 2, source: 'HackerNews', sourceCls: 'bg-amber-600', viral: 98, viralCls: 'text-amber-400', user: 'levelsio', tag: '#tech', title: "I make $3.5M/year as a solo founder — no employees, no investors, no office. Ask me anything", likes: '18.9k', comments: '5.4k', shares: '945' },
@@ -43,7 +32,7 @@ const socialPlatforms = [
   'Ghost (Blog)', 'Webflow', 'Shopify', 'Custom Webhook',
 ];
 
-// ── Toggle helper ──────────────────────────────────────────────────────────────
+// ── Toggle ─────────────────────────────────────────────────────────────────────
 function Toggle({ on, onToggle }: { on: boolean; onToggle: () => void }) {
   return (
     <button
@@ -51,11 +40,36 @@ function Toggle({ on, onToggle }: { on: boolean; onToggle: () => void }) {
       className={`relative rounded-full flex-shrink-0 transition-colors ${on ? 'bg-purple-600' : 'bg-zinc-600'}`}
       style={{ width: 40, height: 22 }}
     >
-      <span
-        className="absolute top-[3px] w-4 h-4 bg-white rounded-full transition-transform"
-        style={{ transform: on ? 'translateX(22px)' : 'translateX(3px)' }}
-      />
+      <span className="absolute top-[3px] w-4 h-4 bg-white rounded-full transition-transform"
+        style={{ transform: on ? 'translateX(22px)' : 'translateX(3px)' }} />
     </button>
+  );
+}
+
+// ── Trial Expired Modal ────────────────────────────────────────────────────────
+function TrialExpiredModal() {
+  return (
+    <div className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center px-4">
+      <div className="bg-zinc-900 border border-white/10 rounded-2xl p-8 max-w-md w-full text-center shadow-2xl">
+        <div className="w-14 h-14 bg-purple-600/20 border border-purple-500/30 rounded-full flex items-center justify-center mx-auto mb-4">
+          <Zap className="w-7 h-7 text-purple-400" />
+        </div>
+        <h2 className="text-xl font-bold text-white mb-2">Your free trial has expired</h2>
+        <p className="text-gray-400 text-sm mb-6">
+          Your 3-day trial has ended. Upgrade to keep automating your viral growth.
+        </p>
+        <div className="space-y-3">
+          <a href="/viral-bot#pricing"
+            className="block w-full bg-purple-600 hover:bg-purple-700 text-white font-semibold py-2.5 rounded-lg transition-colors text-sm">
+            View Pricing Plans
+          </a>
+          <a href="/contact"
+            className="block w-full border border-white/20 hover:border-white/40 text-white py-2.5 rounded-lg transition-colors text-sm">
+            Talk to Sales
+          </a>
+        </div>
+      </div>
+    </div>
   );
 }
 
@@ -207,7 +221,7 @@ function AutoPosterView() {
         </button>
       </div>
       <div className="flex items-center justify-center h-64 text-gray-600 text-sm">
-        No automation rules created yet. Click "+ Create Rule" to get started.
+        No automation rules yet. Click "+ Create Rule" to get started.
       </div>
     </div>
   );
@@ -218,7 +232,6 @@ function AnalyticsView() {
   const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'];
   const platforms = ['Twitter', 'LinkedIn', 'Instagram', 'TikTok'];
   const yLabels = ['304k', '303k', '302k', '301k', '0k'];
-
   return (
     <div>
       <div className="flex items-start justify-between mb-6">
@@ -231,7 +244,6 @@ function AnalyticsView() {
         </button>
       </div>
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-        {/* Follower Growth */}
         <div className="bg-zinc-900 border border-white/10 rounded-xl p-4">
           <div className="flex items-center gap-2 mb-0.5">
             <TrendingUp className="w-4 h-4 text-purple-400" />
@@ -254,7 +266,6 @@ function AnalyticsView() {
             ))}
           </svg>
         </div>
-        {/* Engagement by Platform */}
         <div className="bg-zinc-900 border border-white/10 rounded-xl p-4">
           <div className="flex items-center gap-2 mb-0.5">
             <BarChart2 className="w-4 h-4 text-purple-400" />
@@ -282,12 +293,9 @@ function AnalyticsView() {
                 </g>
               );
             })}
-            <rect x="80" y="148" width="7" height="7" fill="#7C3AED" rx="1" />
-            <text x="91" y="155" fill="#9ca3af" fontSize="8">Likes</text>
-            <rect x="122" y="148" width="7" height="7" fill="#A855F7" rx="1" />
-            <text x="133" y="155" fill="#9ca3af" fontSize="8">Comments</text>
-            <rect x="183" y="148" width="7" height="7" fill="#6366F1" rx="1" />
-            <text x="194" y="155" fill="#9ca3af" fontSize="8">Shares</text>
+            <rect x="80" y="148" width="7" height="7" fill="#7C3AED" rx="1" /><text x="91" y="155" fill="#9ca3af" fontSize="8">Likes</text>
+            <rect x="122" y="148" width="7" height="7" fill="#A855F7" rx="1" /><text x="133" y="155" fill="#9ca3af" fontSize="8">Comments</text>
+            <rect x="183" y="148" width="7" height="7" fill="#6366F1" rx="1" /><text x="194" y="155" fill="#9ca3af" fontSize="8">Shares</text>
           </svg>
         </div>
       </div>
@@ -300,7 +308,6 @@ function SettingsView() {
   const [adminMode, setAdminMode] = useState(true);
   const [emailNotifs, setEmailNotifs] = useState(true);
   const [autoApprove, setAutoApprove] = useState(false);
-
   return (
     <div>
       <div className="flex items-start justify-between mb-6">
@@ -312,25 +319,21 @@ function SettingsView() {
           <Save className="w-3.5 h-3.5" /> Save Changes
         </button>
       </div>
-
       <div className="space-y-8 max-w-2xl">
-        {/* Account Details */}
         <section>
           <h2 className="font-semibold text-white mb-0.5">Account Details</h2>
           <p className="text-gray-500 text-xs mb-3">Update your personal information.</p>
           <div className="space-y-3">
             <div>
               <label className="text-xs text-gray-400 block mb-1">Full Name</label>
-              <input defaultValue="Alex Carter" className="w-full bg-zinc-800 border border-white/10 rounded-lg px-3 py-2 text-sm text-white outline-none focus:border-purple-500/50" />
+              <input defaultValue={getCurrentUser()?.name || ''} className="w-full bg-zinc-800 border border-white/10 rounded-lg px-3 py-2.5 text-sm text-white outline-none focus:border-purple-500/60 transition-colors" />
             </div>
             <div>
               <label className="text-xs text-gray-400 block mb-1">Email Address</label>
-              <input defaultValue="alex@example.com" className="w-full bg-zinc-800 border border-white/10 rounded-lg px-3 py-2 text-sm text-white outline-none focus:border-purple-500/50" />
+              <input defaultValue={getCurrentUser()?.email || ''} className="w-full bg-zinc-800 border border-white/10 rounded-lg px-3 py-2.5 text-sm text-white outline-none focus:border-purple-500/60 transition-colors" />
             </div>
           </div>
         </section>
-
-        {/* Admin Controls */}
         <section>
           <div className="flex items-center gap-2 mb-0.5">
             <Shield className="w-4 h-4 text-purple-400" />
@@ -345,8 +348,6 @@ function SettingsView() {
             <Toggle on={adminMode} onToggle={() => setAdminMode(v => !v)} />
           </div>
         </section>
-
-        {/* Social Media Integrations */}
         <section>
           <h2 className="font-semibold text-white mb-0.5">Social Media Integrations</h2>
           <p className="text-gray-500 text-xs mb-3">Connect your accounts to enable auto-posting.</p>
@@ -367,8 +368,6 @@ function SettingsView() {
             ))}
           </div>
         </section>
-
-        {/* Global Preferences */}
         <section>
           <h2 className="font-semibold text-white mb-0.5">Global Preferences</h2>
           <p className="text-gray-500 text-xs mb-3">Configure how ViralBot operates globally.</p>
@@ -389,79 +388,38 @@ function SettingsView() {
             </div>
           </div>
         </section>
-
-        {/* Database Connection */}
         <section>
           <div className="flex items-center gap-2 mb-0.5">
             <Database className="w-4 h-4 text-purple-400" />
             <h2 className="font-semibold text-purple-400">Database Connection (Supabase)</h2>
           </div>
-          <p className="text-gray-500 text-xs mb-3">Connect to your own Supabase PostgreSQL database to store user and post data.</p>
+          <p className="text-gray-500 text-xs mb-3">Connect to your own Supabase PostgreSQL database.</p>
           <div className="space-y-3">
             <div>
               <label className="text-xs text-gray-400 block mb-1">Supabase Project URL</label>
-              <input defaultValue="https://zqperoznmyngczxnbqhn.supabase.co" className="w-full bg-zinc-800 border border-white/10 rounded-lg px-3 py-2 text-sm text-white outline-none focus:border-purple-500/50" />
+              <input placeholder="https://your-project.supabase.co" className="w-full bg-zinc-800 border border-white/10 rounded-lg px-3 py-2.5 text-sm text-white outline-none focus:border-purple-500/60 transition-colors" />
             </div>
             <div>
               <label className="text-xs text-gray-400 block mb-1">Supabase Anon Key</label>
-              <input type="password" defaultValue="placeholder-anon-key" className="w-full bg-zinc-800 border border-white/10 rounded-lg px-3 py-2 text-sm text-white outline-none focus:border-purple-500/50" />
+              <input type="password" placeholder="••••••••••••••••" className="w-full bg-zinc-800 border border-white/10 rounded-lg px-3 py-2.5 text-sm text-white outline-none focus:border-purple-500/60 transition-colors" />
             </div>
             <button className="w-full flex items-center justify-center gap-1.5 border border-purple-500/40 text-purple-400 text-sm py-2 rounded-lg hover:bg-purple-500/10 transition-colors">
               <Database className="w-3.5 h-3.5" /> Save Database Connection
             </button>
           </div>
         </section>
-
-        {/* Subscription Plan */}
         <section>
           <h2 className="font-semibold text-white mb-0.5">Subscription Plan</h2>
           <p className="text-gray-500 text-xs mb-3">Manage your current plan and usage.</p>
           <div className="bg-purple-600/10 border border-purple-500/30 rounded-xl p-4 flex items-center justify-between">
             <div>
               <div className="flex items-center gap-2 mb-1">
-                <span className="font-semibold text-white">Enterprise Plan</span>
-                <span className="text-xs bg-green-500/20 text-green-400 border border-green-500/30 px-2 py-0.5 rounded-full">Active</span>
+                <span className="font-semibold text-white">Starter Plan</span>
+                <span className="text-xs bg-blue-500/20 text-blue-400 border border-blue-500/30 px-2 py-0.5 rounded-full">Trial</span>
               </div>
-              <p className="text-xs text-gray-400">$99/month • 30 Automation Rules • Custom Proxies</p>
+              <p className="text-xs text-gray-400">Free • 1 Automation Rule • 10 Posts/day</p>
             </div>
-            <div className="flex gap-2 flex-shrink-0 ml-4">
-              <button className="text-xs text-gray-400 hover:text-white border border-white/10 px-3 py-1.5 rounded-lg transition-colors">Cancel Plan</button>
-              <button className="text-xs bg-purple-600 hover:bg-purple-700 text-white px-3 py-1.5 rounded-lg transition-colors">Change Plan</button>
-            </div>
-          </div>
-        </section>
-
-        {/* Payment Methods */}
-        <section>
-          <h2 className="font-semibold text-white mb-0.5">Payment Methods</h2>
-          <p className="text-gray-500 text-xs mb-3">Manage your saved credit cards and billing options.</p>
-          <div className="bg-zinc-900 border border-white/10 rounded-xl p-4 text-center">
-            <p className="text-gray-500 text-sm mb-3">No payment methods saved.</p>
-            <button className="inline-flex items-center gap-1.5 text-sm text-white border border-white/20 px-4 py-2 rounded-lg hover:border-white/40 transition-colors">
-              <Plus className="w-3.5 h-3.5" /> Add Payment Method
-            </button>
-          </div>
-        </section>
-
-        {/* Billing History */}
-        <section>
-          <h2 className="font-semibold text-white mb-0.5">Billing History</h2>
-          <p className="text-gray-500 text-xs mb-3">View your past invoices and payment history.</p>
-          <div className="bg-zinc-900 border border-white/10 rounded-xl overflow-hidden">
-            <table className="w-full text-sm">
-              <thead className="border-b border-white/10">
-                <tr>
-                  {['Date', 'Amount', 'Status', 'Invoice'].map(h => (
-                    <th key={h} className="text-left px-4 py-3 text-xs text-gray-500 font-medium">{h}</th>
-                  ))}
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td colSpan={4} className="px-4 py-6 text-center text-gray-600 text-sm">No billing history available.</td>
-                </tr>
-              </tbody>
-            </table>
+            <a href="/viral-bot#pricing" className="text-xs bg-purple-600 hover:bg-purple-700 text-white px-3 py-1.5 rounded-lg transition-colors">Upgrade</a>
           </div>
         </section>
       </div>
@@ -507,9 +465,18 @@ function AdminPanelView() {
   );
 }
 
-// ── Main Page ──────────────────────────────────────────────────────────────────
-export default function ViralBot() {
+// ── Main App Page ──────────────────────────────────────────────────────────────
+export default function ViralBotApp() {
+  const navigate = useNavigate();
   const [activeView, setActiveView] = useState<AppView>('dashboard');
+  const user = getCurrentUser();
+  const trial = getTrialStatus();
+
+  useEffect(() => {
+    if (!user) navigate('/viral-bot/auth');
+  }, []);
+
+  if (!user) return null;
 
   const menuItems = [
     { id: 'dashboard' as AppView, label: 'Dashboard', icon: LayoutDashboard },
@@ -522,169 +489,96 @@ export default function ViralBot() {
     { id: 'admin' as AppView, label: 'Admin Panel', icon: Shield },
   ];
 
+  const handleLogout = () => {
+    logout();
+    navigate('/viral-bot');
+  };
+
   return (
-    <div className="relative bg-charcoal min-h-screen">
-      <Navigation />
+    <div className="min-h-screen bg-black flex flex-col">
+      {trial?.expired && <TrialExpiredModal />}
 
-      {/* ── Hero ── */}
-      <section className="pt-32 pb-20 px-[6vw] bg-black relative z-10 text-center">
-        <div className="max-w-3xl mx-auto">
-          <div className="inline-flex items-center gap-2 border border-purple-500/40 rounded-full px-4 py-1.5 text-sm text-purple-300 mb-8">
+      {/* Trial banner */}
+      {trial && !trial.expired && (
+        <div className="bg-purple-600/20 border-b border-purple-500/30 px-6 py-2 flex items-center justify-between">
+          <div className="flex items-center gap-2 text-xs text-purple-300">
             <Zap className="w-3.5 h-3.5" />
-            AI-Powered Social Media Automation
+            {trial.daysLeft > 0
+              ? `${trial.daysLeft} day${trial.daysLeft !== 1 ? 's' : ''} left in your free trial`
+              : `${trial.hoursLeft} hour${trial.hoursLeft !== 1 ? 's' : ''} left in your free trial`}
           </div>
-          <h1 className="font-display text-5xl md:text-6xl lg:text-7xl font-bold text-white mb-6 leading-tight">
-            Automate your{' '}
-            <span className="text-purple-500">viral<br />growth</span>{' '}
-            on autopilot.
-          </h1>
-          <p className="text-lg text-gray-400 max-w-xl mx-auto mb-10">
-            ViralBot finds trending content in your niche and automatically posts it to your social media accounts. Grow your audience while you sleep.
-          </p>
-          <div className="flex flex-wrap justify-center gap-4">
-            <a href="/viral-bot/auth"
-              className="inline-flex items-center gap-2 bg-purple-600 hover:bg-purple-700 text-white font-semibold px-6 py-3 rounded-lg transition-colors">
-              Start Free Trial <ArrowRight className="w-4 h-4" />
-            </a>
-            <a href="#viral-bot-demo"
-              className="inline-flex items-center gap-2 border border-white/20 hover:border-white/40 text-white px-6 py-3 rounded-lg transition-colors">
-              View Demo
-            </a>
-          </div>
+          <a href="/viral-bot#pricing" className="text-xs bg-purple-600 hover:bg-purple-700 text-white px-3 py-1 rounded-lg transition-colors">
+            Upgrade Now
+          </a>
         </div>
-      </section>
+      )}
 
-      {/* ── Features ── */}
-      <section className="py-20 px-[6vw] bg-zinc-950 relative z-10">
-        <div className="max-w-5xl mx-auto text-center">
-          <h2 className="font-display text-3xl md:text-4xl font-bold text-white mb-3">Everything you need to go viral</h2>
-          <p className="text-gray-400 mb-12">Powerful tools designed for serious content creators and brands.</p>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {features.map((f, i) => (
-              <div key={i} className="bg-zinc-900 border border-white/10 rounded-xl p-6 text-left">
-                <div className="w-10 h-10 bg-purple-600/20 border border-purple-500/30 rounded-lg flex items-center justify-center mb-4">
-                  <f.icon className="w-5 h-5 text-purple-400" />
-                </div>
-                <h3 className="font-semibold text-white mb-2">{f.title}</h3>
-                <p className="text-gray-400 text-sm">{f.description}</p>
-              </div>
-            ))}
+      {/* App top bar */}
+      <div className="bg-zinc-900 border-b border-white/10 px-5 py-2.5 flex items-center justify-between">
+        <p className="text-gray-400 text-sm">
+          Welcome back, <span className="text-white font-medium">{user.name}</span> — your bot has found{' '}
+          <span className="text-white font-medium">12 new viral posts</span> today.
+        </p>
+        <div className="flex items-center gap-3">
+          <div className="flex items-center gap-1.5 text-sm">
+            <span className="w-2 h-2 bg-green-500 rounded-full" />
+            <span className="text-green-400 text-xs">Bot Active</span>
           </div>
+          <Bell className="w-4 h-4 text-gray-400 cursor-pointer hover:text-white transition-colors" />
         </div>
-      </section>
+      </div>
 
-      {/* ── Pricing ── */}
-      <section className="py-20 px-[6vw] bg-black relative z-10">
-        <div className="max-w-5xl mx-auto text-center">
-          <h2 className="font-display text-3xl md:text-4xl font-bold text-white mb-3">Simple, transparent pricing</h2>
-          <p className="text-gray-400 mb-12">Start for free, upgrade when you go viral.</p>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 items-start">
-            {pricingPlans.map((plan, i) => (
-              <div key={i} className={`bg-zinc-900 border rounded-xl p-6 text-left relative ${plan.popular ? 'border-purple-500' : 'border-white/10'}`}>
-                {plan.popular && (
-                  <div className="absolute -top-3 left-1/2 -translate-x-1/2">
-                    <span className="bg-purple-600 text-white text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wide">Most Popular</span>
-                  </div>
+      {/* Body */}
+      <div className="flex flex-1 overflow-hidden">
+        {/* Sidebar */}
+        <div className="w-52 bg-zinc-900 border-r border-white/10 flex flex-col py-5 px-3 flex-shrink-0">
+          <p className="text-[10px] text-gray-500 uppercase tracking-wider px-2 mb-2">Menu</p>
+          <nav className="space-y-0.5 mb-5">
+            {menuItems.map(item => (
+              <button key={item.id} onClick={() => setActiveView(item.id)}
+                className={`w-full flex items-center gap-2.5 px-3 py-2 rounded-lg text-xs font-medium transition-colors ${activeView === item.id ? 'bg-purple-600/20 text-purple-400' : 'text-gray-400 hover:text-white hover:bg-white/5'}`}>
+                <item.icon className="w-3.5 h-3.5 flex-shrink-0" />
+                {item.label}
+                {item.badge && (
+                  <span className="ml-auto bg-purple-600 text-white text-[10px] rounded-full w-4 h-4 flex items-center justify-center">{item.badge}</span>
                 )}
-                <p className={`font-semibold text-lg mb-1 ${plan.popular ? 'text-purple-400' : 'text-white'}`}>{plan.name}</p>
-                <p className="text-gray-400 text-sm mb-4">{plan.subtitle}</p>
-                <div className="mb-6">
-                  <span className="text-4xl font-bold text-white">{plan.price}</span>
-                  {plan.period && <span className="text-gray-400">{plan.period}</span>}
-                </div>
-                <ul className="space-y-2 mb-6">
-                  {plan.features.map((feat, j) => (
-                    <li key={j} className="flex items-center gap-2 text-sm text-gray-300">
-                      <Zap className="w-3.5 h-3.5 text-purple-400 flex-shrink-0" />{feat}
-                    </li>
-                  ))}
-                </ul>
-                <button className={`w-full py-2.5 rounded-lg font-semibold text-sm transition-colors ${plan.popular ? 'bg-purple-600 hover:bg-purple-700 text-white' : 'border border-white/20 hover:border-white/40 text-white'}`}>
-                  {plan.cta}
-                </button>
-              </div>
+              </button>
             ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ── App Demo ── */}
-      <section id="viral-bot-demo" className="py-16 px-[6vw] bg-zinc-950 relative z-10">
-        <div className="max-w-6xl mx-auto">
-          <div className="text-center mb-10">
-            <h2 className="font-display text-3xl font-bold text-white mb-3">See ViralBot in action</h2>
-            <p className="text-gray-400">Explore the full platform — dashboard, discovery feed, analytics, and more.</p>
-          </div>
-
-          <div className="bg-zinc-950 border border-white/10 rounded-2xl overflow-hidden">
-            {/* App top bar */}
-            <div className="bg-zinc-900 border-b border-white/10 px-5 py-2.5 flex items-center justify-between">
-              <p className="text-gray-400 text-xs">
-                Welcome back, your bot has found <span className="text-white font-medium">12 new viral posts</span> today.
-              </p>
-              <div className="flex items-center gap-3">
-                <div className="flex items-center gap-1.5 text-xs">
-                  <span className="w-2 h-2 bg-green-500 rounded-full" />
-                  <span className="text-green-400">Bot Active</span>
-                </div>
-                <Bell className="w-4 h-4 text-gray-400" />
+          </nav>
+          <p className="text-[10px] text-gray-500 uppercase tracking-wider px-2 mb-2">Configuration</p>
+          <nav className="space-y-0.5">
+            {configItems.map(item => (
+              <button key={item.id} onClick={() => setActiveView(item.id)}
+                className={`w-full flex items-center gap-2.5 px-3 py-2 rounded-lg text-xs font-medium transition-colors ${activeView === item.id ? 'bg-purple-600/20 text-purple-400' : 'text-gray-400 hover:text-white hover:bg-white/5'}`}>
+                <item.icon className="w-3.5 h-3.5 flex-shrink-0" />
+                {item.label}
+              </button>
+            ))}
+          </nav>
+          <div className="mt-auto pt-4 border-t border-white/10 px-2">
+            <div className="flex items-center gap-2">
+              <div className="w-7 h-7 rounded-full bg-gradient-to-br from-purple-500 to-pink-500 flex-shrink-0" />
+              <div className="min-w-0">
+                <p className="text-[10px] text-gray-300 truncate">{user.email}</p>
+                <p className="text-[10px] text-purple-400">Starter (Trial)</p>
               </div>
-            </div>
-
-            {/* Sidebar + Content */}
-            <div className="flex" style={{ minHeight: 580 }}>
-              {/* Sidebar */}
-              <div className="w-48 bg-zinc-900 border-r border-white/10 flex flex-col py-5 px-3 flex-shrink-0">
-                <p className="text-[10px] text-gray-500 uppercase tracking-wider px-2 mb-2">Menu</p>
-                <nav className="space-y-0.5 mb-5">
-                  {menuItems.map(item => (
-                    <button key={item.id} onClick={() => setActiveView(item.id)}
-                      className={`w-full flex items-center gap-2.5 px-3 py-2 rounded-lg text-xs font-medium transition-colors ${activeView === item.id ? 'bg-purple-600/20 text-purple-400' : 'text-gray-400 hover:text-white hover:bg-white/5'}`}>
-                      <item.icon className="w-3.5 h-3.5 flex-shrink-0" />
-                      {item.label}
-                      {item.badge && (
-                        <span className="ml-auto bg-purple-600 text-white text-[10px] rounded-full w-4 h-4 flex items-center justify-center">{item.badge}</span>
-                      )}
-                    </button>
-                  ))}
-                </nav>
-                <p className="text-[10px] text-gray-500 uppercase tracking-wider px-2 mb-2">Configuration</p>
-                <nav className="space-y-0.5">
-                  {configItems.map(item => (
-                    <button key={item.id} onClick={() => setActiveView(item.id)}
-                      className={`w-full flex items-center gap-2.5 px-3 py-2 rounded-lg text-xs font-medium transition-colors ${activeView === item.id ? 'bg-purple-600/20 text-purple-400' : 'text-gray-400 hover:text-white hover:bg-white/5'}`}>
-                      <item.icon className="w-3.5 h-3.5 flex-shrink-0" />
-                      {item.label}
-                    </button>
-                  ))}
-                </nav>
-                <div className="mt-auto pt-4 border-t border-white/10 px-2">
-                  <div className="flex items-center gap-2">
-                    <div className="w-7 h-7 rounded-full bg-gradient-to-br from-purple-500 to-pink-500 flex-shrink-0" />
-                    <div className="min-w-0">
-                      <p className="text-[10px] text-gray-300 truncate">admin@viralb...</p>
-                      <p className="text-[10px] text-purple-400">Enterprise Plan</p>
-                    </div>
-                    <LogOut className="w-3 h-3 text-gray-500 ml-auto flex-shrink-0" />
-                  </div>
-                </div>
-              </div>
-
-              {/* Content */}
-              <div className="flex-1 overflow-auto bg-zinc-950 p-5">
-                {activeView === 'dashboard' && <DashboardView />}
-                {activeView === 'discovery' && <DiscoveryFeedView />}
-                {activeView === 'autoposter' && <AutoPosterView />}
-                {activeView === 'analytics' && <AnalyticsView />}
-                {activeView === 'settings' && <SettingsView />}
-                {activeView === 'admin' && <AdminPanelView />}
-              </div>
+              <button onClick={handleLogout} title="Log out" className="ml-auto text-gray-500 hover:text-white flex-shrink-0 transition-colors">
+                <LogOut className="w-3.5 h-3.5" />
+              </button>
             </div>
           </div>
         </div>
-      </section>
 
-      <Footer />
+        {/* Content */}
+        <div className="flex-1 overflow-auto bg-zinc-950 p-6">
+          {activeView === 'dashboard' && <DashboardView />}
+          {activeView === 'discovery' && <DiscoveryFeedView />}
+          {activeView === 'autoposter' && <AutoPosterView />}
+          {activeView === 'analytics' && <AnalyticsView />}
+          {activeView === 'settings' && <SettingsView />}
+          {activeView === 'admin' && <AdminPanelView />}
+        </div>
+      </div>
     </div>
   );
 }

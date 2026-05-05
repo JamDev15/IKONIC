@@ -30,6 +30,8 @@ import ProofClient from './pages/ProofClient';
 import BrandedToWin from './pages/BrandedToWin';
 import StickerBuilder from './pages/StickerBuilder';
 import ViralBot from './pages/ViralBot';
+import ViralBotAuth from './pages/ViralBotAuth';
+import ViralBotApp from './pages/ViralBotApp';
 import './App.css';
 
 gsap.registerPlugin(ScrollTrigger);
@@ -104,6 +106,8 @@ function App() {
           <Route path="/branded-to-win" element={<BrandedToWin />} />
           <Route path="/sticker-builder" element={<StickerBuilder />} />
           <Route path="/viral-bot" element={<ViralBot />} />
+          <Route path="/viral-bot/auth" element={<ViralBotAuth />} />
+          <Route path="/viral-bot/app" element={<ViralBotApp />} />
         </Routes>
       </div>
     </Router>
