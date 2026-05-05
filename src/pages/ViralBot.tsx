@@ -542,7 +542,7 @@ export default function ViralBot() {
             ViralBot finds trending content in your niche and automatically posts it to your social media accounts. Grow your audience while you sleep.
           </p>
           <div className="flex flex-wrap justify-center gap-4">
-            <a href="https://viralbot.tech/" target="_blank" rel="noopener noreferrer"
+            <a href="#viral-bot-demo"
               className="inline-flex items-center gap-2 bg-purple-600 hover:bg-purple-700 text-white font-semibold px-6 py-3 rounded-lg transition-colors">
               Start Free Trial <ArrowRight className="w-4 h-4" />
             </a>
