@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import Navigation from '../components/Navigation';
 import Footer from '../components/Footer';
+import MatrixBackground from '../components/MatrixBackground';
 import {
   LayoutDashboard, Rss, Send, BarChart2, Settings, Shield,
   TrendingUp, Share2, Bot, Check, Plus, Bell, LogOut,
@@ -524,10 +525,11 @@ export default function ViralBot() {
 
   return (
     <div className="relative bg-charcoal min-h-screen">
+      <MatrixBackground />
       <Navigation />
 
       {/* ── Hero ── */}
-      <section className="pt-32 pb-20 px-[6vw] bg-black relative z-10 text-center">
+      <section className="pt-32 pb-20 px-[6vw] bg-black/70 relative z-10 text-center">
         <div className="max-w-3xl mx-auto">
           <div className="inline-flex items-center gap-2 border border-purple-500/40 rounded-full px-4 py-1.5 text-sm text-purple-300 mb-8">
             <Zap className="w-3.5 h-3.5" />
@@ -555,7 +557,7 @@ export default function ViralBot() {
       </section>
 
       {/* ── Features ── */}
-      <section className="py-20 px-[6vw] bg-zinc-950 relative z-10">
+      <section className="py-20 px-[6vw] bg-zinc-950/70 relative z-10">
         <div className="max-w-5xl mx-auto text-center">
           <h2 className="font-display text-3xl md:text-4xl font-bold text-white mb-3">Everything you need to go viral</h2>
           <p className="text-gray-400 mb-12">Powerful tools designed for serious content creators and brands.</p>
@@ -574,7 +576,7 @@ export default function ViralBot() {
       </section>
 
       {/* ── Pricing ── */}
-      <section className="py-20 px-[6vw] bg-black relative z-10">
+      <section className="py-20 px-[6vw] bg-black/70 relative z-10">
         <div className="max-w-5xl mx-auto text-center">
           <h2 className="font-display text-3xl md:text-4xl font-bold text-white mb-3">Simple, transparent pricing</h2>
           <p className="text-gray-400 mb-12">Start for free, upgrade when you go viral.</p>
@@ -609,7 +611,7 @@ export default function ViralBot() {
       </section>
 
       {/* ── App Demo ── */}
-      <section id="viral-bot-demo" className="py-16 px-[6vw] bg-zinc-950 relative z-10">
+      <section id="viral-bot-demo" className="py-16 px-[6vw] bg-zinc-950/70 relative z-10">
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-10">
             <h2 className="font-display text-3xl font-bold text-white mb-3">See ViralBot in action</h2>

@@ -7,6 +7,7 @@ import {
   Calendar, Eye, Flame, Heart, MessageCircle, Save, Database, Zap
 } from 'lucide-react';
 import { getCurrentUser, getTrialStatus, logout } from '../lib/viralbot-auth';
+import MatrixBackground from '../components/MatrixBackground';
 
 type AppView = 'dashboard' | 'discovery' | 'autoposter' | 'analytics' | 'settings' | 'admin';
 
@@ -495,7 +496,8 @@ export default function ViralBotApp() {
   };
 
   return (
-    <div className="min-h-screen bg-black flex flex-col">
+    <div className="relative min-h-screen bg-charcoal flex flex-col">
+      <MatrixBackground />
       {trial?.expired && <TrialExpiredModal />}
 
       {/* Trial banner */}
@@ -514,7 +516,7 @@ export default function ViralBotApp() {
       )}
 
       {/* App top bar */}
-      <div className="bg-zinc-900 border-b border-white/10 px-5 py-2.5 flex items-center justify-between">
+      <div className="bg-zinc-900/80 backdrop-blur-md border-b border-white/10 px-5 py-2.5 flex items-center justify-between relative z-10">
         <p className="text-gray-400 text-sm">
           Welcome back, <span className="text-white font-medium">{user.name}</span> — your bot has found{' '}
           <span className="text-white font-medium">12 new viral posts</span> today.
@@ -529,9 +531,9 @@ export default function ViralBotApp() {
       </div>
 
       {/* Body */}
-      <div className="flex flex-1 overflow-hidden">
+      <div className="flex flex-1 overflow-hidden relative z-10">
         {/* Sidebar */}
-        <div className="w-52 bg-zinc-900 border-r border-white/10 flex flex-col py-5 px-3 flex-shrink-0">
+        <div className="w-52 bg-zinc-900/80 backdrop-blur-md border-r border-white/10 flex flex-col py-5 px-3 flex-shrink-0">
           <p className="text-[10px] text-gray-500 uppercase tracking-wider px-2 mb-2">Menu</p>
           <nav className="space-y-0.5 mb-5">
             {menuItems.map(item => (
@@ -570,7 +572,7 @@ export default function ViralBotApp() {
         </div>
 
         {/* Content */}
-        <div className="flex-1 overflow-auto bg-zinc-950 p-6">
+        <div className="flex-1 overflow-auto bg-zinc-950/70 p-6">
           {activeView === 'dashboard' && <DashboardView />}
           {activeView === 'discovery' && <DiscoveryFeedView />}
           {activeView === 'autoposter' && <AutoPosterView />}
