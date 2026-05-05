@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
   LayoutDashboard, Rss, Send, BarChart2, Settings, Shield,
-  TrendingUp, Share2, Bot, Check, Plus, Bell, LogOut,
+  TrendingUp, Share2, Check, Plus, Bell, LogOut,
   RefreshCw, Download, X, Pencil, ExternalLink, Users, Activity,
   Calendar, Eye, Flame, Heart, MessageCircle, Save, Database, Zap
 } from 'lucide-react';
