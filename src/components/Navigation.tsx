@@ -167,6 +167,10 @@ export default function Navigation() {
               Sticker Builder
             </Link>
 
+            <Link to="/gallery" className="text-sm font-medium text-offwhite-dark hover:text-mint transition-colors">
+              Gallery
+            </Link>
+
             {/* Web Design Builder — temporarily hidden from the menu; will re-enable later. Keep the code. */}
             {/* <Link to="/ai-website-generator" className="text-sm font-medium text-offwhite-dark hover:text-mint transition-colors">
               Web Design Builder
@@ -258,6 +262,9 @@ export default function Navigation() {
           </Link>
           <Link to="/sticker-builder" className="text-2xl font-display font-bold text-offwhite hover:text-mint transition-colors">
             Sticker Builder
+          </Link>
+          <Link to="/gallery" className="text-2xl font-display font-bold text-offwhite hover:text-mint transition-colors">
+            Gallery
           </Link>
           {/* Web Design Builder — temporarily hidden from the menu; will re-enable later. Keep the code. */}
           {/* <Link to="/ai-website-generator" className="text-2xl font-display font-bold text-offwhite hover:text-mint transition-colors">

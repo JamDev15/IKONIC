@@ -39,6 +39,7 @@ const StickerBuilder = lazy(() => import('./pages/StickerBuilder'));
 // Pages remain in src/pages/ if the product is ever revived; auth must be rebuilt on
 // Supabase Auth and the generation endpoint must be guarded before re-enabling.
 const AIWebsiteGenerator = lazy(() => import('./pages/AIWebsiteGenerator'));
+const Gallery = lazy(() => import('./pages/Gallery'));
 const NotFound = lazy(() => import('./pages/NotFound'));
 
 function HomePage() {
@@ -156,6 +157,7 @@ function App() {
             <Route path="/branded-to-win" element={<BrandedToWin />} />
             <Route path="/sticker-builder" element={<StickerBuilder />} />
             <Route path="/ai-website-generator" element={<AIWebsiteGenerator />} />
+            <Route path="/gallery" element={<Gallery />} />
             {/* Catch-all. Must stay LAST — react-router matches in order. */}
             <Route path="*" element={<NotFound />} />
           </Routes>
