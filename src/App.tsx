@@ -32,18 +32,21 @@ const ProofManager = lazy(() => import('./pages/ProofManager'));
 const ProofClient = lazy(() => import('./pages/ProofClient'));
 const BrandedToWin = lazy(() => import('./pages/BrandedToWin'));
 const StickerBuilder = lazy(() => import('./pages/StickerBuilder'));
-const ViralBot = lazy(() => import('./pages/ViralBot'));
-const ViralBotAuth = lazy(() => import('./pages/ViralBotAuth'));
-const ViralBotApp = lazy(() => import('./pages/ViralBotApp'));
-const OpsTickerPage = lazy(() => import('./pages/OpsTickerPage'));
+// ViralBot routes REMOVED 2026-07-21 (security audit). It was a mockup that
+// (a) stored user passwords in PLAINTEXT in localStorage with a client-side-only
+// trial gate, and (b) was the sole caller of /api/generate-post — an unauthenticated,
+// unmetered Gemini endpoint anyone could drive as a free LLM proxy on our key.
+// Pages remain in src/pages/ if the product is ever revived; auth must be rebuilt on
+// Supabase Auth and the generation endpoint must be guarded before re-enabling.
 const AIWebsiteGenerator = lazy(() => import('./pages/AIWebsiteGenerator'));
 const Gallery = lazy(() => import('./pages/Gallery'));
+const NotFound = lazy(() => import('./pages/NotFound'));
 
 function HomePage() {
   return (
     <>
       <PageSEO
-        title="Digital Marketing Agency Denver CO | Ikonic Marketing"
+        title="Digital Marketing Agency Denver CO | ikonic303"
         description="Denver's #1 GoHighLevel agency. We build 24/7 lead capture systems — custom websites, CRM automation, sales funnels, and reputation management. Get more leads on autopilot."
         canonical="/"
       />
@@ -153,12 +156,10 @@ function App() {
             <Route path="/proof/:token" element={<ProofClient />} />
             <Route path="/branded-to-win" element={<BrandedToWin />} />
             <Route path="/sticker-builder" element={<StickerBuilder />} />
-            <Route path="/viral-bot" element={<ViralBot />} />
-            <Route path="/viral-bot/auth" element={<ViralBotAuth />} />
-            <Route path="/viral-bot/app" element={<ViralBotApp />} />
-            <Route path="/ops/:slug" element={<OpsTickerPage />} />
             <Route path="/ai-website-generator" element={<AIWebsiteGenerator />} />
             <Route path="/gallery" element={<Gallery />} />
+            {/* Catch-all. Must stay LAST — react-router matches in order. */}
+            <Route path="*" element={<NotFound />} />
           </Routes>
         </Suspense>
       </div>

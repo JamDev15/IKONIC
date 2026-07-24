@@ -4,20 +4,147 @@
   "framework": "vite",
   "crons": [
     {
-      "path": "/api/auto-blog-generate",
+      "path": "/api/blog?action=auto-generate",
       "schedule": "0 14 * * *"
     }
   ],
+  "redirects": [
+    {
+      "source": "/:path*",
+      "has": [
+        {
+          "type": "host",
+          "value": "(www\\.)?ikonicmarketing303\\.com"
+        }
+      ],
+      "destination": "https://ikonic303.com/:path*",
+      "permanent": true
+    }
+  ],
   "rewrites": [
-    { "source": "/signage", "destination": "/signage.html" },
-    { "source": "/wayfinding", "destination": "/wayfinding.html" },
-    { "source": "/marketing", "destination": "/marketing.html" },
-    { "source": "/paint-protection-film", "destination": "/paint-protection-film.html" },
-    { "source": "/window-tint", "destination": "/window-tint.html" },
-    { "source": "/ceramic-coating", "destination": "/ceramic-coating.html" },
-    { "source": "/services/paint-protection-film", "destination": "/paint-protection-film.html" },
-    { "source": "/services/window-tint", "destination": "/window-tint.html" },
-    { "source": "/services/ceramic-coating", "destination": "/ceramic-coating.html" },
-    { "source": "/((?!api/|@vite|@react-refresh|src/|node_modules/|.*\\.[a-zA-Z0-9]+$).*)", "destination": "/index.html" }
+    {
+      "source": "/api/blog-posts",
+      "destination": "/api/blog?action=list"
+    },
+    {
+      "source": "/api/blog-post",
+      "destination": "/api/blog?action=post"
+    },
+    {
+      "source": "/api/publish-blog",
+      "destination": "/api/blog?action=publish"
+    },
+    {
+      "source": "/api/auto-blog-generate",
+      "destination": "/api/blog?action=auto-generate"
+    },
+    {
+      "source": "/signage",
+      "destination": "/signage.html"
+    },
+    {
+      "source": "/wayfinding",
+      "destination": "/wayfinding.html"
+    },
+    {
+      "source": "/marketing",
+      "destination": "/marketing.html"
+    },
+    {
+      "source": "/paint-protection-film",
+      "destination": "/paint-protection-film.html"
+    },
+    {
+      "source": "/window-tint",
+      "destination": "/window-tint.html"
+    },
+    {
+      "source": "/ceramic-coating",
+      "destination": "/ceramic-coating.html"
+    },
+    {
+      "source": "/services/paint-protection-film",
+      "destination": "/paint-protection-film.html"
+    },
+    {
+      "source": "/services/window-tint",
+      "destination": "/window-tint.html"
+    },
+    {
+      "source": "/services/ceramic-coating",
+      "destination": "/ceramic-coating.html"
+    },
+    {
+      "source": "/commercial-wraps",
+      "destination": "/commercial-wraps.html"
+    },
+    {
+      "source": "/post/:slug",
+      "destination": "/404.html"
+    },
+    {
+      "source": "/proof-manager",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/proof/:token",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/viral-bot",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/viral-bot/:path*",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/((?!api/|@vite|@react-refresh|src/|node_modules/|.*\\.[a-zA-Z0-9]+$).*)",
+      "destination": "/404.html"
+    }
+  ],
+  "headers": [
+    {
+      "source": "/(.*)",
+      "headers": [
+        {
+          "key": "X-Content-Type-Options",
+          "value": "nosniff"
+        },
+        {
+          "key": "X-Frame-Options",
+          "value": "DENY"
+        },
+        {
+          "key": "Referrer-Policy",
+          "value": "strict-origin-when-cross-origin"
+        },
+        {
+          "key": "Permissions-Policy",
+          "value": "camera=(), microphone=(), geolocation=(), payment=(), usb=()"
+        },
+        {
+          "key": "Content-Security-Policy-Report-Only",
+          "value": "default-src 'self'; script-src 'self' 'unsafe-inline' https://connect.facebook.net https://widgets.leadconnectorhq.com https://crm.ikonic303.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' data: https://fonts.gstatic.com; img-src 'self' data: blob: https:; connect-src 'self' https://www.facebook.com https://widgets.leadconnectorhq.com https://services.leadconnectorhq.com https://crm.ikonic303.com; frame-src https://crm.ikonic303.com https://widgets.leadconnectorhq.com https://www.facebook.com; frame-ancestors 'none'; base-uri 'self'; form-action 'self' https://crm.ikonic303.com; object-src 'none'; upgrade-insecure-requests"
+        }
+      ]
+    },
+    {
+      "source": "/api/(.*)",
+      "headers": [
+        {
+          "key": "X-Content-Type-Options",
+          "value": "nosniff"
+        },
+        {
+          "key": "X-Frame-Options",
+          "value": "DENY"
+        },
+        {
+          "key": "Referrer-Policy",
+          "value": "no-referrer"
+        }
+      ]
+    }
   ]
 }

@@ -1,9 +1,10 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node';
+import { timingSafeEqual } from 'crypto';
 import { GoogleGenAI } from '@google/genai';
 import { Resend } from 'resend';
 import { randomUUID } from 'node:crypto';
 
-export const maxDuration = 60;
+
 
 const TOPICS = [
   // Digital Marketing
@@ -44,15 +45,39 @@ async function upstash(command: unknown[]) {
   return res.json();
 }
 
-export default async function handler(req: VercelRequest, res: VercelResponse) {
-  // Auth — Vercel cron sends Authorization: Bearer {CRON_SECRET} automatically
+
+/**
+ * Constant-time secret comparison.
+ * ADDED 2026-07-21: `!==` on a secret leaks length and prefix through timing. Not
+ * practically exploitable across the public internet, but this is one line.
+ */
+function secretMatches(provided: string, expected: string): boolean {
+  const a = Buffer.from(provided);
+  const b = Buffer.from(expected);
+  if (a.length !== b.length) return false;
+  return timingSafeEqual(a, b);
+}
+
+export async function handler(req: VercelRequest, res: VercelResponse) {
+  // Auth — Vercel cron sends Authorization: Bearer {CRON_SECRET} automatically.
+  //
+  // FAIL CLOSED. This previously read `if (cronSecret) { ...check... }`, so when
+  // CRON_SECRET was unset the check was skipped entirely and this endpoint was
+  // publicly triggerable — every call costing a Gemini generation and a Resend email.
+  // CRON_SECRET was in fact NOT set in Vercel (found 2026-07-20), so that was live.
+  // A missing secret must mean NOBODY gets in, never everybody.
   const cronSecret = process.env.CRON_SECRET || '';
-  if (cronSecret) {
-    const authHeader = (req.headers['authorization'] as string) || '';
-    const querySecret = (req.query?.secret as string) || '';
-    if (authHeader !== `Bearer ${cronSecret}` && querySecret !== cronSecret) {
-      return res.status(401).json({ error: 'Unauthorized' });
-    }
+  if (!cronSecret) {
+    console.error('auto-blog-generate: CRON_SECRET not configured — refusing to run');
+    return res.status(503).json({ error: 'Not configured' });
+  }
+  // HEADER ONLY (2026-07-21 security audit). The ?secret= path was removed: a secret in
+  // a URL lands in Vercel access logs, browser history, and any Referer sent by the
+  // rendered page. Vercel cron sends Authorization: Bearer $CRON_SECRET automatically.
+  const authHeader = (req.headers['authorization'] as string) || '';
+  const provided = authHeader.startsWith('Bearer ') ? authHeader.slice(7) : '';
+  if (!provided || !secretMatches(provided, cronSecret)) {
+    return res.status(401).json({ error: 'Unauthorized' });
   }
 
   const geminiKey = process.env.GEMINI_API_KEY;
@@ -61,10 +86,59 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   if (!resendKey) return res.status(500).json({ error: 'RESEND_API_KEY not set' });
   if (!process.env.UPSTASH_REDIS_REST_URL) return res.status(500).json({ error: 'UPSTASH_REDIS_REST_URL not set' });
 
-  const topic = TOPICS[Math.floor(Math.random() * TOPICS.length)];
+  // TOPIC SELECTION — never write the same subject twice.
+  //
+  // This used to be `TOPICS[Math.floor(Math.random() * TOPICS.length)]` with no memory,
+  // running daily against a 20-item list. The result was severe self-cannibalisation:
+  // by post 47 there were SEVEN near-identical "fleet as mobile billboard" articles and
+  // three on "the hidden cost of a weak brand", each splitting the others' search
+  // authority. A content engine that republishes its own topics is worse than one that
+  // stops.
+  //
+  // Every post now records the exact topic string it came from. We read those back and
+  // only pick from what's left. When the list is exhausted we DO NOT generate — we email
+  // instead, because the right response to "nothing new to say" is to write new topics,
+  // not to say an old thing again.
+  const usedTopics = new Set<string>();
+  try {
+    const slugsData = await upstash(['SMEMBERS', 'blog:slugs']);
+    const existing: string[] = slugsData.result || [];
+    for (const s of existing) {
+      const d = await upstash(['GET', `blog:post:${s}`]);
+      if (!d.result) continue;
+      try {
+        const post = JSON.parse(d.result);
+        if (post.topic) usedTopics.add(post.topic);
+      } catch { /* ignore an unparseable record */ }
+    }
+  } catch (err) {
+    console.error('auto-blog-generate: could not read existing topics, proceeding:', err);
+  }
+
+  const available = TOPICS.filter((t) => !usedTopics.has(t));
+  if (!available.length) {
+    console.warn('auto-blog-generate: every topic is used — not generating a duplicate');
+    try {
+      await new Resend(resendKey).emails.send({
+        from: 'ikonic303 Blog <blog@ikonicmarketing303.com>',
+        to: 'info@ikonicmarketing303.com',
+        subject: 'Blog generator paused — the topic list is used up',
+        html: `<p>The daily blog generator ran but every topic in its list has already been
+               published, so it did not write anything rather than duplicate an existing post.</p>
+               <p><strong>To restart it:</strong> add new topics to <code>TOPICS</code> in
+               <code>api/_lib/blog/auto-blog-generate.ts</code>.</p>
+               <p>${usedTopics.size} topics used.</p>`,
+      });
+    } catch (err) {
+      console.error('auto-blog-generate: exhausted-notice email failed:', err);
+    }
+    return res.status(200).json({ ok: true, skipped: 'all topics used', used: usedTopics.size });
+  }
+
+  const topic = available[Math.floor(Math.random() * available.length)];
 
   const ai = new GoogleGenAI({ apiKey: geminiKey });
-  const prompt = `You are a professional content writer for Ikonic Marketing, a Denver-based company specializing in digital marketing, business signage, commercial vehicle wraps, and wayfinding signage.
+  const prompt = `You are a professional content writer for ikonic303, a Denver-based company specializing in digital marketing, business signage, commercial vehicle wraps, and wayfinding signage.
 
 Write a high-quality, SEO-optimized blog post on this topic: "${topic}"
 
@@ -112,15 +186,18 @@ Make it genuinely helpful and relevant to Denver business owners. Include real a
   const slug = (postData.slug || token).replace(/[^a-z0-9-]/gi, '-').toLowerCase();
   const now = new Date().toISOString();
 
+  // NOTE: named `draft`, but status is 'published' — generated posts go LIVE immediately.
+  // The token/publish-blog flow is a leftover from when they were held for review.
   const draft = {
     token,
+    topic, // recorded so the next run can exclude this subject — see topic selection above
     title: postData.title,
     slug,
     excerpt: postData.excerpt,
     content: postData.content,
     category: postData.category,
     tags: Array.isArray(postData.tags) ? postData.tags : [],
-    author: 'Ikonic Team',
+    author: 'ikonic303',
     status: 'published',
     createdAt: now,
     publishedAt: now,
@@ -129,7 +206,7 @@ Make it genuinely helpful and relevant to Denver business owners. Include real a
   await upstash(['SET', `blog:post:${slug}`, JSON.stringify(draft)]);
   await upstash(['SADD', 'blog:slugs', slug]);
 
-  const postUrl = `https://ikonicmarketing303.com/post/${slug}`;
+  const postUrl = `https://ikonic303.com/post/${slug}`;
 
   // Content preview — strip HTML tags for a clean text preview in the email
   const textPreview = draft.content
@@ -143,7 +220,7 @@ Make it genuinely helpful and relevant to Denver business owners. Include real a
 
   <div style="background:#0B0D10;padding:22px 28px;border-radius:12px;margin-bottom:20px;text-align:center;">
     <h1 style="color:#00FF9D;font-size:18px;margin:0;letter-spacing:2px;">✅ NEW BLOG POST PUBLISHED</h1>
-    <p style="color:rgba(255,255,255,0.5);margin:6px 0 0;font-size:12px;">Auto-published · Live on ikonicmarketing303.com/blogs</p>
+    <p style="color:rgba(255,255,255,0.5);margin:6px 0 0;font-size:12px;">Auto-published · Live on ikonic303.com/blogs</p>
   </div>
 
   <div style="background:white;border-radius:12px;padding:28px;margin-bottom:16px;">
@@ -164,13 +241,13 @@ Make it genuinely helpful and relevant to Denver business owners. Include real a
     </a>
   </div>
 
-  <p style="text-align:center;color:#aaa;font-size:11px;margin:0;">Ikonic Marketing · ikonicmarketing303.com</p>
+  <p style="text-align:center;color:#aaa;font-size:11px;margin:0;">ikonic303 · ikonic303.com</p>
 </div>`;
 
   const resend = new Resend(resendKey);
   try {
     await resend.emails.send({
-      from: 'Ikonic Blog <blog@ikonicmarketing303.com>',
+      from: 'ikonic303 Blog <blog@ikonicmarketing303.com>',
       to: 'info@ikonicmarketing303.com',
       subject: `✅ New Blog Post Live: "${draft.title}"`,
       html: emailHtml,
