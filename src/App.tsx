@@ -37,6 +37,7 @@ const ViralBotAuth = lazy(() => import('./pages/ViralBotAuth'));
 const ViralBotApp = lazy(() => import('./pages/ViralBotApp'));
 const OpsTickerPage = lazy(() => import('./pages/OpsTickerPage'));
 const AIWebsiteGenerator = lazy(() => import('./pages/AIWebsiteGenerator'));
+const Gallery = lazy(() => import('./pages/Gallery'));
 
 function HomePage() {
   return (
@@ -157,6 +158,7 @@ function App() {
             <Route path="/viral-bot/app" element={<ViralBotApp />} />
             <Route path="/ops/:slug" element={<OpsTickerPage />} />
             <Route path="/ai-website-generator" element={<AIWebsiteGenerator />} />
+            <Route path="/gallery" element={<Gallery />} />
           </Routes>
         </Suspense>
       </div>
