@@ -6,32 +6,82 @@ import { randomUUID } from 'node:crypto';
 
 
 
-const TOPICS = [
-  // Digital Marketing
-  'How Denver Businesses Can Use Digital Marketing to Get More Leads This Month',
-  'The ROI of Digital Marketing for Local Service Companies in Colorado',
-  'Email Automation vs. Social Media: Which Drives More Leads for Denver Businesses?',
-  'How to Build a 24/7 Lead Generation System with Digital Marketing',
-  'Google Ads vs. Meta Ads: Which Is Better for Denver Local Businesses?',
-  'Why Every Denver Service Business Needs a CRM and Marketing Automation System',
-  // Signage
-  'How Business Signage Drives Walk-In Traffic and Brand Recognition in Denver',
-  'Indoor vs. Outdoor Signage: What Denver Businesses Need to Know',
-  'The Psychology of Effective Business Signage: What Makes Customers Stop and Look',
-  'How to Choose the Right Signage for Your Denver Business Location',
-  // Commercial Wraps
-  'How Commercial Vehicle Wraps Turn Denver Fleets Into Mobile Billboards',
-  'The True ROI of Commercial Wraps for Denver Service Businesses',
-  'Full Wrap vs. Partial Wrap: Which Is Right for Your Denver Business Fleet?',
-  'How to Design a Commercial Wrap That Gets Your Denver Business Noticed',
-  'Fleet Branding 101: Wrapping Multiple Vehicles for Maximum Impact in Colorado',
-  // Wayfinding Signage
-  'What Is Wayfinding Signage and Why Does Your Denver Business Need It?',
-  'How Wayfinding Signage Improves the Customer Experience at Your Location',
-  'Interior Wayfinding Signs: Helping Customers Navigate Your Denver Business',
-  'Wayfinding Signage for Office Buildings and Commercial Properties in Denver',
-  'How to Design a Wayfinding System That Reflects Your Brand in Colorado',
-];
+// TOPICS_BY_CATEGORY + CATEGORY_ORDER below replace a flat 20-item TOPICS list.
+// That list ran out on ~2026-07-22 (one draw per day, no repeats allowed — see the
+// dedup note further down), and the generator has been silently emailing "topic
+// list is used up" and skipping ever since instead of posting. Fix: ~4x more
+// topics for runway, grouped by category, with the day-to-day category picked in
+// rotation (see CATEGORY_ORDER) so consecutive posts don't cluster on one area.
+const TOPICS_BY_CATEGORY: Record<string, string[]> = {
+  'Digital Marketing': [
+    'How Denver Businesses Can Use Digital Marketing to Get More Leads This Month',
+    'The ROI of Digital Marketing for Local Service Companies in Colorado',
+    'Email Automation vs. Social Media: Which Drives More Leads for Denver Businesses?',
+    'How to Build a 24/7 Lead Generation System with Digital Marketing',
+    'Google Ads vs. Meta Ads: Which Is Better for Denver Local Businesses?',
+    'Why Every Denver Service Business Needs a CRM and Marketing Automation System',
+    '5 Signs Your Denver Business Needs a Marketing Automation Overhaul',
+    'How to Turn Google Reviews Into a Steady Stream of New Customers in Denver',
+    'SMS Marketing for Local Businesses: What Denver Owners Need to Know',
+    'The Real Cost of a Slow Lead Response Time for Colorado Service Businesses',
+    'How to Build a Website That Actually Converts Denver Visitors Into Customers',
+    'Local SEO Checklist: Getting Your Denver Business Found on Google Maps',
+    'Marketing Funnels 101: A Simple Guide for Denver Service Business Owners',
+    'How Chatbots and AI Voice Agents Are Changing Customer Service for Local Businesses',
+    'Retargeting Ads Explained: Bringing Denver Website Visitors Back to Buy',
+  ],
+  'Signage': [
+    'How Business Signage Drives Walk-In Traffic and Brand Recognition in Denver',
+    'Indoor vs. Outdoor Signage: What Denver Businesses Need to Know',
+    'The Psychology of Effective Business Signage: What Makes Customers Stop and Look',
+    'How to Choose the Right Signage for Your Denver Business Location',
+    "Channel Letters vs. Monument Signs: Which Is Right for Your Denver Storefront?",
+    "LED vs. Traditional Signage: What's the Better Investment for Colorado Businesses?",
+    'How Often Should You Update Your Business Signage in Denver?',
+    'Window Graphics and Decals: An Affordable Signage Upgrade for Local Shops',
+    'ADA Signage Compliance: What Every Denver Business Owner Should Know',
+    'How to Design Signage That Works Day and Night in Colorado Weather',
+    'Signage Permits in Denver: What You Need to Know Before You Install',
+    'Retail Signage Trends Denver Business Owners Should Watch This Year',
+    'How Custom Signage Builds Trust With First-Time Customers',
+  ],
+  'Commercial Wraps': [
+    'How Commercial Vehicle Wraps Turn Denver Fleets Into Mobile Billboards',
+    'The True ROI of Commercial Wraps for Denver Service Businesses',
+    'Full Wrap vs. Partial Wrap: Which Is Right for Your Denver Business Fleet?',
+    'How to Design a Commercial Wrap That Gets Your Denver Business Noticed',
+    'Fleet Branding 101: Wrapping Multiple Vehicles for Maximum Impact in Colorado',
+    "How Long Does a Commercial Vehicle Wrap Last in Colorado's Climate?",
+    'Vehicle Wrap Maintenance: Keeping Your Denver Fleet Looking Sharp',
+    "Color Change Wraps vs. Branded Wraps: What's the Difference?",
+    'How Much Does a Commercial Vehicle Wrap Cost in Denver?',
+    'The Best Vehicles for Wrap Advertising: Vans, Trucks, and Trailers Compared',
+    'How Vehicle Wraps Compare to Traditional Advertising for Local Businesses',
+    'Spot Graphics vs. Full Wraps: Budget-Friendly Options for Denver Fleets',
+    'Preparing Your Vehicle for a Wrap: What Denver Business Owners Should Know',
+    "How to Measure the Marketing Impact of Your Wrapped Fleet",
+    "Seasonal Wrap Refreshes: Keeping Your Denver Fleet's Look Current",
+  ],
+  'Wayfinding Signage': [
+    'What Is Wayfinding Signage and Why Does Your Denver Business Need It?',
+    'How Wayfinding Signage Improves the Customer Experience at Your Location',
+    'Interior Wayfinding Signs: Helping Customers Navigate Your Denver Business',
+    'Wayfinding Signage for Office Buildings and Commercial Properties in Denver',
+    'How to Design a Wayfinding System That Reflects Your Brand in Colorado',
+    'ADA-Compliant Wayfinding Signage: What Denver Property Owners Need to Know',
+    'Wayfinding Signage for Medical Offices and Clinics in Colorado',
+    'Outdoor Wayfinding Signs: Directing Traffic Across Multi-Building Properties',
+    'How Wayfinding Signage Reduces Front-Desk Questions and Staff Interruptions',
+    'Digital vs. Static Wayfinding Signs: Which Fits Your Denver Business?',
+    'Wayfinding Signage for Retail Centers and Shopping Plazas in Denver',
+    'Parking Lot and Garage Wayfinding: Solving Navigation Before Customers Arrive',
+    "How to Audit Your Business's Current Wayfinding for Confusing Gaps",
+    'Wayfinding Signage for Warehouses and Industrial Facilities in Colorado',
+    'Combining Wayfinding and Brand Signage Without Cluttering Your Space',
+  ],
+};
+
+const CATEGORY_ORDER = ['Digital Marketing', 'Signage', 'Commercial Wraps', 'Wayfinding Signage'];
 
 async function upstash(command: unknown[]) {
   const res = await fetch(process.env.UPSTASH_REDIS_REST_URL!, {
@@ -86,19 +136,11 @@ export async function handler(req: VercelRequest, res: VercelResponse) {
   if (!resendKey) return res.status(500).json({ error: 'RESEND_API_KEY not set' });
   if (!process.env.UPSTASH_REDIS_REST_URL) return res.status(500).json({ error: 'UPSTASH_REDIS_REST_URL not set' });
 
-  // TOPIC SELECTION — never write the same subject twice.
-  //
-  // This used to be `TOPICS[Math.floor(Math.random() * TOPICS.length)]` with no memory,
-  // running daily against a 20-item list. The result was severe self-cannibalisation:
-  // by post 47 there were SEVEN near-identical "fleet as mobile billboard" articles and
-  // three on "the hidden cost of a weak brand", each splitting the others' search
-  // authority. A content engine that republishes its own topics is worse than one that
-  // stops.
-  //
-  // Every post now records the exact topic string it came from. We read those back and
-  // only pick from what's left. When the list is exhausted we DO NOT generate — we email
-  // instead, because the right response to "nothing new to say" is to write new topics,
-  // not to say an old thing again.
+  // TOPIC SELECTION — never write the same subject twice. Every post records the
+  // exact topic string it came from (see `topic` on `draft` below); we read those
+  // back and only pick from what's left. If every topic is exhausted we DO NOT
+  // generate — we email instead, because the right response to "nothing new to
+  // say" is to add new topics, not to duplicate an old post's subject.
   const usedTopics = new Set<string>();
   try {
     const slugsData = await upstash(['SMEMBERS', 'blog:slugs']);
@@ -115,8 +157,27 @@ export async function handler(req: VercelRequest, res: VercelResponse) {
     console.error('auto-blog-generate: could not read existing topics, proceeding:', err);
   }
 
-  const available = TOPICS.filter((t) => !usedTopics.has(t));
-  if (!available.length) {
+  // CATEGORY ROTATION — today's category is fixed by the UTC date so consecutive
+  // posts alternate (Digital Marketing -> Signage -> Commercial Wraps ->
+  // Wayfinding Signage -> repeat) instead of landing wherever chance puts them.
+  // If today's category has no unused topics left, move to the next category in
+  // the rotation that still has one; only give up once every category is dry.
+  const daysSinceEpoch = Math.floor(Date.now() / 86_400_000);
+  const startIndex = daysSinceEpoch % CATEGORY_ORDER.length;
+
+  let category = '';
+  let topic = '';
+  for (let i = 0; i < CATEGORY_ORDER.length; i++) {
+    const candidate = CATEGORY_ORDER[(startIndex + i) % CATEGORY_ORDER.length];
+    const remaining = TOPICS_BY_CATEGORY[candidate].filter((t) => !usedTopics.has(t));
+    if (remaining.length) {
+      category = candidate;
+      topic = remaining[Math.floor(Math.random() * remaining.length)];
+      break;
+    }
+  }
+
+  if (!topic) {
     console.warn('auto-blog-generate: every topic is used — not generating a duplicate');
     try {
       await new Resend(resendKey).emails.send({
@@ -125,7 +186,7 @@ export async function handler(req: VercelRequest, res: VercelResponse) {
         subject: 'Blog generator paused — the topic list is used up',
         html: `<p>The daily blog generator ran but every topic in its list has already been
                published, so it did not write anything rather than duplicate an existing post.</p>
-               <p><strong>To restart it:</strong> add new topics to <code>TOPICS</code> in
+               <p><strong>To restart it:</strong> add new topics to <code>TOPICS_BY_CATEGORY</code> in
                <code>api/_lib/blog/auto-blog-generate.ts</code>.</p>
                <p>${usedTopics.size} topics used.</p>`,
       });
@@ -135,12 +196,11 @@ export async function handler(req: VercelRequest, res: VercelResponse) {
     return res.status(200).json({ ok: true, skipped: 'all topics used', used: usedTopics.size });
   }
 
-  const topic = available[Math.floor(Math.random() * available.length)];
-
   const ai = new GoogleGenAI({ apiKey: geminiKey });
   const prompt = `You are a professional content writer for ikonic303, a Denver-based company specializing in digital marketing, business signage, commercial vehicle wraps, and wayfinding signage.
 
 Write a high-quality, SEO-optimized blog post on this topic: "${topic}"
+This post belongs to the "${category}" category.
 
 Return ONLY a single valid JSON object — no markdown, no code fences, just the JSON:
 {
@@ -148,7 +208,6 @@ Return ONLY a single valid JSON object — no markdown, no code fences, just the
   "slug": "url-friendly-slug-with-hyphens-only",
   "excerpt": "2-3 sentence compelling description for the blog listing page",
   "content": "full article as clean HTML (use h2, h3, p, ul, li, strong tags; 900-1300 words; no outer html/body/head tags; no inline styles; no class attributes)",
-  "category": "one of: Digital Marketing, Signage, Commercial Wraps, Wayfinding Signage",
   "tags": ["tag1", "tag2", "tag3", "tag4"]
 }
 
@@ -159,7 +218,6 @@ Make it genuinely helpful and relevant to Denver business owners. Include real a
     slug: string;
     excerpt: string;
     content: string;
-    category: string;
     tags: string[];
   };
 
@@ -195,7 +253,7 @@ Make it genuinely helpful and relevant to Denver business owners. Include real a
     slug,
     excerpt: postData.excerpt,
     content: postData.content,
-    category: postData.category,
+    category,
     tags: Array.isArray(postData.tags) ? postData.tags : [],
     author: 'ikonic303',
     status: 'published',
