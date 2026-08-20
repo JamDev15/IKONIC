@@ -365,11 +365,24 @@ function buildPost(template, post) {
   return html.replace(/(<div id="root">)[\s\S]*?(<\/div>\s*(?:<script|<\/body>))/, `$1${body}$2`);
 }
 
+// Moon River (Rios's Brighton construction business) categories. The daily generator is
+// not yet client-scoped, so it can still queue these onto ikonic's own blog. Unpublishing
+// clears what's already live; this filter keeps any new ones out of ikonic's prerendered
+// shells and sitemap until the generator itself is scoped at write time.
+const MOON_RIVER_CATEGORIES = new Set([
+  'Concrete & Hardscapes',
+  'Landscaping & Outdoor Living',
+  'Interior Remodeling',
+  'Home Maintenance & Seasonal',
+]);
+
 async function prerenderPosts(template) {
   let list;
   try {
     const d = await fetchJson(`${ORIGIN}/api/blog-posts`, 20000);
-    list = (d.posts || []).filter((p) => p.slug && !String(p.link || '').startsWith('http'));
+    list = (d.posts || [])
+      .filter((p) => p.slug && !String(p.link || '').startsWith('http'))
+      .filter((p) => !MOON_RIVER_CATEGORIES.has(p.category));
   } catch (err) {
     console.warn(`prerender: skipping blog posts — could not load the list (${err.message})`);
     return { count: 0, slugs: [] };
