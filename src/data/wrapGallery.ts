@@ -106,4 +106,9 @@ export const wrapGallery: WrapMediaItem[] = [
   { id: 'vid-49', type: 'video', src: '/wrap-gallery/videos/wrap-video-51.mp4' },
   { id: 'vid-51', type: 'video', src: '/wrap-gallery/videos/wrap-video-53.mp4' },
   { id: 'vid-52', type: 'video', src: '/wrap-gallery/videos/wrap-video-54.mp4' },
+  { id: 'vid-53', type: 'video', src: '/wrap-gallery/videos/WhatsApp%20Video%202026-08-08%20at%204.16.00%20AM.mp4' },
+  { id: 'vid-54', type: 'video', src: '/wrap-gallery/videos/WhatsApp%20Video%202026-08-08%20at%204.16.03%20AM.mp4' },
+  { id: 'vid-55', type: 'video', src: '/wrap-gallery/videos/WhatsApp%20Video%202026-08-08%20at%204.16.19%20AM.mp4' },
+  { id: 'vid-56', type: 'video', src: '/wrap-gallery/videos/WhatsApp%20Video%202026-08-08%20at%204.21.58%20AM.mp4' },
+  { id: 'vid-57', type: 'video', src: '/wrap-gallery/videos/WhatsApp%20Video%202026-08-08%20at%204.23.16%20AM.mp4' },
 ];
