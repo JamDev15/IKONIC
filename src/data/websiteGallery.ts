@@ -26,6 +26,14 @@ export const websiteGallery: WebsiteMediaItem[] = [
     url: 'https://dencorooterdrain.com/',
   },
   {
+    id: 'website-4',
+    category: 'website',
+    src: '/website-gallery/website/SaveOurSolarPage.png',
+    title: 'Save Our Solar',
+    description: '24/7 solar system roadside assistance & repair membership with nationwide dispatch.',
+    url: 'https://www.saveoursolarclub.com/',
+  },
+  {
     id: 'funnel-1',
     category: 'funnel',
     src: '/website-gallery/funnel/funnel-01.jpg',
