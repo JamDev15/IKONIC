@@ -65,14 +65,52 @@ one of those things. We do all of them under one roof in Wheat Ridge.</p>`,
     description:
       'Full-service digital marketing for Denver businesses — web design, GoHighLevel CRM automation, reputation management, speed-to-lead, and marketing systems. All under one roof.',
     body: `<h1>ikonic services — Denver, Colorado</h1>
-<p>Two sides of one business: the physical brand and the digital front office.</p>
-<h2>Brand &amp; signage</h2>
-<p>Storefront and building signage, window graphics and wall murals, storefront branding, and
-wayfinding and ADA/safety signage — designed and printed in our Wheat Ridge shop, installed
-on-site.</p>
-<h2>Digital marketing</h2>
-<p>Web design and sales funnels, CRM automation, speed-to-lead response, reputation and review
-generation, SEO and AEO, and monthly reporting — delivered as a flat monthly retainer.</p>`,
+<p>Two sides of one business: the physical brand and the digital front office. From websites and
+CRM to signage and window film, ikonic provides complete solutions for Colorado businesses — all
+integrated, all optimized, all working together under one roof in Wheat Ridge.</p>
+<h2>Web Design &amp; Funnels</h2>
+<p>Custom websites and high-converting sales funnels built in GoHighLevel that turn visitors into
+booked jobs: landing pages, sales funnels, GHL integration, and mobile-responsive design built and
+maintained for local service businesses across the Denver metro.</p>
+<h2>CRM &amp; Automations</h2>
+<p>Complete GoHighLevel setup with automated workflows that nurture leads: CRM setup, workflow
+automation, lead tracking, and AI integrations, so every enquiry is tagged, routed, and followed
+up without anyone having to remember to send it.</p>
+<h2>Reputation Management</h2>
+<p>Build a five-star reputation with Google Business optimization: Google Business Profile setup
+and optimization, automated review generation, local SEO, and ongoing reputation monitoring —
+reviews are the single strongest local ranking and trust signal a service business has.</p>
+<h2>Speed to Lead</h2>
+<p>Respond to leads in under 60 seconds with automated follow-up: instant SMS, email sequences,
+missed-call text-back, and smart routing, because most local service leads go to whoever answers
+first.</p>
+<h2>Marketing Systems</h2>
+<p>Full-service digital marketing that keeps the pipeline full 24/7: campaign management, social
+media strategy, paid ads on Google and Meta, and an analytics dashboard that shows what came in
+and what it was worth.</p>
+<h2>Window Tint</h2>
+<p>Flat-glass window film for homes, offices, and storefronts — heat and glare control, UV
+protection, and privacy film, with every job's glass checked against the manufacturer's
+compatibility chart before a quote goes out.</p>
+<h2>Why choose ikonic?</h2>
+<p><strong>All-in-one platform</strong> — everything integrated in GoHighLevel, no juggling
+multiple tools or vendors. <strong>Done-for-you service</strong> — ikonic builds and manages the
+systems so business owners can focus on running their business instead of chasing five different
+agencies. <strong>Proven results</strong> — data-driven strategies with measurable ROI for every
+campaign, reported monthly in plain language, not jargon.</p>
+<p>ikonic serves local service businesses across the Denver metro, including Wheat Ridge, Arvada,
+Lakewood, Golden, and Denver. Every engagement starts the same way: a conversation about where
+leads are slipping through the cracks today, followed by a free consultation to map out which of
+these services — or which combination of them — actually moves the needle for that specific
+business, rather than a one-size-fits-all package.</p>
+<p>Most local service businesses lose revenue in the gap between a customer reaching out and
+someone getting back to them — closing that gap with speed-to-lead automation is usually the
+first thing ikonic fixes, before layering on the rest of the marketing system, because a faster
+website or a better-looking storefront doesn't help if the leads it generates never get a
+response. That's why speed to lead — automated SMS, email sequences, and missed-call text-back —
+is usually the first piece ikonic turns on for a new client, ahead of anything that spends money
+generating more leads in the first place.</p>
+${CONTACT_BLOCK}`,
   },
   {
     path: '/contact',
@@ -102,10 +140,53 @@ branding actually costs. Written for owners, not marketers.</p>`,
       'Get the Branded to Win book — the complete guide to building a business brand that attracts customers, generates leads, and dominates your local market. Digital & bundle editions available.',
     body: `<h1>Branded to Win — by Joshua Soderblom</h1>
 <p><em>Branded to Win</em> is ikonic founder Joshua Soderblom's guide to building a local brand
-that brings customers in: how a service business earns recognition in its own market, why
-consistency across vehicle, storefront, and search beats a bigger ad budget, and how to
-compound that recognition instead of renting it.</p>
-<p>Available in digital and bundle editions.</p>`,
+that brings customers in — nearly 200 pages of dense, actionable frameworks for local service
+business owners: plumbers, roofers, landscapers, and anyone who relies on their local reputation
+to win jobs. No marketing background required.</p>
+<h2>What you'll discover inside</h2>
+<p><strong>Build instant trust</strong> — the branding signals that instantly communicate
+reliability and quality to potential customers in your area. <strong>Command premium prices</strong>
+— how a strong brand lets you charge what you're worth and attract clients who value quality over
+the lowest bid. <strong>Dominate local marketing</strong> — frameworks to position your business on
+every platform so local customers choose you over the competition.</p>
+<h2>Chapter breakdown</h2>
+<p><strong>Part I: The Invisible Tax</strong> — the book's premise that your brand is either
+making or costing you money daily, what invisibility actually costs in lost leads and referrals,
+and the psychology behind why customers decide to trust a business in milliseconds.</p>
+<p><strong>Part II: The Brand Equation</strong> — a framework for revenue as visibility times
+professionalism times consistency, divided by friction; the "Seven Touchpoints System" covering
+crew, digital presence, paperwork, job site, customer experience, and community; and a full
+financial model.</p>
+<p><strong>Part III: The Transformation</strong> — five real case studies across HVAC,
+landscaping, plumbing, cleaning, and roofing businesses, the pricing power of a strong brand, and
+the mindset shift from technician to CEO.</p>
+<p><strong>Part IV: The Playbook</strong> — a 7-dimension, 70-point brand audit, a 90-day
+brand-transformation implementation plan, and a scaling strategy for growing from one truck to
+market domination.</p>
+<p><strong>Part V: The Compound Effect</strong> — aligning digital and physical branding so they
+reinforce each other, the seventeen most common mistakes that sabotage a brand investment, why
+brand equity behaves like an appreciating asset rather than a recurring expense, a practical
+system for turning social media and customer reviews into compounding sales assets, and how
+strategic partnerships and everyday surfaces — yard signs, door hangers, job-site banners,
+wearables — can replicate the perception of a national franchise brand at a fraction of typical
+franchise fees.</p>
+<h2>Editions</h2>
+<p>The <strong>Digital Edition</strong> includes the full eBook in PDF, ePub, and Mobi formats
+with lifetime updates to future digital editions. <strong>The Complete Bundle</strong> — designed
+for the serious owner ready to dominate their local market — adds an audiobook, printable
+branding worksheets and templates, and a bonus 30-day implementation guide. See the book page for
+current pricing.</p>
+<h2>About the author</h2>
+<p>Joshua Soderblom didn't start behind a desk. He started with a pressure washer, a polishing
+machine, and an obsession with making things look flawless, launching ikonic in 2020 in Denver,
+Colorado. Along the way he realized the brand is the business — today he helps local service
+business owners build brands strong enough that customers choose them on sight.</p>
+<h2>FAQ</h2>
+<p><strong>Who is this book for?</strong> Local service business owners who rely on their local
+reputation to win jobs. <strong>Is there a money-back guarantee?</strong> Yes — the Complete
+Bundle comes with a 30-day money-back guarantee.</p>
+<p>Available in digital and bundle editions, with a free chapter download to preview the book
+before you buy.</p>`,
   },
   {
     path: '/careers',
@@ -175,9 +256,51 @@ competitor who happened to pick up.</p>`,
     description:
       'Full-service digital marketing for Colorado businesses — social media, paid ads (Google & Facebook), email automation, and analytics dashboards. Fill your pipeline on autopilot.',
     body: `<h1>Marketing systems — Denver, Colorado</h1>
-<p>The full front office on a flat monthly retainer: search and AI visibility, Google Business
-Profile, social, paid ads when they earn their keep, email and SMS follow-up, and a monthly
-report that shows what came in and what it was worth.</p>`,
+<p>Full-service digital marketing for Colorado businesses. ikonic manages social media, paid ads,
+email campaigns, and analytics — so business owners can focus on running their business while the
+pipeline fills with qualified leads. Digital marketing is essential for any business looking to
+grow in today's competitive landscape, and these marketing systems help Colorado businesses reach
+more customers, generate more leads, and increase revenue through strategic online campaigns.</p>
+<h2>Everything under one roof</h2>
+<p>Stop juggling multiple agencies and tools. The integrated marketing system handles everything
+from social media to paid ads, all working together to maximize ROI: complete marketing campaign
+management, social media strategy and scheduling, paid advertising on Google Ads and Facebook,
+email marketing automation, an analytics dashboard and reporting, and ongoing A/B testing and
+optimization.</p>
+<h2>Marketing channels we manage</h2>
+<p><strong>Social Media</strong> — strategic posting across Facebook, Instagram, LinkedIn, and
+TikTok. <strong>Paid Ads</strong> — targeted campaigns on Google, Facebook, and Instagram.
+<strong>Email Marketing</strong> — automated sequences that nurture and convert. <strong>Content
+Strategy</strong> — blog posts, videos, and content that drives traffic.</p>
+<h2>Real-time analytics</h2>
+<p>Every campaign is tracked, measured, and optimized with a comprehensive analytics dashboard:
+lead source tracking, conversion rate analysis, cost-per-acquisition metrics, campaign
+performance reports, and monthly strategy reviews, so a business owner always knows exactly what's
+working.</p>
+<h2>What is a marketing system?</h2>
+<p>A marketing system is an integrated set of tools, processes, and strategies that work together
+to attract, engage, and convert customers. Unlike one-off campaigns, a marketing system runs
+continuously, constantly optimizing for better results. A data-driven approach informs every
+decision: from social media management to paid advertising, every channel is optimized for maximum
+ROI, and the integrated systems ensure all marketing efforts work together seamlessly rather than
+as disconnected, one-off tactics.</p>
+<h2>Benefits of integrated marketing</h2>
+<p>Consistent messaging across all channels, better attribution and ROI tracking, reduced cost per
+acquisition, scalable growth without adding headcount, and data-driven decision making at every
+step — rather than guessing which channel deserves next month's budget.</p>
+<h2>Marketing FAQ</h2>
+<p><strong>Does ikonic offer digital marketing?</strong> Yes — monthly retainers for local service
+businesses. <strong>What areas does ikonic serve?</strong> Wheat Ridge, Arvada, Lakewood, Golden,
+and Denver — the same service area ikonic covers for signage, window film, and web design, so a
+business's brand stays consistent across every one of those touchpoints, not just its ads.</p>
+<p>Book a free marketing strategy session and discover how an integrated system fits your
+business — this is one of the six services on ikonic's full <a href="${ORIGIN}/services">services
+page</a>, alongside web design, CRM automation, reputation management, speed to lead, and window
+tint. Most engagements pair marketing systems with speed-to-lead automation first, since a bigger
+ad budget doesn't help if the leads it generates never get a fast reply — then layer on the rest
+of the retainer once that gap is closed. Reporting happens monthly, in plain language rather than
+agency jargon, so a business owner can see exactly what came in, what it cost to generate, and
+what to do differently next month.</p>`,
   },
   {
     path: '/print-ship',
