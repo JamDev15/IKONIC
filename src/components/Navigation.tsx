@@ -132,14 +132,8 @@ export default function Navigation() {
                   className="absolute top-full left-0 mt-2 w-52 bg-charcoal border border-white/10 rounded-lg shadow-xl overflow-hidden"
                 >
                   <Link
-                    to="/wrap-calculator"
-                    className="block px-4 py-3 text-sm text-offwhite-dark hover:bg-mint/10 hover:text-mint transition-colors"
-                  >
-                    Wrap Calculator
-                  </Link>
-                  <Link
                     to="/print-ship"
-                    className="block px-4 py-3 text-sm text-offwhite-dark hover:bg-mint/10 hover:text-mint transition-colors border-t border-white/10"
+                    className="block px-4 py-3 text-sm text-offwhite-dark hover:bg-mint/10 hover:text-mint transition-colors"
                   >
                     Print &amp; Ship
                   </Link>
@@ -241,9 +235,6 @@ export default function Navigation() {
           
           <div className="text-center">
             <p className="text-mint text-sm mb-3">Calculators</p>
-            <Link to="/wrap-calculator" className="block text-xl font-display font-bold text-offwhite-dark hover:text-mint transition-colors py-2">
-              Wrap Calculator
-            </Link>
             <Link to="/print-ship" className="block text-xl font-display font-bold text-offwhite-dark hover:text-mint transition-colors py-2">
               Print &amp; Ship
             </Link>

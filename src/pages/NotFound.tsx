@@ -13,7 +13,7 @@ export default function NotFound() {
     <div className="relative bg-charcoal min-h-screen flex flex-col">
       <PageSEO
         title="Page Not Found"
-        description="That page doesn't exist. Find vehicle wraps, signage, and marketing for Denver businesses at ikonic303."
+        description="That page doesn't exist. Find signage, wayfinding, and marketing for Denver businesses at ikonic303."
         noIndex
       />
       <Navigation />
@@ -31,11 +31,11 @@ export default function NotFound() {
           <div className="grid sm:grid-cols-2 gap-3 text-left mb-10">
             <Link to="/services" className="block bg-charcoal-light/80 border border-white/10 rounded-xl px-5 py-4 hover:border-mint transition-colors">
               <span className="block text-offwhite font-medium">Services</span>
-              <span className="block text-offwhite-dark text-sm">Wraps, signage &amp; marketing</span>
+              <span className="block text-offwhite-dark text-sm">Signage, wayfinding &amp; marketing</span>
             </Link>
-            <Link to="/wrap-calculator" className="block bg-charcoal-light/80 border border-white/10 rounded-xl px-5 py-4 hover:border-mint transition-colors">
-              <span className="block text-offwhite font-medium">Wrap calculator</span>
-              <span className="block text-offwhite-dark text-sm">Estimate your vehicle</span>
+            <Link to="/print-ship" className="block bg-charcoal-light/80 border border-white/10 rounded-xl px-5 py-4 hover:border-mint transition-colors">
+              <span className="block text-offwhite font-medium">Print &amp; Ship</span>
+              <span className="block text-offwhite-dark text-sm">Custom-printed vinyl, shipped to you</span>
             </Link>
             <Link to="/blogs" className="block bg-charcoal-light/80 border border-white/10 rounded-xl px-5 py-4 hover:border-mint transition-colors">
               <span className="block text-offwhite font-medium">Guides</span>

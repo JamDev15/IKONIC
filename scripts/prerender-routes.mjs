@@ -40,9 +40,8 @@ const PHONE = '(720) 679-1230';
 const CONTACT_BLOCK = `<h2>Get a quote</h2>
 <p>Call <a href="tel:+17206791230">${PHONE}</a> or email
 <a href="mailto:info@ikonicmarketing303.com">info@ikonicmarketing303.com</a>.
-ikonic — 4880 Robb St. #8, Wheat Ridge, CO 80033. Vehicle wraps are installed in our
-Wheat Ridge shop by drop-off appointment; building and storefront signage is installed
-on-site.</p>`;
+ikonic — 4880 Robb St. #8, Wheat Ridge, CO 80033. Storefront signage, window graphics, and
+wayfinding are installed on-site; printing and fabrication happen in our Wheat Ridge shop.</p>`;
 
 /** @type {{path:string,title:string,description:string,body:string}[]} */
 const ROUTES = [
@@ -53,12 +52,12 @@ const ROUTES = [
       'Meet the ikonic303 team. Denver-based digital marketing agency specializing in GoHighLevel automation, CRM setup, and lead generation for Colorado businesses.',
     body: `<h1>About ikonic303 — Wheat Ridge, Colorado</h1>
 <p>ikonic is a brand-transformation company for local service businesses in the Denver metro.
-We design, print, and install commercial vehicle and fleet wraps, storefront signage and window
-graphics, and wayfinding and ADA/safety signage — and we run AI-powered digital marketing
-retainers for the same kind of business.</p>
+We design, print, and install storefront signage, window graphics and murals, and wayfinding and
+ADA/safety signage — and we run AI-powered digital marketing retainers for the same kind of
+business.</p>
 <p>The through-line is consistency: a customer should see the same brand, at the same level of
-quality, on your truck, on your building, and in their search results. Most shops do one of
-those three. We do all of them under one roof in Wheat Ridge.</p>`,
+quality, on your storefront, inside your building, and in their search results. Most shops do
+one of those things. We do all of them under one roof in Wheat Ridge.</p>`,
   },
   {
     path: '/services',
@@ -68,9 +67,9 @@ those three. We do all of them under one roof in Wheat Ridge.</p>`,
     body: `<h1>ikonic services — Denver, Colorado</h1>
 <p>Two sides of one business: the physical brand and the digital front office.</p>
 <h2>Brand &amp; signage</h2>
-<p>Commercial and fleet vehicle wraps, color changes, storefront and building signage, window
-graphics and storefront branding, wayfinding and ADA/safety signage. Vehicle work is installed
-in our Wheat Ridge shop by drop-off appointment; building signage is installed on-site.</p>
+<p>Storefront and building signage, window graphics and wall murals, storefront branding, and
+wayfinding and ADA/safety signage — designed and printed in our Wheat Ridge shop, installed
+on-site.</p>
 <h2>Digital marketing</h2>
 <p>Web design and sales funnels, CRM automation, speed-to-lead response, reputation and review
 generation, SEO and AEO, and monthly reporting — delivered as a flat monthly retainer.</p>`,
@@ -81,7 +80,7 @@ generation, SEO and AEO, and monthly reporting — delivered as a flat monthly r
     description:
       'Book your free marketing strategy session with ikonic303. Denver-based GoHighLevel experts ready to build your lead generation system. Call (720) 679-1230.',
     body: `<h1>Contact ikonic303 — Wheat Ridge, Colorado</h1>
-<p>Talk to us about a vehicle wrap, storefront signage, or a marketing retainer for your local
+<p>Talk to us about storefront signage, window graphics, or a marketing retainer for your local
 service business. We serve the Denver metro including Wheat Ridge, Arvada, Lakewood, and
 Golden.</p>
 ${CONTACT_BLOCK}`,
@@ -179,17 +178,6 @@ competitor who happened to pick up.</p>`,
 <p>The full front office on a flat monthly retainer: search and AI visibility, Google Business
 Profile, social, paid ads when they earn their keep, email and SMS follow-up, and a monthly
 report that shows what came in and what it was worth.</p>`,
-  },
-  {
-    path: '/wrap-calculator',
-    title: 'Commercial Vehicle Wrap Cost Calculator Denver | ikonic303',
-    description:
-      'Get an instant vehicle wrap price estimate for your business vehicle. Our free wrap calculator covers cars, trucks, vans, and trailers. Serving Denver and Colorado.',
-    body: `<h1>Vehicle wrap cost calculator</h1>
-<p>Estimate what wrapping your work vehicle involves — cars, trucks, vans, and trailers, full or
-partial coverage, single vehicle or a fleet. Wraps are installed in our Wheat Ridge shop by
-drop-off appointment.</p>
-${CONTACT_BLOCK}`,
   },
   {
     path: '/print-ship',
@@ -450,7 +438,7 @@ function fixSitemap(postSlugs) {
 function build404(template) {
   let html = template;
   html = html.replace(/<title>[\s\S]*?<\/title>/, '<title>Page Not Found | ikonic303</title>');
-  html = setTag(html, /<meta\s+name="description"[^>]*>/, "That page doesn't exist. Vehicle wraps, signage and marketing for Denver businesses.");
+  html = setTag(html, /<meta\s+name="description"[^>]*>/, "That page doesn't exist. Signage, wayfinding and marketing for Denver businesses.");
   html = html.replace(/<link\s+rel="canonical"\s+href="[^"]*"\s*\/?>/,
     '<meta name="robots" content="noindex,follow" />');
   const rootRe = /(<div id="root">)[\s\S]*?(<\/div>\s*(?:<script|<\/body>))/;
@@ -460,7 +448,6 @@ function build404(template) {
         <p>That page doesn't exist. The link may be out of date, or the address slightly off.</p>
         <p><a href="${ORIGIN}/">ikonic303 home</a> ·
            <a href="${ORIGIN}/services">services</a> ·
-           <a href="${ORIGIN}/wrap-calculator">wrap calculator</a> ·
            <a href="${ORIGIN}/blogs">guides</a> ·
            <a href="${ORIGIN}/contact">contact</a></p>
         <p>Or call <a href="tel:+17206791230">(720) 679-1230</a>.</p>

@@ -29,7 +29,6 @@ export default defineConfig({
         // '/commercial-wraps',
         '/careers',
         '/blogs',
-        '/wrap-calculator',
         '/print-ship',
         '/lost-call-calculator',
         '/branded-to-win',

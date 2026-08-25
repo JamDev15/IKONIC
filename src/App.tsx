@@ -24,7 +24,6 @@ const CRMAutomation = lazy(() => import('./pages/CRMAutomation'));
 const ReputationManagement = lazy(() => import('./pages/ReputationManagement'));
 const SpeedToLead = lazy(() => import('./pages/SpeedToLead'));
 const MarketingSystems = lazy(() => import('./pages/MarketingSystems'));
-const WrapCalculator = lazy(() => import('./pages/WrapCalculator'));
 const PrintAndShip = lazy(() => import('./pages/PrintAndShip'));
 const BlogPost = lazy(() => import('./pages/BlogPost'));
 const LostCallCalculator = lazy(() => import('./pages/LostCallCalculator'));
@@ -148,7 +147,6 @@ function App() {
             <Route path="/services/reputation" element={<ReputationManagement />} />
             <Route path="/services/speed-to-lead" element={<SpeedToLead />} />
             <Route path="/services/marketing" element={<MarketingSystems />} />
-            <Route path="/wrap-calculator" element={<WrapCalculator />} />
             <Route path="/print-ship" element={<PrintAndShip />} />
             <Route path="/lost-call-calculator" element={<LostCallCalculator />} />
             <Route path="/post/:slug" element={<BlogPost />} />

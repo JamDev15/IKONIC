@@ -62,9 +62,38 @@ const TOPICS_BY_CATEGORY: Record<string, string[]> = {
     'Wayfinding Signage for Warehouses and Industrial Facilities in Colorado',
     'Combining Wayfinding and Brand Signage Without Cluttering Your Space',
   ],
+  // Added 2026-08-26 (D4 vehicle-content removal) to replace the retired "Commercial
+  // Wraps" category — flat-glass/architectural only, never automotive. See
+  // CATEGORY_ORDER and the prompt below for the same scoping.
+  'Window Tint': [
+    'How Window Film Cuts Cooling Costs for Denver Homes and Offices',
+    'Flat Glass vs. Coated Glass: Why We Check Your Windows Before Quoting Film',
+    'Solar Window Film for West-Facing Rooms: Fixing Denver\'s Worst Afternoon Glare',
+    'Frosted Window Film for Privacy: Bathrooms, Conference Rooms, and Street-Facing Glass',
+    'Security Window Film 101: What It Actually Does for a Denver Storefront',
+    'Does Window Film Void a Window Warranty? What Denver Homeowners Should Ask First',
+    'Dual-Pane Windows and Film: Why Not Every Combination Is Safe',
+    'How UV Window Film Protects Floors, Furniture, and Artwork from Fading',
+    'Office Window Film: Cutting Screen Glare Without Losing Natural Light',
+    'Decorative and Etched Window Film: A Budget-Friendly Storefront Upgrade',
+    'How Long Does Residential Window Film Last in Colorado?',
+    'Window Film for Storefronts: Protecting Merchandise Without Blocking the View',
+  ],
+  'Storefront Graphics': [
+    'Storefront Window Graphics 101: Turning Blank Glass Into a Customer Magnet',
+    'Perforated Window Film vs. Frosted Vinyl: Which Fits Your Denver Storefront?',
+    'How Wall Murals Build Brand Identity in a Denver Office or Lobby',
+    'Window Graphics vs. Traditional Signage: When to Use Which',
+    'Designing Storefront Graphics That Work With, Not Against, Your Window Displays',
+    'Floor Decals and Directional Graphics: Guiding Customers Without Extra Signage',
+    'How Often Should a Denver Business Refresh Its Storefront Graphics?',
+    'Interior Branding 101: Feature Walls, Culture Walls, and Menu Walls',
+    'Grand Opening Window Graphics: Making a First Impression Before Customers Walk In',
+    'Removable vs. Permanent Window Vinyl: Choosing the Right Material for Your Promotion',
+  ],
 };
 
-const CATEGORY_ORDER = ['Digital Marketing', 'Signage', 'Wayfinding Signage'];
+const CATEGORY_ORDER = ['Digital Marketing', 'Signage', 'Wayfinding Signage', 'Window Tint', 'Storefront Graphics'];
 
 async function upstash(command: unknown[]) {
   const res = await fetch(process.env.UPSTASH_REDIS_REST_URL!, {
@@ -180,7 +209,7 @@ export async function handler(req: VercelRequest, res: VercelResponse) {
   }
 
   const ai = new GoogleGenAI({ apiKey: geminiKey });
-  const prompt = `You are a professional content writer for ikonic303, a Denver-based company specializing in digital marketing, business signage, and wayfinding signage.
+  const prompt = `You are a professional content writer for ikonic303, a Denver-based company specializing in digital marketing, business signage, wayfinding signage, storefront window graphics and wall murals, and flat-glass window film for homes and businesses. ikonic does NOT offer vehicle services of any kind (no vehicle wraps, no automotive window tint, no paint protection film, no ceramic coating) — never write about vehicles, cars, trucks, fleets, or automotive tint law (VLT).
 
 Write a high-quality, SEO-optimized blog post on this topic: "${topic}"
 This post belongs to the "${category}" category.

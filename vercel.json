@@ -52,11 +52,16 @@
     },
     {
       "source": "/commercial-wraps",
-      "destination": "/",
+      "destination": "/signage",
       "permanent": true
     },
     {
       "source": "/commercial-wraps.html",
+      "destination": "/signage",
+      "permanent": true
+    },
+    {
+      "source": "/wrap-calculator",
       "destination": "/",
       "permanent": true
     }
