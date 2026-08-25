@@ -104,6 +104,46 @@
       "destination": "/window-tint.html"
     },
     {
+      "source": "/storefront-graphics",
+      "destination": "/storefront-graphics.html"
+    },
+    {
+      "source": "/window-tint/home",
+      "destination": "/window-tint/home.html"
+    },
+    {
+      "source": "/window-tint/office",
+      "destination": "/window-tint/office.html"
+    },
+    {
+      "source": "/window-tint/storefront",
+      "destination": "/window-tint/storefront.html"
+    },
+    {
+      "source": "/window-tint/security-film",
+      "destination": "/window-tint/security-film.html"
+    },
+    {
+      "source": "/window-tint/decorative-privacy",
+      "destination": "/window-tint/decorative-privacy.html"
+    },
+    {
+      "source": "/service-areas/wheat-ridge",
+      "destination": "/service-areas/wheat-ridge.html"
+    },
+    {
+      "source": "/service-areas/arvada",
+      "destination": "/service-areas/arvada.html"
+    },
+    {
+      "source": "/service-areas/lakewood",
+      "destination": "/service-areas/lakewood.html"
+    },
+    {
+      "source": "/service-areas/golden",
+      "destination": "/service-areas/golden.html"
+    },
+    {
       "source": "/post/:slug",
       "destination": "/404.html"
     },
