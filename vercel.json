@@ -19,6 +19,61 @@
       ],
       "destination": "https://ikonic303.com/:path*",
       "permanent": true
+    },
+    {
+      "source": "/paint-protection-film",
+      "destination": "/",
+      "permanent": true
+    },
+    {
+      "source": "/paint-protection-film.html",
+      "destination": "/",
+      "permanent": true
+    },
+    {
+      "source": "/services/paint-protection-film",
+      "destination": "/",
+      "permanent": true
+    },
+    {
+      "source": "/window-tint",
+      "destination": "/",
+      "permanent": true
+    },
+    {
+      "source": "/window-tint.html",
+      "destination": "/",
+      "permanent": true
+    },
+    {
+      "source": "/services/window-tint",
+      "destination": "/",
+      "permanent": true
+    },
+    {
+      "source": "/ceramic-coating",
+      "destination": "/",
+      "permanent": true
+    },
+    {
+      "source": "/ceramic-coating.html",
+      "destination": "/",
+      "permanent": true
+    },
+    {
+      "source": "/services/ceramic-coating",
+      "destination": "/",
+      "permanent": true
+    },
+    {
+      "source": "/commercial-wraps",
+      "destination": "/",
+      "permanent": true
+    },
+    {
+      "source": "/commercial-wraps.html",
+      "destination": "/",
+      "permanent": true
     }
   ],
   "rewrites": [
@@ -49,34 +104,6 @@
     {
       "source": "/marketing",
       "destination": "/marketing.html"
-    },
-    {
-      "source": "/paint-protection-film",
-      "destination": "/paint-protection-film.html"
-    },
-    {
-      "source": "/window-tint",
-      "destination": "/window-tint.html"
-    },
-    {
-      "source": "/ceramic-coating",
-      "destination": "/ceramic-coating.html"
-    },
-    {
-      "source": "/services/paint-protection-film",
-      "destination": "/paint-protection-film.html"
-    },
-    {
-      "source": "/services/window-tint",
-      "destination": "/window-tint.html"
-    },
-    {
-      "source": "/services/ceramic-coating",
-      "destination": "/ceramic-coating.html"
-    },
-    {
-      "source": "/commercial-wraps",
-      "destination": "/commercial-wraps.html"
     },
     {
       "source": "/post/:slug",

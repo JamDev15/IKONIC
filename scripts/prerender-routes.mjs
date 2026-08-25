@@ -376,13 +376,22 @@ const MOON_RIVER_CATEGORIES = new Set([
   'Home Maintenance & Seasonal',
 ]);
 
+// D4 vehicle content removal (2026-08-26): PPF, window tint, ceramic coating, and
+// commercial/fleet vehicle wraps are no longer part of ikonic's content strategy — the
+// 14 existing posts were unpublished via the Redis status flag and the generator no
+// longer queues these topics (see TOPICS_BY_CATEGORY in auto-blog-generate.ts). This
+// filter is defense-in-depth, same as MOON_RIVER_CATEGORIES above: it keeps any
+// leftover or manually-added vehicle post out of the sitemap and prerendered shells.
+const VEHICLE_CATEGORIES = new Set(['Commercial Wraps', 'Vehicle Protection']);
+
 async function prerenderPosts(template) {
   let list;
   try {
     const d = await fetchJson(`${ORIGIN}/api/blog-posts`, 20000);
     list = (d.posts || [])
       .filter((p) => p.slug && !String(p.link || '').startsWith('http'))
-      .filter((p) => !MOON_RIVER_CATEGORIES.has(p.category));
+      .filter((p) => !MOON_RIVER_CATEGORIES.has(p.category))
+      .filter((p) => !VEHICLE_CATEGORIES.has(p.category));
   } catch (err) {
     console.warn(`prerender: skipping blog posts — could not load the list (${err.message})`);
     return { count: 0, slugs: [] };
@@ -410,9 +419,7 @@ async function prerenderPosts(template) {
 }
 
 /**
- * Rewrite dist/sitemap.xml: add every prerendered post, drop duplicates, and drop the
- * /services/* aliases of the standalone .html pages (those canonicalise to the short
- * form, so listing both invites Google to pick the wrong one).
+ * Rewrite dist/sitemap.xml: add every prerendered post and drop duplicates.
  */
 function fixSitemap(postSlugs) {
   const smPath = join(DIST, 'sitemap.xml');
@@ -420,8 +427,7 @@ function fixSitemap(postSlugs) {
   const xml = readFileSync(smPath, 'utf8');
   const locs = [...xml.matchAll(/<loc>([^<]+)<\/loc>/g)].map((m) => m[1]);
 
-  const ALIASES = ['/services/window-tint', '/services/paint-protection-film', '/services/ceramic-coating'];
-  const keep = [...new Set(locs)].filter((u) => !ALIASES.some((a) => u.endsWith(a)));
+  const keep = [...new Set(locs)];
   for (const slug of postSlugs) keep.push(`${ORIGIN}/post/${slug}`);
 
   const body = [...new Set(keep)]

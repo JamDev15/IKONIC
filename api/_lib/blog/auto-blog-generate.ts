@@ -45,23 +45,6 @@ const TOPICS_BY_CATEGORY: Record<string, string[]> = {
     'Retail Signage Trends Denver Business Owners Should Watch This Year',
     'How Custom Signage Builds Trust With First-Time Customers',
   ],
-  'Commercial Wraps': [
-    'How Commercial Vehicle Wraps Turn Denver Fleets Into Mobile Billboards',
-    'The True ROI of Commercial Wraps for Denver Service Businesses',
-    'Full Wrap vs. Partial Wrap: Which Is Right for Your Denver Business Fleet?',
-    'How to Design a Commercial Wrap That Gets Your Denver Business Noticed',
-    'Fleet Branding 101: Wrapping Multiple Vehicles for Maximum Impact in Colorado',
-    "How Long Does a Commercial Vehicle Wrap Last in Colorado's Climate?",
-    'Vehicle Wrap Maintenance: Keeping Your Denver Fleet Looking Sharp',
-    "Color Change Wraps vs. Branded Wraps: What's the Difference?",
-    'How Much Does a Commercial Vehicle Wrap Cost in Denver?',
-    'The Best Vehicles for Wrap Advertising: Vans, Trucks, and Trailers Compared',
-    'How Vehicle Wraps Compare to Traditional Advertising for Local Businesses',
-    'Spot Graphics vs. Full Wraps: Budget-Friendly Options for Denver Fleets',
-    'Preparing Your Vehicle for a Wrap: What Denver Business Owners Should Know',
-    "How to Measure the Marketing Impact of Your Wrapped Fleet",
-    "Seasonal Wrap Refreshes: Keeping Your Denver Fleet's Look Current",
-  ],
   'Wayfinding Signage': [
     'What Is Wayfinding Signage and Why Does Your Denver Business Need It?',
     'How Wayfinding Signage Improves the Customer Experience at Your Location',
@@ -81,7 +64,7 @@ const TOPICS_BY_CATEGORY: Record<string, string[]> = {
   ],
 };
 
-const CATEGORY_ORDER = ['Digital Marketing', 'Signage', 'Commercial Wraps', 'Wayfinding Signage'];
+const CATEGORY_ORDER = ['Digital Marketing', 'Signage', 'Wayfinding Signage'];
 
 async function upstash(command: unknown[]) {
   const res = await fetch(process.env.UPSTASH_REDIS_REST_URL!, {
@@ -197,7 +180,7 @@ export async function handler(req: VercelRequest, res: VercelResponse) {
   }
 
   const ai = new GoogleGenAI({ apiKey: geminiKey });
-  const prompt = `You are a professional content writer for ikonic303, a Denver-based company specializing in digital marketing, business signage, commercial vehicle wraps, and wayfinding signage.
+  const prompt = `You are a professional content writer for ikonic303, a Denver-based company specializing in digital marketing, business signage, and wayfinding signage.
 
 Write a high-quality, SEO-optimized blog post on this topic: "${topic}"
 This post belongs to the "${category}" category.
