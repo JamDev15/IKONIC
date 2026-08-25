@@ -36,21 +36,6 @@
       "permanent": true
     },
     {
-      "source": "/window-tint",
-      "destination": "/",
-      "permanent": true
-    },
-    {
-      "source": "/window-tint.html",
-      "destination": "/",
-      "permanent": true
-    },
-    {
-      "source": "/services/window-tint",
-      "destination": "/",
-      "permanent": true
-    },
-    {
       "source": "/ceramic-coating",
       "destination": "/",
       "permanent": true
@@ -104,6 +89,14 @@
     {
       "source": "/marketing",
       "destination": "/marketing.html"
+    },
+    {
+      "source": "/window-tint",
+      "destination": "/window-tint.html"
+    },
+    {
+      "source": "/services/window-tint",
+      "destination": "/window-tint.html"
     },
     {
       "source": "/post/:slug",

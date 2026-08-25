@@ -34,6 +34,7 @@ export default defineConfig({
         '/lost-call-calculator',
         '/branded-to-win',
         '/sticker-builder',
+        '/services/window-tint',
       ],
     }),
   ],

@@ -32,6 +32,9 @@ export default function Navigation() {
     { label: 'Reputation Management', href: '/services/reputation' },
     { label: 'Speed to Lead', href: '/services/speed-to-lead' },
     { label: 'Marketing Systems', href: '/services/marketing' },
+    // Static (prerendered) SEO page served via a vercel.json rewrite — use a full
+    // page load (external) so the browser hits the server-served HTML, not the SPA.
+    { label: 'Window Tint', href: '/services/window-tint', external: true },
   ];
 
   return (
@@ -90,13 +93,23 @@ export default function Navigation() {
                     View All Services →
                   </Link>
                   {serviceLinks.map((link) => (
-                    <Link
-                      key={link.label}
-                      to={link.href}
-                      className="block px-4 py-3 text-sm text-offwhite-dark hover:bg-mint/10 hover:text-mint transition-colors"
-                    >
-                      {link.label}
-                    </Link>
+                    link.external ? (
+                      <a
+                        key={link.label}
+                        href={link.href}
+                        className="block px-4 py-3 text-sm text-offwhite-dark hover:bg-mint/10 hover:text-mint transition-colors"
+                      >
+                        {link.label}
+                      </a>
+                    ) : (
+                      <Link
+                        key={link.label}
+                        to={link.href}
+                        className="block px-4 py-3 text-sm text-offwhite-dark hover:bg-mint/10 hover:text-mint transition-colors"
+                      >
+                        {link.label}
+                      </Link>
+                    )
                   ))}
                 </div>
               )}
@@ -206,13 +219,23 @@ export default function Navigation() {
               View All Services →
             </Link>
             {serviceLinks.map((link) => (
-              <Link
-                key={link.label}
-                to={link.href}
-                className="block text-xl font-display font-bold text-offwhite-dark hover:text-mint transition-colors py-2"
-              >
-                {link.label}
-              </Link>
+              link.external ? (
+                <a
+                  key={link.label}
+                  href={link.href}
+                  className="block text-xl font-display font-bold text-offwhite-dark hover:text-mint transition-colors py-2"
+                >
+                  {link.label}
+                </a>
+              ) : (
+                <Link
+                  key={link.label}
+                  to={link.href}
+                  className="block text-xl font-display font-bold text-offwhite-dark hover:text-mint transition-colors py-2"
+                >
+                  {link.label}
+                </Link>
+              )
             ))}
           </div>
           
