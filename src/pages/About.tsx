@@ -1,7 +1,7 @@
 import { useRef, useLayoutEffect } from 'react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import { Users, Clock, TrendingUp, Headphones, Target, Zap, Shield, Heart } from 'lucide-react';
+import { PanelsTopLeft, Sun, MapPin, ShieldCheck, Target, Zap, Shield, Heart } from 'lucide-react';
 import Navigation from '../components/Navigation';
 import MatrixBackground from '../components/MatrixBackground';
 import Footer from '../components/Footer';
@@ -10,17 +10,17 @@ import PageSEO from '../components/PageSEO';
 gsap.registerPlugin(ScrollTrigger);
 
 const stats = [
-  { icon: Users, label: 'Leads Captured', value: '10K+' },
-  { icon: Clock, label: 'Hours Saved', value: '5K+' },
-  { icon: TrendingUp, label: 'Avg. ROI Increase', value: '340%' },
-  { icon: Headphones, label: 'Support', value: '24/7' }
+  { icon: PanelsTopLeft, label: 'Panes & Panels Installed', value: '10K+' },
+  { icon: Sun, label: 'Heat & UV Rejected', value: 'up to 99%' },
+  { icon: MapPin, label: 'Denver-Metro Service Radius', value: '30 mi' },
+  { icon: ShieldCheck, label: 'Manufacturer Film Warranty', value: 'Lifetime' }
 ];
 
 const values = [
-  { icon: Target, title: 'Results-Driven', desc: 'We measure success by your growth, not vanity metrics.' },
-  { icon: Zap, title: 'Fast Execution', desc: 'We move quickly to get your systems up and running.' },
-  { icon: Shield, title: 'Transparent', desc: 'No hidden fees, no surprises. Just honest work.' },
-  { icon: Heart, title: 'Client-First', desc: 'Your success is our success. We treat your business like our own.' }
+  { icon: Target, title: 'Right Film, Right Glass', desc: 'We check every window against the manufacturer chart before we quote.' },
+  { icon: Zap, title: 'Clean Installs', desc: 'Dust-controlled prep, finished edges, and a firm timeline we hold.' },
+  { icon: Shield, title: 'One Honest Number', desc: 'No hidden fees and no surprise add-ons at the end of the job.' },
+  { icon: Heart, title: 'One Consistent Look', desc: 'Film, graphics, and signage from the same shop so it all matches.' }
 ];
 
 export default function About() {
@@ -39,8 +39,8 @@ export default function About() {
   return (
     <div className="relative bg-charcoal min-h-screen">
       <PageSEO
-        title="About ikonic303 | Denver Digital Marketing Agency"
-        description="Meet the ikonic303 team. Denver-based digital marketing agency specializing in GoHighLevel automation, CRM setup, and lead generation for Colorado businesses."
+        title="About ikonic303 | Denver Window Film & Graphics Shop"
+        description="ikonic is a Wheat Ridge, CO shop for architectural window film, storefront and window graphics, and signage. Design, print, and installation in-house for the Denver metro."
         canonical="/about"
       />
       <MatrixBackground />
@@ -51,13 +51,13 @@ export default function About() {
         <div ref={heroRef} className="max-w-4xl mx-auto text-center">
           <p className="text-micro text-mint mb-4">ABOUT IKONIC</p>
           <h1 className="font-display text-4xl md:text-5xl lg:text-6xl font-bold text-offwhite mb-6 leading-tight">
-            The Digital Agency That<br />
-            <span className="text-mint">Works While You Sleep</span>
+            One Shop for Film,<br />
+            <span className="text-mint">Graphics &amp; Signage</span>
           </h1>
           <p className="text-lg text-offwhite-dark max-w-2xl mx-auto">
-            We're a Colorado-based digital marketing agency specializing in automation, 
-            CRM systems, and lead generation for local businesses. Our mission is to help 
-            businesses grow smarter, not harder.
+            ikonic is a Wheat Ridge, Colorado shop for the visible skin of a building — architectural
+            window film, storefront and window graphics, and signage. We design, print, and install
+            all of it in-house for the Denver metro.
           </p>
         </div>
       </section>
@@ -70,22 +70,20 @@ export default function About() {
           </h2>
           <div className="space-y-6 text-offwhite-dark">
             <p>
-              ikonic was founded with a simple belief: local businesses deserve 
-              access to the same powerful marketing tools and automation that big corporations use. 
-              We saw too many small businesses struggling to keep up with the digital world, 
-              juggling dozens of tools and still falling behind.
+              ikonic started with a pressure washer and an obsession with making things look
+              flawless. That grew into a shop that handles the surfaces customers actually see:
+              the film on your glass, the graphics on your windows, and the sign over your door.
             </p>
             <p>
-              That's why we built Ikonic—to be the partner that helps businesses scale with 
-              smart automation, powerful CRM systems, and done-for-you marketing. We don't just 
-              build websites and set up software. We build complete revenue systems that work 
-              24/7, so you can focus on what you do best: running your business.
+              Most businesses hire three different vendors for those three things and end up with
+              three slightly different looks. We do all of it under one roof in Wheat Ridge —
+              design, printing, and installation — so it matches, and so nothing gets lost
+              between companies.
             </p>
             <p>
-              Based in Colorado, we understand the unique challenges local businesses face. 
-              From Denver to Boulder, Fort Collins to Colorado Springs, we've helped businesses 
-              across the Front Range grow their customer base and increase revenue through 
-              strategic digital marketing and automation.
+              We serve the Denver metro: Wheat Ridge, Arvada, Lakewood, Golden, and greater
+              Denver. Building and storefront work is installed on-site; printing and fabrication
+              happen at the shop.
             </p>
           </div>
         </div>
@@ -97,17 +95,16 @@ export default function About() {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
             <div>
               <h2 className="font-display text-3xl font-bold text-offwhite mb-6">
-                Our <span className="text-mint">Mission</span>
+                Our <span className="text-mint">Standard</span>
               </h2>
               <p className="text-offwhite-dark mb-6">
-                We're here to skip the fluff and equip you with tools that actually drive impact. 
-                No heavy platforms. No copy-paste setups. Just tailored systems built to capture 
-                leads, nurture relationships, and scale your business.
+                We only install film a manufacturer's compatibility chart says is safe for your
+                glass. Dual-pane, low-e, tempered, and annealed glass each behave differently, and
+                the wrong film can crack a pane or void its seal warranty — so we check first.
               </p>
               <p className="text-offwhite-dark">
-                Whether you're a local service business, a fast-moving startup, or a growing 
-                online brand, our team builds everything inside GoHighLevel—clean, organized, 
-                and designed to run effortlessly on autopilot.
+                The same care goes into graphics and signage: the right substrate for the surface,
+                finished edges, and a firm timeline. Quality-first, every pane and every panel.
               </p>
             </div>
             <div className="bg-gradient-to-br from-mint/20 to-mint/5 border border-mint/30 rounded-2xl p-8">
@@ -116,11 +113,11 @@ export default function About() {
               </h3>
               <ul className="space-y-3">
                 {[
-                  'We build AND manage your systems',
-                  'No long-term contracts required',
-                  'Transparent pricing with no hidden fees',
-                  'Dedicated support from our Colorado team',
-                  'Proven results with measurable ROI'
+                  'Design, printing, and installation in-house',
+                  'Glass checked against the film chart before quoting',
+                  'One written quote — no surprise add-ons',
+                  'Building & storefront work installed on-site',
+                  'Film, graphics, and signage that match'
                 ].map((item, index) => (
                   <li key={index} className="flex items-center gap-2 text-offwhite">
                     <div className="w-1.5 h-1.5 bg-mint rounded-full" />
@@ -140,7 +137,7 @@ export default function About() {
             Our <span className="text-mint">Values</span>
           </h2>
           <p className="text-offwhite-dark text-center mb-12 max-w-2xl mx-auto">
-            These principles guide everything we do.
+            The rules we don't bend, on every job.
           </p>
           
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -161,10 +158,10 @@ export default function About() {
       <section className="py-20 px-[6vw] relative z-10">
         <div className="max-w-6xl mx-auto">
           <h2 className="font-display text-3xl font-bold text-offwhite mb-4 text-center">
-            Results That <span className="text-mint">Speak</span>
+            By the <span className="text-mint">Numbers</span>
           </h2>
           <p className="text-offwhite-dark text-center mb-12 max-w-2xl mx-auto">
-            Numbers don't lie. Here's what we've achieved for our clients.
+            What the work adds up to.
           </p>
           
           <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
@@ -188,10 +185,10 @@ export default function About() {
             Ready to Work With Us?
           </h2>
           <p className="text-offwhite-dark mb-8">
-            Let's build something great together. Book your free consultation today.
+            Book a free on-site consultation — we'll check the glass or walk the site and send one quote.
           </p>
           <a href="/contact" className="btn-primary inline-flex items-center gap-2 text-lg px-8 py-4">
-            Get Started
+            Get a Quote
           </a>
         </div>
       </section>

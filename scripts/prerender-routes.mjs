@@ -39,199 +39,253 @@ const ORIGIN = 'https://ikonic303.com';
 const PHONE = '(720) 679-1230';
 const CONTACT_BLOCK = `<h2>Get a quote</h2>
 <p>Call <a href="tel:+17206791230">${PHONE}</a> or email
-<a href="mailto:info@ikonicmarketing303.com">info@ikonicmarketing303.com</a>.
-ikonic — 4880 Robb St. #8, Wheat Ridge, CO 80033. Vehicle wraps are installed in our
-Wheat Ridge shop by drop-off appointment; building and storefront signage is installed
-on-site.</p>`;
+<a href="mailto:info@ikonic303.com">info@ikonic303.com</a>.
+ikonic — 4880 Robb St. #8, Wheat Ridge, CO 80033. Architectural window film, storefront and
+window graphics, signage, and wayfinding are installed on-site; printing and fabrication happen
+in our Wheat Ridge shop.</p>`;
 
 /** @type {{path:string,title:string,description:string,body:string}[]} */
 const ROUTES = [
   {
     path: '/about',
-    title: 'About ikonic303 | Denver Digital Marketing Agency',
+    title: 'About ikonic303 | Denver Window Film & Graphics Shop',
     description:
-      'Meet the ikonic303 team. Denver-based digital marketing agency specializing in GoHighLevel automation, CRM setup, and lead generation for Colorado businesses.',
+      'ikonic is a Wheat Ridge, CO shop for architectural window film, storefront and window graphics, and signage. Design, print, and installation in-house for the Denver metro.',
     body: `<h1>About ikonic303 — Wheat Ridge, Colorado</h1>
-<p>ikonic is a brand-transformation company for local service businesses in the Denver metro.
-We design, print, and install commercial vehicle and fleet wraps, storefront signage and window
-graphics, and wayfinding and ADA/safety signage — and we run AI-powered digital marketing
-retainers for the same kind of business.</p>
-<p>The through-line is consistency: a customer should see the same brand, at the same level of
-quality, on your truck, on your building, and in their search results. Most shops do one of
-those three. We do all of them under one roof in Wheat Ridge.</p>`,
+<p>ikonic is a shop for the visible skin of a building in the Denver metro. We install
+architectural window film for homes and businesses, print and apply storefront and window
+graphics, and fabricate and hang signage and wayfinding — all designed, printed, and installed
+in-house.</p>
+<p>The through-line is consistency: the film on your glass, the graphics on your windows, and the
+sign over your door should look like the same company did all three — because we did. Most shops
+do one of those things. We do all of them under one roof in Wheat Ridge.</p>`,
   },
   {
     path: '/services',
-    title: 'Digital Marketing Services Denver CO | ikonic303',
+    title: 'Window Film & Graphics Services Denver CO | ikonic303',
     description:
-      'Full-service digital marketing for Denver businesses — web design, GoHighLevel CRM automation, reputation management, speed-to-lead, and marketing systems. All under one roof.',
+      'Architectural window film, residential and commercial window tint, storefront and window graphics, signage, and wayfinding for the Denver metro. Designed, printed, and installed in-house.',
     body: `<h1>ikonic services — Denver, Colorado</h1>
-<p>Two sides of one business: the physical brand and the digital front office.</p>
-<h2>Brand &amp; signage</h2>
-<p>Commercial and fleet vehicle wraps, color changes, storefront and building signage, window
-graphics and storefront branding, wayfinding and ADA/safety signage. Vehicle work is installed
-in our Wheat Ridge shop by drop-off appointment; building signage is installed on-site.</p>
-<h2>Digital marketing</h2>
-<p>Web design and sales funnels, CRM automation, speed-to-lead response, reputation and review
-generation, SEO and AEO, and monthly reporting — delivered as a flat monthly retainer.</p>`,
+<p>One Wheat Ridge shop for the whole exterior of your building — architectural window film,
+storefront and window graphics, signage, and wayfinding — so every surface a customer sees looks
+like the same company.</p>
+<h2>Architectural Window Film</h2>
+<p>Flat-glass film for homes and buildings: heat rejection, glare control, up to 99% UV blocking,
+privacy, security, anti-graffiti, and decorative films. Every window is checked against the film
+manufacturer's glass compatibility chart before a quote goes out, because the wrong film on the
+wrong glass can crack a pane or void its seal warranty.</p>
+<h2>Residential Window Tint</h2>
+<p>Fixes hot upstairs rooms, sun-faded floors, and harsh afternoon light without changing how a
+home looks from the street. Free written quote after we check the windows.</p>
+<h2>Commercial Window Tint</h2>
+<p>Cuts cooling costs and screen glare across offices, clinics, and multi-tenant buildings.
+Installs are scheduled after hours so a business never loses a workday.</p>
+<h2>Storefront &amp; Window Graphics</h2>
+<p>Cut vinyl and full-color printed window graphics, frosted privacy film, perforated see-through
+film, wall murals, and interior branding — installed on-site across the Denver metro.</p>
+<h2>Signage &amp; Visual Graphics</h2>
+<p>Storefront and building signage designed, fabricated, and installed on-site: dimensional and
+illuminated letters, monument and blade signs, banners, and interior branding. We prepare the
+drawings the permit process needs.</p>
+<h2>Wayfinding &amp; ADA Signage</h2>
+<p>Directional, room ID, and ADA-compliant signage systems for offices, medical buildings, and
+campuses — a consistent set that cuts front-desk questions.</p>
+<h2>Why choose ikonic?</h2>
+<p><strong>In-house, end to end</strong> — design, printing, and installation under one roof, no
+subcontractors. <strong>Glass checked first</strong> — we confirm your windows against the film
+compatibility chart before quoting. <strong>One consistent look</strong> — film, graphics, and
+signage from the same team so every surface matches.</p>
+<p>ikonic serves the Denver metro, including Wheat Ridge, Arvada, Lakewood, Golden, and Denver.
+Every engagement starts the same way: we check the glass or walk the site, confirm the right
+film or material, and send one written quote with no surprise add-ons.</p>
+${CONTACT_BLOCK}`,
   },
   {
     path: '/contact',
-    title: 'Contact ikonic303 | Free Strategy Call — Denver, CO',
+    title: 'Contact ikonic303 | Free On-Site Window Film Quote — Denver, CO',
     description:
-      'Book your free marketing strategy session with ikonic303. Denver-based GoHighLevel experts ready to build your lead generation system. Call (720) 679-1230.',
+      'Book a free on-site consultation for architectural window film, window graphics, or signage in the Denver metro. We check your glass and send one written quote. Call (720) 679-1230.',
     body: `<h1>Contact ikonic303 — Wheat Ridge, Colorado</h1>
-<p>Talk to us about a vehicle wrap, storefront signage, or a marketing retainer for your local
-service business. We serve the Denver metro including Wheat Ridge, Arvada, Lakewood, and
-Golden.</p>
+<p>Talk to us about architectural window film, residential or commercial window tint, storefront
+and window graphics, or signage for your home or business. We serve the Denver metro including
+Wheat Ridge, Arvada, Lakewood, and Golden.</p>
 ${CONTACT_BLOCK}`,
   },
   {
     path: '/blogs',
-    title: 'Digital Marketing Blog | Tips for Denver Businesses | ikonic303',
+    title: 'Window Film & Graphics Blog | Guides for Denver Businesses | ikonic303',
     description:
-      'Marketing tips, GoHighLevel guides, and growth strategies for Denver-area businesses. Learn how to automate leads, improve your reputation, and scale your business.',
-    body: `<h1>ikonic guides — marketing for local service businesses</h1>
-<p>Practical guides on marketing a local service business in the Denver metro: capturing and
-responding to leads, generating reviews, getting found in search and in AI answers, and what
-branding actually costs. Written for owners, not marketers.</p>`,
-  },
-  {
-    path: '/branded-to-win',
-    title: 'Branded to Win Book by Joshua Soderblom | ikonic303',
-    description:
-      'Get the Branded to Win book — the complete guide to building a business brand that attracts customers, generates leads, and dominates your local market. Digital & bundle editions available.',
-    body: `<h1>Branded to Win — by Joshua Soderblom</h1>
-<p><em>Branded to Win</em> is ikonic founder Joshua Soderblom's guide to building a local brand
-that brings customers in: how a service business earns recognition in its own market, why
-consistency across vehicle, storefront, and search beats a bigger ad budget, and how to
-compound that recognition instead of renting it.</p>
-<p>Available in digital and bundle editions.</p>`,
+      'Guides on architectural window film, residential and commercial window tint, storefront and window graphics, signage, and wayfinding for Denver-area homes and businesses.',
+    body: `<h1>ikonic guides — window film, graphics &amp; signage</h1>
+<p>Practical guides on architectural window film, residential and commercial window tint,
+storefront and window graphics, signage, and wayfinding in the Denver metro. Written for
+homeowners and business owners, not marketers.</p>`,
   },
   {
     path: '/careers',
-    title: 'Careers at ikonic303 | Join Our Denver Marketing Team',
+    title: 'Careers at ikonic303 | Window Film & Sign Installers — Denver, CO',
     description:
-      "Join the ikonic303 team in Denver, CO. We're hiring driven marketers, GoHighLevel specialists, and automation experts. Build your career in digital marketing.",
+      "Join the ikonic303 shop in Wheat Ridge, CO. We're hiring window film installers, vinyl and graphics applicators, and sign fabricators. Craft-focused, steady work across the Denver metro.",
     body: `<h1>Careers at ikonic303 — Wheat Ridge, Colorado</h1>
-<p>ikonic hires for the shop and for the marketing side: vinyl installers, designers, and
-marketing and automation specialists. We are a small team in Wheat Ridge that values doing the
-work right over doing it fast.</p>
+<p>ikonic hires for the shop and the install crew: window film installers, large-format vinyl and
+graphics applicators, and sign fabricators. We are a small team in Wheat Ridge that values doing
+the work right over doing it fast.</p>
 ${CONTACT_BLOCK}`,
   },
   {
     path: '/learn-more',
-    title: 'How It Works | Marketing Automation for Denver Businesses | ikonic303',
+    title: 'How It Works | Window Film & Graphics Process | ikonic303',
     description:
-      'Learn how ikonic303 builds automated lead generation systems for Denver businesses. Our proven 4-step process captures leads 24/7 while you focus on your business.',
+      'How ikonic scopes and installs architectural window film and graphics in the Denver metro: on-site glass check, one written quote, clean install, and a manufacturer-backed warranty.',
     body: `<h1>How ikonic works</h1>
-<p>Every lead gets captured, answered fast, followed up with until they respond, and tracked
-through to the job. Most local service businesses lose revenue in the gap between a customer
-reaching out and someone getting back to them — that gap is what we close first, then we build
-the rest of the marketing on top of it.</p>`,
+<p>Every job starts with a look at the actual glass or a walk of the site — glass type,
+orientation, and condition — because the wrong film on the wrong glass can crack a pane or void
+its warranty. Then one written quote, a dust-controlled install with finished edges, and a
+manufacturer film warranty plus our workmanship guarantee behind it.</p>`,
   },
+
+  // ── Service pages (React Router routes in src/pages/services; same URLs as the
+  //    former static HTML). Keep this copy roughly in sync with serviceData.tsx.
   {
-    path: '/services/web-design',
-    title: 'Web Design & Sales Funnels Denver CO | ikonic303',
+    path: '/window-tint',
+    title: 'Architectural Window Film in Denver | ikonic303',
     description:
-      'Custom websites and high-converting GoHighLevel sales funnels for Denver businesses. Mobile-responsive, conversion-optimized, built by GHL experts. Get a free quote.',
-    body: `<h1>Web design &amp; sales funnels — Denver, Colorado</h1>
-<p>Websites and funnels built to turn visitors into booked jobs: mobile-first, fast, and wired
-into the CRM so every enquiry lands somewhere it will be answered. Built and maintained for
-local service businesses across the Denver metro.</p>`,
-  },
-  {
-    path: '/services/crm-automation',
-    title: 'GoHighLevel CRM Setup & Automation Denver CO | ikonic303',
-    description:
-      'Expert GoHighLevel CRM setup and automation for Colorado businesses. Automate follow-ups, nurture leads, and close more deals. Free CRM audit available.',
-    body: `<h1>CRM setup &amp; automation — Denver, Colorado</h1>
-<p>Your customer list, pipeline, and follow-up in one place, automated: every lead tagged and
-routed, follow-up that runs without anyone remembering to send it, and a pipeline that shows
-what is actually going to close this month.</p>`,
-  },
-  {
-    path: '/services/reputation',
-    title: 'Reputation Management & Google Reviews Denver CO | ikonic303',
-    description:
-      'Build your 5-star reputation and dominate Google Maps. Automated review collection, Google Business Profile optimization, and local SEO for Denver businesses.',
-    body: `<h1>Reputation &amp; Google reviews — Denver, Colorado</h1>
-<p>Reviews are the single strongest local ranking and trust signal a service business has. We
-ask every finished customer at the right moment, route unhappy ones to you privately first, and
-keep your Google Business Profile accurate and complete.</p>`,
-  },
-  {
-    path: '/services/speed-to-lead',
-    title: 'Speed to Lead Automation Denver CO | ikonic303',
-    description:
-      'Respond to leads in under 60 seconds with automated SMS and email follow-up. Never lose a lead again. Speed-to-lead automation for Colorado businesses.',
-    body: `<h1>Speed to lead — Denver, Colorado</h1>
-<p>Most local service leads go to whoever answers first. We answer for you in under a minute,
-day or night, then keep following up until the customer replies — so the job does not go to the
-competitor who happened to pick up.</p>`,
-  },
-  {
-    path: '/services/marketing',
-    title: 'Digital Marketing Systems & Automation Denver CO | ikonic303',
-    description:
-      'Full-service digital marketing for Colorado businesses — social media, paid ads (Google & Facebook), email automation, and analytics dashboards. Fill your pipeline on autopilot.',
-    body: `<h1>Marketing systems — Denver, Colorado</h1>
-<p>The full front office on a flat monthly retainer: search and AI visibility, Google Business
-Profile, social, paid ads when they earn their keep, email and SMS follow-up, and a monthly
-report that shows what came in and what it was worth.</p>`,
-  },
-  {
-    path: '/wrap-calculator',
-    title: 'Commercial Vehicle Wrap Cost Calculator Denver | ikonic303',
-    description:
-      'Get an instant vehicle wrap price estimate for your business vehicle. Our free wrap calculator covers cars, trucks, vans, and trailers. Serving Denver and Colorado.',
-    body: `<h1>Vehicle wrap cost calculator</h1>
-<p>Estimate what wrapping your work vehicle involves — cars, trucks, vans, and trailers, full or
-partial coverage, single vehicle or a fleet. Wraps are installed in our Wheat Ridge shop by
-drop-off appointment.</p>
+      'Architectural window film for Denver homes and businesses — heat, glare, UV, privacy, security, and decorative films on flat glass. We check your glass first. Free on-site quote.',
+    body: `<h1>Architectural Window Film in Denver, Colorado</h1>
+<p>ikonic installs architectural window film on the flat glass in homes and buildings across the
+Denver metro — film that rejects solar heat, cuts glare, blocks up to 99% of UV, adds privacy or
+security, or creates a frosted or decorative look, all without replacing a window.</p>
+<h2>What architectural film does</h2>
+<p>Heat and glare rejection on west- and south-facing glass; UV protection that slows fading of
+floors, furniture, and merchandise; frosted and decorative privacy film; tear-resistant security
+and safety film that holds broken glass in the frame; and clear anti-graffiti film for storefront
+glass.</p>
+<h2>We check your glass first</h2>
+<p>Dual-pane, low-e, tempered, laminated, and single-pane annealed glass each behave differently.
+The wrong film on the wrong glass is the most common cause of thermal-stress cracks and voided
+window warranties, so every quote starts with identifying the glass on-site and matching it to the
+film manufacturer's compatibility chart.</p>
+<h2>FAQ</h2>
+<p><strong>Will it make my rooms dark?</strong> Not with a spectrally-selective heat film, which
+stays nearly clear. <strong>Does film help with energy bills?</strong> Yes — it lowers the cooling
+load on the glass that gains the most summer heat.</p>
 ${CONTACT_BLOCK}`,
   },
   {
-    path: '/print-ship',
-    title: 'Print & Ship Vinyl Wraps Denver | ikonic303',
+    path: '/window-tint/home',
+    title: 'Home Window Tinting in Denver | ikonic303',
     description:
-      'Order custom-printed vinyl wraps and have them shipped directly to you. Professional print quality for vehicle wraps, banners, and signage. Serving Denver and Colorado.',
-    body: `<h1>Print &amp; ship vinyl</h1>
-<p>Custom-printed vinyl wraps, banners, and signage printed to spec and shipped to you or your
-installer — the same print quality we install in our own shop, for shops and businesses outside
-the Denver metro.</p>`,
+      'Home window film for hot upstairs rooms, sun-faded floors, and harsh afternoon glare in the Denver west metro. Free written quote after we check your glass.',
+    body: `<h1>Home Window Tinting in the Denver West Metro</h1>
+<p>Window film fixes the hot upstairs bedroom, the west-facing living room that overheats every
+afternoon, the sun-faded floor, and street-facing privacy — without losing the view or the light.
+ikonic serves homeowners in Wheat Ridge, Arvada, Lakewood, and Golden.</p>
+<h2>We check your glass before we quote</h2>
+<p>Before any home job gets a number, we identify the glass — single or dual-pane, coated or
+clear — and check it against the film manufacturer's compatibility chart. Most homes are finished
+in a single visit.</p>
+<h2>FAQ</h2>
+<p><strong>Will home window film make my rooms dark?</strong> Not unless you want it to; solar
+films cut heat and glare while staying close to clear. <strong>Can film protect my hardwood floors
+from fading?</strong> Yes — UV is the biggest driver of fading, and film blocks most of it.</p>
+${CONTACT_BLOCK}`,
   },
   {
-    path: '/lost-call-calculator',
-    title:
-      'Missed Call Revenue Calculator | How Much Are Lost Calls Costing You? | ikonic303',
+    path: '/window-tint/office',
+    title: 'Office Window Tinting & Glare Control Denver | ikonic303',
     description:
-      'Find out how much revenue your business loses from missed calls. Use our free calculator and see how missed call text-back automation can recover that revenue instantly.',
-    body: `<h1>Missed call revenue calculator</h1>
-<p>Work out what unanswered calls cost your business each month. Every missed call at a local
-service business is a customer who is already calling the next name on the list — this puts a
-number on it, and shows what automatic text-back recovers.</p>`,
+      'Office and commercial window film in the Denver metro for screen glare, heat load, and conference-room privacy. Scoped room by room, installed around your business hours.',
+    body: `<h1>Office Window Tinting &amp; Glare Control</h1>
+<p>Screen glare that forces the blinds shut every afternoon, glass-walled conference rooms with no
+privacy, and west-facing floors that run the HVAC constantly are all solvable with the right film
+on the right glass — not a whole-building retrofit. Jobs are scoped room by room and installed
+around business hours.</p>
+<h2>Multi-tenant and property-manager jobs</h2>
+<p>A property manager can roll film out floor by floor as budget allows. We identify the glass —
+coated, low-e, tempered, laminated, single or dual-pane — and confirm the film against the
+manufacturer's compatibility chart before quoting.</p>
+<h2>FAQ</h2>
+<p><strong>Will it help with the AC bill?</strong> It reduces the heat load through the glass,
+particularly on west- and south-facing windows. <strong>Can you do just the conference room?</strong>
+Yes — most office jobs are scoped room by room.</p>
+${CONTACT_BLOCK}`,
   },
   {
-    path: '/sticker-builder',
-    title: 'Custom Sticker Builder — Design & Order Online | ikonic303',
+    path: '/storefront-graphics',
+    title: 'Storefront Window Graphics & Wall Murals Denver | ikonic303',
     description:
-      'Design and order custom stickers online. Choose your shape, size, material, and finish — die-cut, kiss-cut, bumper stickers, and more. Fast shipping across Colorado and the US.',
-    body: `<h1>Custom sticker builder</h1>
-<p>Design and order custom stickers online — die-cut, kiss-cut, and bumper stickers in your
-choice of shape, size, material, and finish. Printed by ikonic in Wheat Ridge, Colorado and
-shipped nationwide.</p>`,
+      'Custom storefront window graphics, frosted privacy vinyl, perforated film, wall murals, and interior branding — designed and printed in-house, installed on-site across the Denver metro.',
+    body: `<h1>Storefront Graphics &amp; Wall Murals in Denver</h1>
+<p>Custom-designed window graphics, frosted and perforated privacy vinyl, wall murals, and
+interior branding — designed in-house, printed in-house, and installed at your storefront across
+the Denver metro. Perforated film reads as a solid graphic outside while you still see out from
+inside.</p>
+<h2>Designed for your brand</h2>
+<p>Every job includes design by ikonic's in-house designer, working from your logo and brand. You
+approve the artwork proof before anything prints; two revision rounds are included.</p>
+<h2>How it works</h2>
+<p>A free storefront walkthrough to measure glass and walls, a design proof plus an exact written
+quote, then a clean on-site install — most storefronts in a day.</p>
+<h2>FAQ</h2>
+<p><strong>Will graphics block the view out?</strong> Only if you want them to — perforated and
+frosted films keep light and, for perforated, the view out. <strong>Can you match my brand
+colors?</strong> Yes — we print from your brand files and proof against them.</p>
+${CONTACT_BLOCK}`,
   },
   {
-    path: '/ai-website-generator',
-    title: 'AI Website Generator | Free Custom Website Design Concept | ikonic303',
+    path: '/signage',
+    title: 'Storefront & Building Signage in Denver | ikonic303',
     description:
-      "Answer a few questions and let Ikonic's AI create a custom website design concept for your business — layout, copy, sections, colors, and a design direction ready to build.",
-    body: `<h1>AI website generator</h1>
-<p>Answer a few questions about your business and get a custom website design concept back —
-layout, sections, copy direction, and colors — as a starting point you can build from or hand
-to us to build for you.</p>`,
+      'Storefront and building signage, channel and dimensional letters, monument and blade signs, banners, and window graphics — designed, fabricated, and installed on-site by ikonic in Wheat Ridge, CO.',
+    body: `<h1>Storefront &amp; Building Signage in Denver, Colorado</h1>
+<p>ikonic designs, fabricates, and installs storefront and building signage across the Denver
+metro — from clean vinyl lettering and window graphics to illuminated channel letters, monument
+and blade signs, and banners. Building and storefront signage is installed on-site.</p>
+<h2>Design, permit, fabricate, install</h2>
+<p>We handle it end to end: brand-matched design, the drawings your city's permit process needs,
+fabrication, and a clean install. Many exterior and illuminated signs must meet local sign code —
+we help you get it right the first time.</p>
+<h2>FAQ</h2>
+<p><strong>Do you install on-site?</strong> Yes, across the Denver metro. <strong>Do you handle
+permits?</strong> We identify what's required and prepare the drawings the permit needs.</p>
+${CONTACT_BLOCK}`,
   },
+  {
+    path: '/wayfinding',
+    title: 'Wayfinding, ADA & Safety Signage in Denver | ikonic303',
+    description:
+      'Wayfinding, ADA-compliant, and safety signage for offices, clinics, warehouses, and multi-tenant buildings across the Denver metro — designed and installed on-site by ikonic.',
+    body: `<h1>Wayfinding, ADA &amp; Safety Signage in Denver, Colorado</h1>
+<p>ikonic designs and installs wayfinding, ADA-compliant, and safety signage for offices, clinics,
+warehouses, and multi-tenant buildings across the Denver metro — directories, directional arrows,
+floor and suite numbers, room identification, ADA room and restroom signs, and OSHA/safety
+signage, installed on-site.</p>
+<h2>ADA-compliant signage</h2>
+<p>Room and restroom signs built to ADA requirements — tactile characters, braille, proper
+contrast, and correct mounting height — so a building stays compliant and usable for everyone.</p>
+<h2>Free signage audit</h2>
+<p>We walk your building and flag the wayfinding gaps and the ADA or safety signage that's
+missing, outdated, or out of compliance, then quote only what you need.</p>
+${CONTACT_BLOCK}`,
+  },
+
+  // ---------------------------------------------------------------------------
+  // HIDDEN 2026-08-29 — site refocused on architectural window film & graphics.
+  // The digital-marketing service pages, the founder's book, and the print/AI/
+  // sticker tools are unrouted in the SPA and 301-redirect to /services (see
+  // vercel.json), so they no longer need prerendered shells or sitemap entries.
+  // The route definitions are kept here, commented out, for an easy revert.
+  // ---------------------------------------------------------------------------
+  // { path: '/branded-to-win', ... },
+  // { path: '/services/web-design', ... },
+  // { path: '/services/crm-automation', ... },
+  // { path: '/services/reputation', ... },
+  // { path: '/services/speed-to-lead', ... },
+  // { path: '/services/marketing', ... },
+  // { path: '/print-ship', ... },
+  // { path: '/lost-call-calculator', ... },
+  // { path: '/sticker-builder', ... },
+  // { path: '/ai-website-generator', ... },
 ];
 
 const esc = (s) => s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
@@ -353,7 +407,7 @@ function buildPost(template, post) {
       <main style="max-width:820px;margin:0 auto;padding:2rem 1.25rem;font-family:Inter,system-ui,sans-serif;line-height:1.6;color:#e8e8e8;background:#0b0b0f">
         <article>
           <h1>${esc(post.title)}</h1>
-          <p><em>${esc(post.category || 'Marketing')}${post.publishedAt ? ' · ' + new Date(post.publishedAt).toDateString() : ''}</em></p>
+          <p><em>${esc(post.category || 'Window Film')}${post.publishedAt ? ' · ' + new Date(post.publishedAt).toDateString() : ''}</em></p>
           ${post.body ? `<p>${esc(post.body)}</p>` : `<p>${esc(desc)}</p>`}
         </article>
         <p><a href="${ORIGIN}/blogs">All guides</a> ·
@@ -376,13 +430,37 @@ const MOON_RIVER_CATEGORIES = new Set([
   'Home Maintenance & Seasonal',
 ]);
 
+// D4 vehicle content removal (2026-08-26): PPF, window tint, ceramic coating, and
+// commercial/fleet vehicle wraps are no longer part of ikonic's content strategy — the
+// 14 existing posts were unpublished via the Redis status flag and the generator no
+// longer queues these topics (see TOPICS_BY_CATEGORY in auto-blog-generate.ts). This
+// filter is defense-in-depth, same as MOON_RIVER_CATEGORIES above: it keeps any
+// leftover or manually-added vehicle post out of the sitemap and prerendered shells.
+//
+// 2026-08-29 refocus: 'Digital Marketing' is retired from the blog for the same reason.
+// Existing marketing posts are unpublished; this keeps any that slip through out of the
+// sitemap and prerendered shells. See auto-blog-generate.ts for the matching change.
+const VEHICLE_CATEGORIES = new Set([
+  'Commercial Wraps', 'Vehicle Protection', 'Digital Marketing',
+]);
+
+// 2026-08-29 refocus: some older marketing posts were filed under generic categories
+// ('Marketing', 'Lead Generation', etc.) so the category set alone doesn't catch them.
+// This slug/title keyword filter is the belt-and-braces: any post that is clearly about
+// digital marketing, SEO, ads, CRM, funnels, or lead automation is kept out of the
+// prerendered shells and the sitemap. Unpublishing them in Redis is still the real fix.
+const OFF_TOPIC_SLUG_RE =
+  /(^|-)(marketing|gohighlevel|ghl|crm|seo|sem|ppc|funnel|funnels|lead-|leads-|lead-gen|lead-generation|automation|chatbot|ai-voice|retarget|ad-|ads-|advertising|google-ads|meta-ads|facebook-ads|newsletter|email-marketing|reputation|reviews?-automation|website-|web-design|sales-funnel)(-|$)/i;
+
 async function prerenderPosts(template) {
   let list;
   try {
     const d = await fetchJson(`${ORIGIN}/api/blog-posts`, 20000);
     list = (d.posts || [])
       .filter((p) => p.slug && !String(p.link || '').startsWith('http'))
-      .filter((p) => !MOON_RIVER_CATEGORIES.has(p.category));
+      .filter((p) => !MOON_RIVER_CATEGORIES.has(p.category))
+      .filter((p) => !VEHICLE_CATEGORIES.has(p.category))
+      .filter((p) => !OFF_TOPIC_SLUG_RE.test(p.slug || '') && !OFF_TOPIC_SLUG_RE.test(p.title || ''));
   } catch (err) {
     console.warn(`prerender: skipping blog posts — could not load the list (${err.message})`);
     return { count: 0, slugs: [] };
@@ -410,9 +488,7 @@ async function prerenderPosts(template) {
 }
 
 /**
- * Rewrite dist/sitemap.xml: add every prerendered post, drop duplicates, and drop the
- * /services/* aliases of the standalone .html pages (those canonicalise to the short
- * form, so listing both invites Google to pick the wrong one).
+ * Rewrite dist/sitemap.xml: add every prerendered post and drop duplicates.
  */
 function fixSitemap(postSlugs) {
   const smPath = join(DIST, 'sitemap.xml');
@@ -420,8 +496,7 @@ function fixSitemap(postSlugs) {
   const xml = readFileSync(smPath, 'utf8');
   const locs = [...xml.matchAll(/<loc>([^<]+)<\/loc>/g)].map((m) => m[1]);
 
-  const ALIASES = ['/services/window-tint', '/services/paint-protection-film', '/services/ceramic-coating'];
-  const keep = [...new Set(locs)].filter((u) => !ALIASES.some((a) => u.endsWith(a)));
+  const keep = [...new Set(locs)];
   for (const slug of postSlugs) keep.push(`${ORIGIN}/post/${slug}`);
 
   const body = [...new Set(keep)]
@@ -444,7 +519,7 @@ function fixSitemap(postSlugs) {
 function build404(template) {
   let html = template;
   html = html.replace(/<title>[\s\S]*?<\/title>/, '<title>Page Not Found | ikonic303</title>');
-  html = setTag(html, /<meta\s+name="description"[^>]*>/, "That page doesn't exist. Vehicle wraps, signage and marketing for Denver businesses.");
+  html = setTag(html, /<meta\s+name="description"[^>]*>/, "That page doesn't exist. Architectural window film, window graphics, and signage for Denver-area homes and businesses.");
   html = html.replace(/<link\s+rel="canonical"\s+href="[^"]*"\s*\/?>/,
     '<meta name="robots" content="noindex,follow" />');
   const rootRe = /(<div id="root">)[\s\S]*?(<\/div>\s*(?:<script|<\/body>))/;
@@ -454,7 +529,6 @@ function build404(template) {
         <p>That page doesn't exist. The link may be out of date, or the address slightly off.</p>
         <p><a href="${ORIGIN}/">ikonic303 home</a> ·
            <a href="${ORIGIN}/services">services</a> ·
-           <a href="${ORIGIN}/wrap-calculator">wrap calculator</a> ·
            <a href="${ORIGIN}/blogs">guides</a> ·
            <a href="${ORIGIN}/contact">contact</a></p>
         <p>Or call <a href="tel:+17206791230">(720) 679-1230</a>.</p>

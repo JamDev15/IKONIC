@@ -6,7 +6,6 @@ export default function Navigation() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isServicesOpen, setIsServicesOpen] = useState(false);
-  const [isCalcOpen, setIsCalcOpen] = useState(false);
   const location = useLocation();
 
   useEffect(() => {
@@ -21,22 +20,22 @@ export default function Navigation() {
   useEffect(() => {
     setIsMobileMenuOpen(false);
     setIsServicesOpen(false);
-    setIsCalcOpen(false);
   }, [location.pathname]);
 
+  // Service pages are React Router routes (src/pages/services), so these are internal
+  // <Link>s. Paths match the former static HTML so old URLs keep working.
+  //
+  // HIDDEN 2026-08-29 — the digital-marketing service links (Web Design & Funnels,
+  // CRM & Automations, Reputation Management, Speed to Lead, Marketing Systems) were
+  // removed from the menu when the site refocused on architectural window film &
+  // graphics. Their pages still exist but are unrouted; do not re-add here.
   const serviceLinks = [
-    // AI Website Generator — temporarily hidden from the menu; will re-enable later. Keep the code.
-    // { label: 'AI Website Generator', href: '/ai-website-generator' },
-    { label: 'Web Design & Funnels', href: '/services/web-design' },
-    { label: 'CRM & Automations', href: '/services/crm-automation' },
-    { label: 'Reputation Management', href: '/services/reputation' },
-    { label: 'Speed to Lead', href: '/services/speed-to-lead' },
-    { label: 'Marketing Systems', href: '/services/marketing' },
-    // Static (prerendered) SEO pages served via vercel.json rewrites — use a full
-    // page load (external) so the browser hits the server-served HTML, not the SPA.
-    { label: 'Paint Protection Film (PPF)', href: '/services/paint-protection-film', external: true },
-    { label: 'Window Tint', href: '/services/window-tint', external: true },
-    { label: 'Ceramic Coating', href: '/services/ceramic-coating', external: true },
+    { label: 'Architectural Window Film', href: '/window-tint' },
+    { label: 'Residential Window Tint', href: '/window-tint/home' },
+    { label: 'Commercial Window Tint', href: '/window-tint/office' },
+    { label: 'Storefront & Window Graphics', href: '/storefront-graphics' },
+    { label: 'Signage & Visual Graphics', href: '/signage' },
+    { label: 'Wayfinding & ADA Signage', href: '/wayfinding' },
   ];
 
   return (
@@ -95,96 +94,36 @@ export default function Navigation() {
                     View All Services →
                   </Link>
                   {serviceLinks.map((link) => (
-                    link.external ? (
-                      <a
-                        key={link.label}
-                        href={link.href}
-                        className="block px-4 py-3 text-sm text-offwhite-dark hover:bg-mint/10 hover:text-mint transition-colors"
-                      >
-                        {link.label}
-                      </a>
-                    ) : (
-                      <Link
-                        key={link.label}
-                        to={link.href}
-                        className="block px-4 py-3 text-sm text-offwhite-dark hover:bg-mint/10 hover:text-mint transition-colors"
-                      >
-                        {link.label}
-                      </Link>
-                    )
+                    <Link
+                      key={link.label}
+                      to={link.href}
+                      className="block px-4 py-3 text-sm text-offwhite-dark hover:bg-mint/10 hover:text-mint transition-colors"
+                    >
+                      {link.label}
+                    </Link>
                   ))}
                 </div>
               )}
             </div>
             
-            {/* Calculators Dropdown */}
-            <div className="relative">
-              <button
-                onClick={() => setIsCalcOpen(!isCalcOpen)}
-                onMouseEnter={() => setIsCalcOpen(true)}
-                className="flex items-center gap-1 text-sm font-medium text-offwhite-dark hover:text-mint transition-colors"
-              >
-                Calculators
-                <ChevronDown className={`w-4 h-4 transition-transform ${isCalcOpen ? 'rotate-180' : ''}`} />
-              </button>
-
-              {isCalcOpen && (
-                <div
-                  onMouseLeave={() => setIsCalcOpen(false)}
-                  className="absolute top-full left-0 mt-2 w-52 bg-charcoal border border-white/10 rounded-lg shadow-xl overflow-hidden"
-                >
-                  <Link
-                    to="/wrap-calculator"
-                    className="block px-4 py-3 text-sm text-offwhite-dark hover:bg-mint/10 hover:text-mint transition-colors"
-                  >
-                    Wrap Calculator
-                  </Link>
-                  <Link
-                    to="/print-ship"
-                    className="block px-4 py-3 text-sm text-offwhite-dark hover:bg-mint/10 hover:text-mint transition-colors border-t border-white/10"
-                  >
-                    Print &amp; Ship
-                  </Link>
-                  <Link
-                    to="/lost-call-calculator"
-                    className="block px-4 py-3 text-sm text-offwhite-dark hover:bg-mint/10 hover:text-mint transition-colors border-t border-white/10"
-                  >
-                    Lost Call Calculator
-                  </Link>
-                </div>
-              )}
-            </div>
+            <Link to="/gallery" className="text-sm font-medium text-offwhite-dark hover:text-mint transition-colors">
+              Gallery
+            </Link>
 
             <Link to="/blogs" className="text-sm font-medium text-offwhite-dark hover:text-mint transition-colors">
               Blogs
             </Link>
 
             <Link to="/careers" className="text-sm font-medium text-offwhite-dark hover:text-mint transition-colors">
-              Career
+              Careers
             </Link>
 
-            <Link to="/sticker-builder" className="text-sm font-medium text-offwhite-dark hover:text-mint transition-colors">
-              Sticker Builder
-            </Link>
-
-            <Link to="/gallery" className="text-sm font-medium text-offwhite-dark hover:text-mint transition-colors">
-              Gallery
-            </Link>
-
-            {/* Web Design Builder — temporarily hidden from the menu; will re-enable later. Keep the code. */}
-            {/* <Link to="/ai-website-generator" className="text-sm font-medium text-offwhite-dark hover:text-mint transition-colors">
-              Web Design Builder
-            </Link> */}
-
-            <Link to="/branded-to-win" className="text-sm font-medium px-3 py-1.5 rounded-lg border transition-colors"
-              style={{ borderColor: '#F5A623', color: '#F5A623' }}
-              onMouseEnter={e => { (e.currentTarget as HTMLElement).style.background = '#F5A62320'; }}
-              onMouseLeave={e => { (e.currentTarget as HTMLElement).style.background = 'transparent'; }}>
-              Book
-            </Link>
+            {/* HIDDEN 2026-08-29 — Calculators dropdown (Print & Ship, Lost Call
+                Calculator), Sticker Builder, and the "Book" (Branded to Win) button
+                were removed when the site refocused on architectural film & graphics. */}
 
             <Link to="/contact" className="btn-primary text-sm">
-              Start Now
+              Get a Quote
             </Link>
           </div>
 
@@ -221,60 +160,28 @@ export default function Navigation() {
               View All Services →
             </Link>
             {serviceLinks.map((link) => (
-              link.external ? (
-                <a
-                  key={link.label}
-                  href={link.href}
-                  className="block text-xl font-display font-bold text-offwhite-dark hover:text-mint transition-colors py-2"
-                >
-                  {link.label}
-                </a>
-              ) : (
-                <Link
-                  key={link.label}
-                  to={link.href}
-                  className="block text-xl font-display font-bold text-offwhite-dark hover:text-mint transition-colors py-2"
-                >
-                  {link.label}
-                </Link>
-              )
+              <Link
+                key={link.label}
+                to={link.href}
+                className="block text-xl font-display font-bold text-offwhite-dark hover:text-mint transition-colors py-2"
+              >
+                {link.label}
+              </Link>
             ))}
           </div>
           
-          <div className="text-center">
-            <p className="text-mint text-sm mb-3">Calculators</p>
-            <Link to="/wrap-calculator" className="block text-xl font-display font-bold text-offwhite-dark hover:text-mint transition-colors py-2">
-              Wrap Calculator
-            </Link>
-            <Link to="/print-ship" className="block text-xl font-display font-bold text-offwhite-dark hover:text-mint transition-colors py-2">
-              Print &amp; Ship
-            </Link>
-            <Link to="/lost-call-calculator" className="block text-xl font-display font-bold text-offwhite-dark hover:text-mint transition-colors py-2">
-              Lost Call Calculator
-            </Link>
-          </div>
-
+          <Link to="/gallery" className="text-2xl font-display font-bold text-offwhite hover:text-mint transition-colors">
+            Gallery
+          </Link>
           <Link to="/blogs" className="text-2xl font-display font-bold text-offwhite hover:text-mint transition-colors">
             Blogs
           </Link>
           <Link to="/careers" className="text-2xl font-display font-bold text-offwhite hover:text-mint transition-colors">
-            Career
+            Careers
           </Link>
-          <Link to="/sticker-builder" className="text-2xl font-display font-bold text-offwhite hover:text-mint transition-colors">
-            Sticker Builder
-          </Link>
-          <Link to="/gallery" className="text-2xl font-display font-bold text-offwhite hover:text-mint transition-colors">
-            Gallery
-          </Link>
-          {/* Web Design Builder — temporarily hidden from the menu; will re-enable later. Keep the code. */}
-          {/* <Link to="/ai-website-generator" className="text-2xl font-display font-bold text-offwhite hover:text-mint transition-colors">
-            Web Design Builder
-          </Link> */}
-          <Link to="/branded-to-win" className="text-2xl font-display font-bold transition-colors" style={{ color: '#F5A623' }}>
-            Book
-          </Link>
+          {/* HIDDEN 2026-08-29 — Calculators, Sticker Builder, and Book removed on refocus. */}
           <Link to="/contact" className="btn-primary mt-4">
-            Start Now
+            Get a Quote
           </Link>
         </div>
       </div>

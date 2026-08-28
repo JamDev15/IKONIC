@@ -19,6 +19,146 @@
       ],
       "destination": "https://ikonic303.com/:path*",
       "permanent": true
+    },
+    {
+      "source": "/paint-protection-film",
+      "destination": "/",
+      "permanent": true
+    },
+    {
+      "source": "/paint-protection-film.html",
+      "destination": "/",
+      "permanent": true
+    },
+    {
+      "source": "/services/paint-protection-film",
+      "destination": "/",
+      "permanent": true
+    },
+    {
+      "source": "/ceramic-coating",
+      "destination": "/",
+      "permanent": true
+    },
+    {
+      "source": "/ceramic-coating.html",
+      "destination": "/",
+      "permanent": true
+    },
+    {
+      "source": "/services/ceramic-coating",
+      "destination": "/",
+      "permanent": true
+    },
+    {
+      "source": "/commercial-wraps",
+      "destination": "/signage",
+      "permanent": true
+    },
+    {
+      "source": "/commercial-wraps.html",
+      "destination": "/signage",
+      "permanent": true
+    },
+    {
+      "source": "/wrap-calculator",
+      "destination": "/",
+      "permanent": true
+    },
+    {
+      "source": "/services/web-design",
+      "destination": "/services",
+      "permanent": true
+    },
+    {
+      "source": "/services/crm-automation",
+      "destination": "/services",
+      "permanent": true
+    },
+    {
+      "source": "/services/reputation",
+      "destination": "/services",
+      "permanent": true
+    },
+    {
+      "source": "/services/speed-to-lead",
+      "destination": "/services",
+      "permanent": true
+    },
+    {
+      "source": "/services/marketing",
+      "destination": "/services",
+      "permanent": true
+    },
+    {
+      "source": "/marketing",
+      "destination": "/services",
+      "permanent": true
+    },
+    {
+      "source": "/marketing.html",
+      "destination": "/services",
+      "permanent": true
+    },
+    {
+      "source": "/print-ship",
+      "destination": "/services",
+      "permanent": true
+    },
+    {
+      "source": "/lost-call-calculator",
+      "destination": "/services",
+      "permanent": true
+    },
+    {
+      "source": "/sticker-builder",
+      "destination": "/services",
+      "permanent": true
+    },
+    {
+      "source": "/ai-website-generator",
+      "destination": "/services",
+      "permanent": true
+    },
+    {
+      "source": "/branded-to-win",
+      "destination": "/",
+      "permanent": true
+    },
+    {
+      "source": "/services/window-tint",
+      "destination": "/window-tint",
+      "permanent": true
+    },
+    {
+      "source": "/window-tint.html",
+      "destination": "/window-tint",
+      "permanent": true
+    },
+    {
+      "source": "/signage.html",
+      "destination": "/signage",
+      "permanent": true
+    },
+    {
+      "source": "/storefront-graphics.html",
+      "destination": "/storefront-graphics",
+      "permanent": true
+    },
+    {
+      "source": "/wayfinding.html",
+      "destination": "/wayfinding",
+      "permanent": true
+    },
+    {
+      "source": "/window-tint/home.html",
+      "destination": "/window-tint/home",
+      "permanent": true
+    },
+    {
+      "source": "/window-tint/office.html",
+      "destination": "/window-tint/office",
+      "permanent": true
     }
   ],
   "rewrites": [
@@ -39,44 +179,32 @@
       "destination": "/api/blog?action=auto-generate"
     },
     {
-      "source": "/signage",
-      "destination": "/signage.html"
+      "source": "/window-tint/storefront",
+      "destination": "/window-tint/storefront.html"
     },
     {
-      "source": "/wayfinding",
-      "destination": "/wayfinding.html"
+      "source": "/window-tint/security-film",
+      "destination": "/window-tint/security-film.html"
     },
     {
-      "source": "/marketing",
-      "destination": "/marketing.html"
+      "source": "/window-tint/decorative-privacy",
+      "destination": "/window-tint/decorative-privacy.html"
     },
     {
-      "source": "/paint-protection-film",
-      "destination": "/paint-protection-film.html"
+      "source": "/service-areas/wheat-ridge",
+      "destination": "/service-areas/wheat-ridge.html"
     },
     {
-      "source": "/window-tint",
-      "destination": "/window-tint.html"
+      "source": "/service-areas/arvada",
+      "destination": "/service-areas/arvada.html"
     },
     {
-      "source": "/ceramic-coating",
-      "destination": "/ceramic-coating.html"
+      "source": "/service-areas/lakewood",
+      "destination": "/service-areas/lakewood.html"
     },
     {
-      "source": "/services/paint-protection-film",
-      "destination": "/paint-protection-film.html"
-    },
-    {
-      "source": "/services/window-tint",
-      "destination": "/window-tint.html"
-    },
-    {
-      "source": "/services/ceramic-coating",
-      "destination": "/ceramic-coating.html"
-    },
-    {
-      "source": "/commercial-wraps",
-      "destination": "/commercial-wraps.html"
+      "source": "/service-areas/golden",
+      "destination": "/service-areas/golden.html"
     },
     {
       "source": "/post/:slug",

@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom';
 import { Send, Facebook, Instagram } from 'lucide-react';
 
 export default function Footer() {
@@ -14,7 +15,7 @@ export default function Footer() {
               className="mb-4"
             />
             <p className="text-offwhite-dark text-sm">
-              The Digital Agency That Works While You Sleep.
+              Architectural window film, tint &amp; graphics — designed, printed, and installed in-house in Wheat Ridge, CO.
             </p>
           </div>
 
@@ -30,12 +31,12 @@ export default function Footer() {
                 { label: 'Blogs', href: '/blogs' },
               ].map(({ label, href }) => (
                 <li key={label}>
-                  <a
-                    href={href}
+                  <Link
+                    to={href}
                     className="text-offwhite-dark text-sm hover:text-mint transition-colors"
                   >
                     {label}
-                  </a>
+                  </Link>
                 </li>
               ))}
             </ul>
@@ -46,19 +47,19 @@ export default function Footer() {
             <h4 className="text-offwhite font-medium mb-4">Services</h4>
             <ul className="space-y-2">
               {[
-                { label: 'Web Design & Funnels', href: '/services/web-design' },
-                { label: 'CRM & Automations', href: '/services/crm-automation' },
-                { label: 'Reputation Management', href: '/services/reputation' },
-                { label: 'Speed to Lead Systems', href: '/services/speed-to-lead' },
-                { label: 'Marketing Systems', href: '/services/marketing' },
+                { label: 'Architectural Window Film', href: '/window-tint' },
+                { label: 'Residential Window Tint', href: '/window-tint/home' },
+                { label: 'Commercial Window Tint', href: '/window-tint/office' },
+                { label: 'Storefront & Window Graphics', href: '/storefront-graphics' },
+                { label: 'Signage & Visual Graphics', href: '/signage' },
               ].map(({ label, href }) => (
                 <li key={label}>
-                  <a
-                    href={href}
+                  <Link
+                    to={href}
                     className="text-offwhite-dark text-sm hover:text-mint transition-colors"
                   >
                     {label}
-                  </a>
+                  </Link>
                 </li>
               ))}
             </ul>
@@ -66,9 +67,9 @@ export default function Footer() {
 
           {/* Newsletter */}
           <div>
-            <h4 className="text-offwhite font-medium mb-4">Free GHL Setup Checklist</h4>
+            <h4 className="text-offwhite font-medium mb-4">Free On-Site Consultation</h4>
             <p className="text-offwhite-dark text-sm mb-4">
-              Get our free GHL setup checklist — join 500+ Colorado businesses automating their lead flow.
+              Tell us your building and what you want the glass to do — we check the windows and send one written quote. Serving the Denver metro.
             </p>
             <div className="flex gap-2">
               <input

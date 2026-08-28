@@ -28,37 +28,37 @@ const testimonials = [
   {
     name: 'Sarah Mitchell',
     title: 'Owner, Peak Fitness Denver',
-    quote: 'Ikonic built our entire lead system from scratch. New member inquiries now get an immediate text response, and our front desk spends less time on follow-ups.',
+    quote: 'The west wall of our studio was unusable by 3pm. ikonic put heat-rejection film on it and the afternoon classes stopped feeling like a sauna. Clean install, no bubbles.',
     rating: 5
   },
   {
     name: 'Marcus Chen',
     title: 'Practice Manager, Chen Dental',
-    quote: 'Our review collection went from sporadic to consistent. We went from 12 Google reviews to over 80 in six months, and new patients mention finding us online.',
+    quote: 'They frosted our operatory glass for privacy and did new lobby window graphics that match our sign. It finally looks like one practice instead of three different eras.',
     rating: 5
   },
   {
     name: 'Jake Rodriguez',
-    title: 'Owner, Rodriguez HVAC',
-    quote: 'Before Ikonic, leads would sit in my inbox for hours. Now customers get an instant response even when I am on a job site. The system pays for itself.',
+    title: 'Facilities, Rodriguez Property Group',
+    quote: 'Four tenant suites, all tinted after hours over one weekend. Nobody lost a workday and the cooling complaints on the south side basically stopped.',
     rating: 5
   },
   {
     name: 'Amanda Foster',
     title: 'Director, Foster Law Group',
-    quote: 'They migrated our outdated website to GHL and set up automated intake workflows. Our consultation bookings have increased, and the process is smoother for clients.',
+    quote: 'ikonic handled the permit drawings and the install for our new dimensional lettering. They told us the realistic timeline up front and hit it.',
     rating: 5
   },
   {
     name: 'David Park',
     title: 'Owner, Park Auto Repair',
-    quote: 'I was skeptical about another marketing service, but Ikonic actually delivers. They handle the technical stuff so I can focus on running my shop.',
+    quote: 'Perforated film on the front glass — you can still see out, but from the street it reads as a finished storefront now. Fair quote, no add-ons at the end.',
     rating: 5
   },
   {
     name: 'Lisa Thompson',
     title: 'Manager, Thompson Realty',
-    quote: 'The CRM setup and automation sequences have changed how we handle buyer leads. Our agents know exactly when to follow up, and nothing falls through the cracks.',
+    quote: 'Security film on the ground-floor glass plus new hours and branding vinyl. One shop, one look, done when they said it would be.',
     rating: 5
   }
 ];
@@ -88,6 +88,9 @@ export default function TestimonialsSection() {
     const section = sectionRef.current;
     if (!section) return;
 
+    // Respect reduced-motion: skip the reveal entirely so content is just there.
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
     const ctx = gsap.context(() => {
       // Header animation
       gsap.fromTo(headerRef.current,
@@ -99,8 +102,8 @@ export default function TestimonialsSection() {
           ease: 'power2.out',
           scrollTrigger: {
             trigger: headerRef.current,
-            start: 'top 80%',
-            toggleActions: 'play none none reverse'
+            start: 'top 88%',
+            once: true
           }
         }
       );
@@ -118,8 +121,8 @@ export default function TestimonialsSection() {
             ease: 'power2.out',
             scrollTrigger: {
               trigger: cardsRef.current,
-              start: 'top 75%',
-              toggleActions: 'play none none reverse'
+              start: 'top 88%',
+              once: true
             }
           }
         );
@@ -142,9 +145,8 @@ export default function TestimonialsSection() {
             See It From Our <span className="text-mint">Customers</span>
           </h2>
           <p className="text-lg text-offwhite-dark max-w-2xl mx-auto">
-            We don't just provide systems — we provide outcomes. From quicker responses to 
-            polished design and live human guidance, companies in every field rely on Ikonic 
-            to fuel their growth.
+            Homes, offices, clinics, and storefronts across the Denver metro rely on ikonic for
+            window film, graphics, and signage that's installed clean and holds up.
           </p>
         </div>
 
@@ -244,19 +246,19 @@ export default function TestimonialsSection() {
             <div>
               <p className="text-micro text-mint mb-2">CASE STUDY</p>
               <h3 className="font-display text-2xl lg:text-3xl font-bold text-offwhite mb-4">
-                Peak Fitness: From Scattered Tools to One System
+                Belmar Retail: One West Wall, Three Fixes
               </h3>
               <p className="text-offwhite-dark mb-6">
-                A Denver fitness studio was juggling Mailchimp, Calendly, and spreadsheets to manage 
-                leads. Ikonic consolidated everything into a single GHL system with automated follow-up 
-                and a new booking funnel.
+                A Lakewood storefront had an unusable west-facing sales floor, mismatched window
+                signage, and no privacy on the office glass. ikonic scoped all three together so
+                the film, graphics, and lettering matched.
               </p>
               <ul className="space-y-2 mb-6">
                 {[
-                  'Migrated website and booking system to GHL',
-                  'Built automated SMS/email follow-up sequences',
-                  'Set up Google Business Profile optimization',
-                  'Created lead tracking dashboard for owners'
+                  'Checked the glass against the film compatibility chart before quoting',
+                  'Spectrally-selective heat film on the west elevation',
+                  'New full-color window graphics and hours vinyl',
+                  'Frosted privacy film on the back-office glass'
                 ].map((item, i) => (
                   <li key={i} className="flex items-center gap-2 text-offwhite-dark text-sm">
                     <div className="w-1.5 h-1.5 bg-mint rounded-full" />
@@ -267,9 +269,9 @@ export default function TestimonialsSection() {
             </div>
             <div className="text-center lg:text-right">
               <div className="inline-block bg-charcoal rounded-xl p-8">
-                <p className="text-5xl font-bold text-mint mb-2">3x</p>
-                <p className="text-offwhite">Faster Lead Response Time</p>
-                <p className="text-offwhite-dark text-sm mt-2">From hours to under 2 minutes</p>
+                <p className="text-5xl font-bold text-mint mb-2">78%</p>
+                <p className="text-offwhite">Solar Heat Rejected</p>
+                <p className="text-offwhite-dark text-sm mt-2">West sales floor usable all afternoon</p>
               </div>
             </div>
           </div>
