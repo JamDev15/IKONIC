@@ -13,22 +13,23 @@ import { randomUUID } from 'node:crypto';
 // topics for runway, grouped by category, with the day-to-day category picked in
 // rotation (see CATEGORY_ORDER) so consecutive posts don't cluster on one area.
 const TOPICS_BY_CATEGORY: Record<string, string[]> = {
-  'Digital Marketing': [
-    'How Denver Businesses Can Use Digital Marketing to Get More Leads This Month',
-    'The ROI of Digital Marketing for Local Service Companies in Colorado',
-    'Email Automation vs. Social Media: Which Drives More Leads for Denver Businesses?',
-    'How to Build a 24/7 Lead Generation System with Digital Marketing',
-    'Google Ads vs. Meta Ads: Which Is Better for Denver Local Businesses?',
-    'Why Every Denver Service Business Needs a CRM and Marketing Automation System',
-    '5 Signs Your Denver Business Needs a Marketing Automation Overhaul',
-    'How to Turn Google Reviews Into a Steady Stream of New Customers in Denver',
-    'SMS Marketing for Local Businesses: What Denver Owners Need to Know',
-    'The Real Cost of a Slow Lead Response Time for Colorado Service Businesses',
-    'How to Build a Website That Actually Converts Denver Visitors Into Customers',
-    'Local SEO Checklist: Getting Your Denver Business Found on Google Maps',
-    'Marketing Funnels 101: A Simple Guide for Denver Service Business Owners',
-    'How Chatbots and AI Voice Agents Are Changing Customer Service for Local Businesses',
-    'Retargeting Ads Explained: Bringing Denver Website Visitors Back to Buy',
+  // 'Digital Marketing' retired 2026-08-29 — the site refocused on architectural
+  // window film & graphics only. Existing marketing posts are unpublished and this
+  // category is filtered out of the sitemap/prerender (see VEHICLE_CATEGORIES in
+  // scripts/prerender-routes.mjs). Do not re-add marketing/SEO/ads/CRM topics.
+  'Architectural Window Film': [
+    'How to Tell If Your Windows Are Safe for Window Film Before You Buy',
+    'Dual-Pane vs. Single-Pane Glass: What It Means for Your Window Film Options',
+    'Low-E Glass and Window Film: Why the Combination Has to Be Checked First',
+    'Can Window Film Crack a Window? Understanding Thermal Stress',
+    'Does Window Film Void a Window Warranty? What Denver Homeowners Should Ask',
+    'Spectrally-Selective Film: Rejecting Heat Without Making a Room Dark',
+    'How Much Heat Can Architectural Window Film Actually Block?',
+    'Interior vs. Exterior Window Film: When Each One Makes Sense',
+    'How Long Does Architectural Window Film Last in Colorado?',
+    'Ceramic vs. Dyed vs. Metalized Window Film: A Plain-English Comparison',
+    'Anti-Graffiti Film for Denver Storefronts: How the Sacrificial Layer Works',
+    'How UV Window Film Protects Floors, Furniture, and Artwork from Fading',
   ],
   'Signage': [
     'How Business Signage Drives Walk-In Traffic and Brand Recognition in Denver',
@@ -93,7 +94,7 @@ const TOPICS_BY_CATEGORY: Record<string, string[]> = {
   ],
 };
 
-const CATEGORY_ORDER = ['Digital Marketing', 'Signage', 'Wayfinding Signage', 'Window Tint', 'Storefront Graphics'];
+const CATEGORY_ORDER = ['Architectural Window Film', 'Signage', 'Wayfinding Signage', 'Window Tint', 'Storefront Graphics'];
 
 async function upstash(command: unknown[]) {
   const res = await fetch(process.env.UPSTASH_REDIS_REST_URL!, {
@@ -170,8 +171,9 @@ export async function handler(req: VercelRequest, res: VercelResponse) {
   }
 
   // CATEGORY ROTATION — today's category is fixed by the UTC date so consecutive
-  // posts alternate (Digital Marketing -> Signage -> Commercial Wraps ->
-  // Wayfinding Signage -> repeat) instead of landing wherever chance puts them.
+  // posts alternate through CATEGORY_ORDER (Architectural Window Film -> Signage ->
+  // Wayfinding Signage -> Window Tint -> Storefront Graphics -> repeat) instead of
+  // landing wherever chance puts them.
   // If today's category has no unused topics left, move to the next category in
   // the rotation that still has one; only give up once every category is dry.
   const daysSinceEpoch = Math.floor(Date.now() / 86_400_000);
@@ -194,7 +196,7 @@ export async function handler(req: VercelRequest, res: VercelResponse) {
     try {
       await new Resend(resendKey).emails.send({
         from: 'ikonic303 Blog <blog@ikonicmarketing303.com>',
-        to: 'info@ikonicmarketing303.com',
+        to: 'info@ikonic303.com',
         subject: 'Blog generator paused — the topic list is used up',
         html: `<p>The daily blog generator ran but every topic in its list has already been
                published, so it did not write anything rather than duplicate an existing post.</p>
@@ -209,7 +211,7 @@ export async function handler(req: VercelRequest, res: VercelResponse) {
   }
 
   const ai = new GoogleGenAI({ apiKey: geminiKey });
-  const prompt = `You are a professional content writer for ikonic303, a Denver-based company specializing in digital marketing, business signage, wayfinding signage, storefront window graphics and wall murals, and flat-glass window film for homes and businesses. ikonic does NOT offer vehicle services of any kind (no vehicle wraps, no automotive window tint, no paint protection film, no ceramic coating) — never write about vehicles, cars, trucks, fleets, or automotive tint law (VLT).
+  const prompt = `You are a professional content writer for ikonic303, a Denver-based shop specializing in architectural (flat-glass) window film and window tint for homes and businesses, storefront and window graphics and wall murals, business signage, and wayfinding/ADA signage. ikonic does NOT offer vehicle services of any kind (no vehicle wraps, no automotive window tint, no paint protection film, no ceramic coating) — never write about vehicles, cars, trucks, fleets, or automotive tint law (VLT). ikonic also does NOT offer digital marketing, SEO, paid ads, CRM, websites, or lead-generation services — never write about those; keep every post about window film, window graphics, or signage.
 
 Write a high-quality, SEO-optimized blog post on this topic: "${topic}"
 This post belongs to the "${category}" category.
@@ -318,7 +320,7 @@ Make it genuinely helpful and relevant to Denver business owners. Include real a
   try {
     await resend.emails.send({
       from: 'ikonic303 Blog <blog@ikonicmarketing303.com>',
-      to: 'info@ikonicmarketing303.com',
+      to: 'info@ikonic303.com',
       subject: `✅ New Blog Post Live: "${draft.title}"`,
       html: emailHtml,
     });

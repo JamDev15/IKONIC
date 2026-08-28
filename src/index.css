@@ -135,6 +135,31 @@ body {
   background-color: #0B0D10;
 }
 
+/* ── Responsive safety (all widths) ──────────────────────────────────────── */
+/* Replaced media / images can't push the page wider than its container.
+   In @layer base so explicit Tailwind width utilities still win. */
+@layer base {
+  img,
+  video,
+  iframe,
+  canvas,
+  svg {
+    max-width: 100%;
+  }
+}
+
+/* The hero pins/scrubs only at lg+ (see HeroSection isSmallScreen). Below that,
+   let its height be driven by content so tall copy is never clipped. */
+@media (max-width: 1023px) {
+  .section-pinned {
+    height: auto !important;
+    min-height: 100svh;
+    overflow: visible !important;
+    position: relative !important;
+    width: 100% !important;
+  }
+}
+
 /* ── Mobile overrides ────────────────────────────────────────────────────── */
 @media (max-width: 768px) {
   /* Section pinned: let height be driven by content, not forced 100vh */

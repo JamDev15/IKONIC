@@ -64,6 +64,101 @@
       "source": "/wrap-calculator",
       "destination": "/",
       "permanent": true
+    },
+    {
+      "source": "/services/web-design",
+      "destination": "/services",
+      "permanent": true
+    },
+    {
+      "source": "/services/crm-automation",
+      "destination": "/services",
+      "permanent": true
+    },
+    {
+      "source": "/services/reputation",
+      "destination": "/services",
+      "permanent": true
+    },
+    {
+      "source": "/services/speed-to-lead",
+      "destination": "/services",
+      "permanent": true
+    },
+    {
+      "source": "/services/marketing",
+      "destination": "/services",
+      "permanent": true
+    },
+    {
+      "source": "/marketing",
+      "destination": "/services",
+      "permanent": true
+    },
+    {
+      "source": "/marketing.html",
+      "destination": "/services",
+      "permanent": true
+    },
+    {
+      "source": "/print-ship",
+      "destination": "/services",
+      "permanent": true
+    },
+    {
+      "source": "/lost-call-calculator",
+      "destination": "/services",
+      "permanent": true
+    },
+    {
+      "source": "/sticker-builder",
+      "destination": "/services",
+      "permanent": true
+    },
+    {
+      "source": "/ai-website-generator",
+      "destination": "/services",
+      "permanent": true
+    },
+    {
+      "source": "/branded-to-win",
+      "destination": "/",
+      "permanent": true
+    },
+    {
+      "source": "/services/window-tint",
+      "destination": "/window-tint",
+      "permanent": true
+    },
+    {
+      "source": "/window-tint.html",
+      "destination": "/window-tint",
+      "permanent": true
+    },
+    {
+      "source": "/signage.html",
+      "destination": "/signage",
+      "permanent": true
+    },
+    {
+      "source": "/storefront-graphics.html",
+      "destination": "/storefront-graphics",
+      "permanent": true
+    },
+    {
+      "source": "/wayfinding.html",
+      "destination": "/wayfinding",
+      "permanent": true
+    },
+    {
+      "source": "/window-tint/home.html",
+      "destination": "/window-tint/home",
+      "permanent": true
+    },
+    {
+      "source": "/window-tint/office.html",
+      "destination": "/window-tint/office",
+      "permanent": true
     }
   ],
   "rewrites": [
@@ -82,38 +177,6 @@
     {
       "source": "/api/auto-blog-generate",
       "destination": "/api/blog?action=auto-generate"
-    },
-    {
-      "source": "/signage",
-      "destination": "/signage.html"
-    },
-    {
-      "source": "/wayfinding",
-      "destination": "/wayfinding.html"
-    },
-    {
-      "source": "/marketing",
-      "destination": "/marketing.html"
-    },
-    {
-      "source": "/window-tint",
-      "destination": "/window-tint.html"
-    },
-    {
-      "source": "/services/window-tint",
-      "destination": "/window-tint.html"
-    },
-    {
-      "source": "/storefront-graphics",
-      "destination": "/storefront-graphics.html"
-    },
-    {
-      "source": "/window-tint/home",
-      "destination": "/window-tint/home.html"
-    },
-    {
-      "source": "/window-tint/office",
-      "destination": "/window-tint/office.html"
     },
     {
       "source": "/window-tint/storefront",

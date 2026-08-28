@@ -77,8 +77,8 @@ export default function Blogs() {
   return (
     <div className="relative bg-charcoal min-h-screen">
       <PageSEO
-        title="Digital Marketing Blog | Tips for Denver Businesses | ikonic303"
-        description="Marketing tips, GoHighLevel guides, and growth strategies for Denver-area businesses. Learn how to automate leads, improve your reputation, and scale your business."
+        title="Window Film & Graphics Blog | Guides for Denver Businesses | ikonic303"
+        description="Guides on architectural window film, residential and commercial window tint, storefront and window graphics, signage, and wayfinding for Denver-area homes and businesses."
         canonical="/blogs"
       />
       <MatrixBackground />
@@ -87,13 +87,13 @@ export default function Blogs() {
       {/* Hero Section */}
       <section className="pt-32 pb-20 px-[6vw] relative z-10">
         <div ref={heroRef} className="max-w-4xl mx-auto text-center">
-          <p className="text-micro text-mint mb-4">INSIGHTS AND UPDATES</p>
+          <p className="text-micro text-mint mb-4">GUIDES AND UPDATES</p>
           <h1 className="font-display text-4xl md:text-5xl lg:text-6xl font-bold text-offwhite mb-6">
             Our <span className="text-mint">Blog</span>
           </h1>
           <p className="text-lg text-offwhite-dark max-w-2xl mx-auto mb-10">
-            Get business growth tips, marketing strategies, and automation insights
-            straight from the Ikonic team.
+            Practical guides on window film, storefront and window graphics, signage, and
+            wayfinding — written for Denver-area homeowners and business owners.
           </p>
           <div className="flex flex-wrap justify-center gap-4">
             <a href="/contact" className="btn-primary inline-flex items-center gap-2">
@@ -121,7 +121,7 @@ export default function Blogs() {
           {error && !loading && (
             <div className="text-center py-20 text-offwhite-dark">
               <p className="text-lg mb-2">Could not load blog posts.</p>
-              <p className="text-sm">Check that the GHL RSS feed is configured correctly.</p>
+              <p className="text-sm">Please try again in a little while.</p>
             </div>
           )}
 
@@ -192,8 +192,7 @@ export default function Blogs() {
             Stay Connected
           </h2>
           <p className="text-offwhite-dark mb-8">
-            Subscribe to our newsletter and get business growth tips and strategies
-            straight to your inbox.
+            Subscribe for new guides on window film, graphics, and signage — a few emails a month, no spam.
           </p>
           <div className="flex flex-col sm:flex-row gap-3 max-w-md mx-auto">
             <input

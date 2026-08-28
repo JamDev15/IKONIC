@@ -13,31 +13,31 @@ gsap.registerPlugin(ScrollTrigger);
 const howItWorks = [
   {
     step: '1',
-    title: 'Free Consultation',
-    description: 'We discuss your business goals, current challenges, and what success looks like for you.'
+    title: 'On-Site Check',
+    description: 'We look at the actual glass or walk the site — glass type, orientation, condition, and what you want it to do.'
   },
   {
     step: '2',
-    title: 'Custom Strategy',
-    description: 'We design a tailored system that fits your business needs and budget.'
+    title: 'Written Quote',
+    description: 'One number, with the specific film or material spec’d to your surface. No surprise add-ons later.'
   },
   {
     step: '3',
-    title: 'Build & Launch',
-    description: 'Our team builds your complete system and trains you on how to use it.'
+    title: 'Install',
+    description: 'Dust-controlled prep, clean application, finished edges — scheduled after hours for businesses that need it.'
   },
   {
     step: '4',
-    title: 'Ongoing Support',
-    description: 'We monitor, optimize, and support your system as your business grows.'
+    title: 'Warranty',
+    description: 'Manufacturer film warranty plus our workmanship guarantee. We come back if anything isn’t right.'
   }
 ];
 
 const benefits = [
-  { icon: Clock, title: 'Save Time', desc: 'Automate repetitive tasks and free up 10+ hours per week.' },
-  { icon: TrendingUp, title: 'Increase Revenue', desc: 'Convert more leads with faster response times and better follow-up.' },
-  { icon: Target, title: 'Better Leads', desc: 'Attract higher-quality prospects who are ready to buy.' },
-  { icon: Shield, title: 'Peace of Mind', desc: 'Your system runs 24/7, even when you are not working.' }
+  { icon: Clock, title: 'Lower Cooling Bills', desc: 'Heat-rejection film cuts the load on west- and south-facing glass all summer.' },
+  { icon: TrendingUp, title: 'Protect Interiors', desc: '99% UV blocking slows fading on floors, furniture, and merchandise.' },
+  { icon: Target, title: 'Privacy & Security', desc: 'Frosted, reflective, and safety films — comfort and protection without losing daylight.' },
+  { icon: Shield, title: 'One Consistent Look', desc: 'Film, window graphics, and signage from one shop, so every surface matches.' }
 ];
 
 export default function LearnMore() {
@@ -56,8 +56,8 @@ export default function LearnMore() {
   return (
     <div className="relative bg-charcoal min-h-screen">
       <PageSEO
-        title="How It Works | Marketing Automation for Denver Businesses | ikonic303"
-        description="Learn how ikonic303 builds automated lead generation systems for Denver businesses. Our proven 4-step process captures leads 24/7 while you focus on your business."
+        title="How It Works | Window Film & Graphics Process | ikonic303"
+        description="How ikonic scopes and installs architectural window film and graphics in the Denver metro: on-site glass check, one written quote, clean install, and a manufacturer-backed warranty."
         canonical="/learn-more"
       />
       <MatrixBackground />
@@ -68,18 +68,18 @@ export default function LearnMore() {
         <div ref={heroRef} className="max-w-4xl mx-auto text-center">
           <p className="text-micro text-mint mb-4">ABOUT OUR APPROACH</p>
           <h1 className="font-display text-4xl md:text-5xl lg:text-6xl font-bold text-offwhite mb-6 leading-tight">
-            Marketing That<br />
-            <span className="text-mint">Works While You Sleep</span>
+            Checked First,<br />
+            <span className="text-mint">Installed Clean</span>
           </h1>
           <p className="text-lg text-offwhite-dark max-w-2xl mx-auto mb-8">
-            Imagine a business where leads are captured automatically, follow-ups happen 
-            instantly, and your pipeline stays full—without you lifting a finger. That's 
-            what we build at Ikonic.
+            The wrong film on the wrong glass can crack a pane or void its warranty. So every
+            ikonic job starts with a look at the actual windows — then one written quote, a
+            clean install, and a warranty behind it.
           </p>
           <div className="flex flex-wrap justify-center gap-4">
             <a href="/contact" className="btn-primary inline-flex items-center gap-2">
               <Phone className="w-5 h-5" />
-              Get Free Consultation
+              Get a Free On-Site Quote
             </a>
             <Link to="/services" className="btn-outline">
               View All Services
@@ -92,15 +92,15 @@ export default function LearnMore() {
       <section className="py-20 px-[6vw] bg-charcoal-light/80 backdrop-blur-sm relative z-10">
         <div className="max-w-4xl mx-auto">
           <h2 className="font-display text-3xl font-bold text-offwhite mb-6 text-center">
-            The Problem With <span className="text-mint">Traditional Marketing</span>
+            The Problem With <span className="text-mint">Quoting Blind</span>
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {[
-              'Leads slip through the cracks due to slow follow-up',
-              'Juggling multiple tools that do not talk to each other',
-              'Spending hours on repetitive manual tasks',
-              'No clear picture of what marketing is actually working',
-              'Paying agencies that deliver reports but not results'
+              'Film applied to incompatible glass can crack the pane or fail the seal',
+              'A phone quote misses orientation, glass type, and access',
+              'Cheap film hazes, purples, or peels within a couple of Colorado summers',
+              'Three vendors for tint, graphics, and signage means three different looks',
+              'Surprise add-ons after the crew is already on site'
             ].map((item, index) => (
               <div key={index} className="flex items-start gap-3 p-4 bg-charcoal rounded-lg">
                 <div className="w-6 h-6 bg-red-500/20 rounded flex items-center justify-center flex-shrink-0">
@@ -117,15 +117,15 @@ export default function LearnMore() {
       <section className="py-20 px-[6vw] relative z-10">
         <div className="max-w-4xl mx-auto">
           <h2 className="font-display text-3xl font-bold text-offwhite mb-6 text-center">
-            The <span className="text-mint">Ikonic</span> Solution
+            The <span className="text-mint">Ikonic</span> Way
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {[
-              'Instant automated follow-up that never misses a lead',
-              'One integrated platform that handles everything',
-              'Systems that run on autopilot 24/7',
-              'Real-time analytics showing exactly what works',
-              'Done-for-you service with measurable ROI'
+              'Every window checked against the film manufacturer’s compatibility chart',
+              'Professional-grade film with a real manufacturer warranty',
+              'One written quote — the number you see is the number you pay',
+              'Dust-controlled prep and finished edges on every pane',
+              'Film, graphics, and signage from one shop so it all matches'
             ].map((item, index) => (
               <div key={index} className="flex items-start gap-3 p-4 bg-charcoal-light rounded-lg border border-mint/30">
                 <div className="w-6 h-6 bg-mint/20 rounded flex items-center justify-center flex-shrink-0">
@@ -145,7 +145,7 @@ export default function LearnMore() {
             How It <span className="text-mint">Works</span>
           </h2>
           <p className="text-offwhite-dark text-center mb-12 max-w-2xl mx-auto">
-            Getting started is simple. We handle everything from strategy to execution.
+            Four steps from first call to warranty.
           </p>
           
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -169,7 +169,7 @@ export default function LearnMore() {
             Benefits of Working With <span className="text-mint">Us</span>
           </h2>
           <p className="text-offwhite-dark text-center mb-12 max-w-2xl mx-auto">
-            Here's what you can expect when you partner with Ikonic.
+            What the right film and graphics actually do for a building.
           </p>
           
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -193,19 +193,19 @@ export default function LearnMore() {
             Who We <span className="text-mint">Help</span>
           </h2>
           <p className="text-offwhite-dark text-center mb-12 max-w-2xl mx-auto">
-            We specialize in helping local service businesses across Colorado.
+            Homes and businesses across the Denver metro.
           </p>
-          
+
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             {[
-              'Fitness Studios',
-              'Dental Practices',
-              'Contractors',
-              'Law Firms',
-              'Real Estate Agents',
-              'Auto Shops',
-              'Cleaning Companies',
-              'Restaurants'
+              'Homeowners',
+              'Offices & Coworking',
+              'Medical & Dental',
+              'Retail & Storefronts',
+              'Restaurants & Cafés',
+              'Property Managers',
+              'Fitness & Studios',
+              'Schools & Churches'
             ].map((business, index) => (
               <div key={index} className="bg-charcoal border border-white/10 rounded-lg p-4 text-center">
                 <span className="text-offwhite">{business}</span>
@@ -219,10 +219,10 @@ export default function LearnMore() {
       <section className="py-20 px-[6vw] relative z-10">
         <div className="max-w-4xl mx-auto text-center">
           <h2 className="font-display text-3xl font-bold text-offwhite mb-6">
-            Ready to Transform Your Business?
+            Ready for a Free On-Site Quote?
           </h2>
           <p className="text-offwhite-dark mb-8">
-            Book your free 15-minute consultation. No commitment, just a clear plan to scale your business.
+            No commitment — we check the glass or walk the site and send one honest number.
           </p>
           <a href="/contact" className="btn-primary inline-flex items-center gap-2 text-lg px-8 py-4">
             <Phone className="w-5 h-5" />

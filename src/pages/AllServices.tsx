@@ -1,7 +1,7 @@
 import { useRef, useLayoutEffect } from 'react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import { Globe, Settings, Star, Zap, TrendingUp, ArrowRight, Phone, Check, Sun } from 'lucide-react';
+import { Sun, Building2, LayoutGrid, Signpost, Shield, Home, ArrowRight, Phone, Check } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import Navigation from '../components/Navigation';
 import MatrixBackground from '../components/MatrixBackground';
@@ -10,49 +10,50 @@ import PageSEO from '../components/PageSEO';
 
 gsap.registerPlugin(ScrollTrigger);
 
+// Service pages are React Router routes (src/pages/services) — internal <Link>s.
+
 const services = [
   {
-    icon: Globe,
-    title: 'Web Design & Funnels',
-    description: 'Custom websites and high-converting sales funnels built in GoHighLevel.',
-    features: ['Landing pages', 'Sales funnels', 'GHL integration', 'Mobile responsive'],
-    link: '/services/web-design'
-  },
-  {
-    icon: Settings,
-    title: 'CRM & Automations',
-    description: 'Complete GoHighLevel setup with automated workflows that nurture leads.',
-    features: ['CRM setup', 'Workflow automation', 'Lead tracking', 'AI integrations'],
-    link: '/services/crm-automation'
-  },
-  {
-    icon: Star,
-    title: 'Reputation Management',
-    description: 'Build your 5-star reputation with Google Business optimization.',
-    features: ['Google Business Profile', 'Review automation', 'Local SEO', 'Reputation monitoring'],
-    link: '/services/reputation'
-  },
-  {
-    icon: Zap,
-    title: 'Speed to Lead',
-    description: 'Respond to leads in under 60 seconds with automated follow-up.',
-    features: ['Instant SMS', 'Email sequences', 'Missed call text-back', 'Smart routing'],
-    link: '/services/speed-to-lead'
-  },
-  {
-    icon: TrendingUp,
-    title: 'Marketing Systems',
-    description: 'Full-service digital marketing that keeps your pipeline full 24/7.',
-    features: ['Campaign management', 'Social media', 'Paid ads', 'Analytics dashboard'],
-    link: '/services/marketing'
-  },
-  {
     icon: Sun,
-    title: 'Window Tint',
-    description: 'Ceramic and carbon tint that blocks UV, rejects heat, and cuts glare.',
-    features: ['99% UV blocking', 'Heat rejection', 'Colorado-legal', 'Lifetime warranty'],
-    link: '/services/window-tint',
-    external: true
+    title: 'Architectural Window Film',
+    description: 'Flat-glass film for homes and buildings — heat, glare, UV, privacy, and security.',
+    features: ['Heat & glare rejection', '99% UV blocking', 'Privacy & security films', 'Glass compatibility checked'],
+    link: '/window-tint'
+  },
+  {
+    icon: Home,
+    title: 'Residential Window Tint',
+    description: 'Fix hot rooms, faded floors, and harsh afternoon light without changing your home’s look.',
+    features: ['West-facing room relief', 'Fade protection', 'Low-profile finish', 'Lifetime film warranty'],
+    link: '/window-tint/home'
+  },
+  {
+    icon: Building2,
+    title: 'Commercial Window Tint',
+    description: 'Cut cooling costs and screen glare across offices, clinics, and multi-tenant buildings.',
+    features: ['Lower cooling load', 'Screen-glare control', 'Tenant-consistent look', 'After-hours install'],
+    link: '/window-tint/office'
+  },
+  {
+    icon: LayoutGrid,
+    title: 'Storefront & Window Graphics',
+    description: 'Window graphics, frosted privacy vinyl, perforated film, wall murals, and interior branding.',
+    features: ['Cut vinyl & full-color prints', 'Frosted & etched looks', 'See-through perforated film', 'Wall & feature-wall murals'],
+    link: '/storefront-graphics'
+  },
+  {
+    icon: Signpost,
+    title: 'Signage & Visual Graphics',
+    description: 'Storefront and building signage designed, fabricated, and installed on-site.',
+    features: ['Dimensional & lit letters', 'Monument & blade signs', 'Banners & event graphics', 'Permit drawings handled'],
+    link: '/signage'
+  },
+  {
+    icon: Shield,
+    title: 'Wayfinding & ADA Signage',
+    description: 'Directional, room ID, and ADA-compliant signage systems for offices and campuses.',
+    features: ['ADA-compliant room ID', 'Directional systems', 'Parking & exterior wayfinding', 'Brand-matched design'],
+    link: '/wayfinding'
   }
 ];
 
@@ -72,8 +73,8 @@ export default function AllServices() {
   return (
     <div className="relative bg-charcoal min-h-screen">
       <PageSEO
-        title="Digital Marketing Services Denver CO | ikonic303"
-        description="Full-service digital marketing for Denver businesses — web design, GoHighLevel CRM automation, reputation management, speed-to-lead, and marketing systems. All under one roof."
+        title="Window Film & Graphics Services Denver CO | ikonic303"
+        description="Architectural window film, residential and commercial window tint, storefront and window graphics, signage, and wayfinding for the Denver metro. Designed, printed, and installed in-house."
         canonical="/services"
       />
       <MatrixBackground />
@@ -84,17 +85,17 @@ export default function AllServices() {
         <div ref={heroRef} className="max-w-4xl mx-auto text-center">
           <p className="text-micro text-mint mb-4">OUR SERVICES</p>
           <h1 className="font-display text-4xl md:text-5xl lg:text-6xl font-bold text-offwhite mb-6 leading-tight">
-            Everything You Need to<br />
-            <span className="text-mint">Grow Your Business</span>
+            The Visible Skin of<br />
+            <span className="text-mint">Your Building</span>
           </h1>
           <p className="text-lg text-offwhite-dark max-w-2xl mx-auto mb-8">
-            From websites and CRM to automation and marketing, we provide complete 
-            digital solutions for Colorado businesses. All integrated, all optimized, 
-            all working together.
+            Architectural window film, storefront and window graphics, signage, and wayfinding
+            for the Denver metro — designed, printed, and installed by one Wheat Ridge shop so
+            every surface matches.
           </p>
           <a href="/contact" className="btn-primary inline-flex items-center gap-2">
             <Phone className="w-5 h-5" />
-            Get Free Consultation
+            Get a Free On-Site Quote
           </a>
         </div>
       </section>
@@ -129,23 +130,13 @@ export default function AllServices() {
                   ))}
                 </ul>
                 
-                {service.external ? (
-                  <a
-                    href={service.link}
-                    className="inline-flex items-center gap-2 text-mint text-sm font-medium hover:gap-3 transition-all"
-                  >
-                    Learn More
-                    <ArrowRight className="w-4 h-4" />
-                  </a>
-                ) : (
-                  <Link
-                    to={service.link}
-                    className="inline-flex items-center gap-2 text-mint text-sm font-medium hover:gap-3 transition-all"
-                  >
-                    Learn More
-                    <ArrowRight className="w-4 h-4" />
-                  </Link>
-                )}
+                <Link
+                  to={service.link}
+                  className="inline-flex items-center gap-2 text-mint text-sm font-medium hover:gap-3 transition-all"
+                >
+                  Learn More
+                  <ArrowRight className="w-4 h-4" />
+                </Link>
               </div>
             ))}
           </div>
@@ -159,14 +150,14 @@ export default function AllServices() {
             Why Choose <span className="text-mint">Ikonic</span>?
           </h2>
           <p className="text-offwhite-dark text-center mb-12 max-w-2xl mx-auto">
-            We're not just another agency. We're your growth partner.
+            Not a broker and not a franchise — the shop that does the work.
           </p>
-          
+
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {[
-              { title: 'All-in-One Platform', desc: 'Everything integrated in GoHighLevel—no juggling multiple tools.' },
-              { title: 'Done-for-You Service', desc: 'We build AND manage your systems so you can focus on your business.' },
-              { title: 'Proven Results', desc: 'Data-driven strategies with measurable ROI for every campaign.' }
+              { title: 'In-House, End to End', desc: 'Design, printing, and installation under one roof — no subcontractors.' },
+              { title: 'Glass Checked First', desc: 'We confirm your windows against the film compatibility chart before quoting.' },
+              { title: 'One Consistent Look', desc: 'Film, graphics, and signage from the same team so every surface matches.' }
             ].map((item, index) => (
               <div key={index} className="bg-charcoal-light border border-white/10 rounded-xl p-6 text-center">
                 <h3 className="font-display text-lg font-bold text-offwhite mb-3">{item.title}</h3>
@@ -184,7 +175,7 @@ export default function AllServices() {
             Ready to Get Started?
           </h2>
           <p className="text-offwhite-dark mb-8">
-            Book your free consultation and let's discuss which services are right for your business.
+            Book a free on-site consultation and we'll scope the film, graphics, or signage your building needs.
           </p>
           <a href="/contact" className="btn-primary inline-flex items-center gap-2 text-lg px-8 py-4">
             <Phone className="w-5 h-5" />

@@ -16,6 +16,9 @@ export default function ContactSection() {
     const section = sectionRef.current;
     if (!section) return;
 
+    // Respect reduced-motion: skip the reveal entirely so content is just there.
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
     const ctx = gsap.context(() => {
       // Header animation
       gsap.fromTo(headerRef.current,
@@ -27,8 +30,8 @@ export default function ContactSection() {
           ease: 'power2.out',
           scrollTrigger: {
             trigger: headerRef.current,
-            start: 'top 80%',
-            toggleActions: 'play none none reverse'
+            start: 'top 88%',
+            once: true
           }
         }
       );
@@ -43,8 +46,8 @@ export default function ContactSection() {
           ease: 'power2.out',
           scrollTrigger: {
             trigger: formRef.current,
-            start: 'top 75%',
-            toggleActions: 'play none none reverse'
+            start: 'top 88%',
+            once: true
           }
         }
       );
@@ -59,8 +62,8 @@ export default function ContactSection() {
           ease: 'power2.out',
           scrollTrigger: {
             trigger: infoRef.current,
-            start: 'top 75%',
-            toggleActions: 'play none none reverse'
+            start: 'top 88%',
+            once: true
           }
         }
       );
@@ -79,11 +82,11 @@ export default function ContactSection() {
         {/* Header */}
         <div ref={headerRef} className="text-center mb-16">
           <h2 className="font-display text-4xl md:text-5xl lg:text-6xl font-bold text-offwhite mb-6">
-            Let's <span className="text-mint">Build</span> Your<br />System
+            Get a <span className="text-mint">Quote</span><br />on Your Glass
           </h2>
           <p className="text-lg text-offwhite-dark max-w-2xl mx-auto">
-            Got a quick ask? Looking to collaborate or send us a referral? 
-            Share your message and we'll respond within one business day.
+            Tell us the building, the windows, and what you want the glass to do. We'll set up a
+            free on-site check and send one written quote — usually within one business day.
           </p>
         </div>
 
@@ -113,15 +116,15 @@ export default function ContactSection() {
                 Connect With Us
               </h3>
               <p className="text-offwhite-dark mb-8">
-                Have a question? Curious how our solutions perform? Whether you're ready 
-                to begin or simply weighing options, our team is here for you.
+                Questions about film for a specific type of glass, a storefront graphics idea, or
+                a sign permit? Call or email and we'll talk it through.
               </p>
             </div>
 
             {/* Contact Details */}
             <div className="space-y-4">
               <a 
-                href="mailto:info@ikonicmarketing303.com"
+                href="mailto:info@ikonic303.com"
                 className="flex items-center gap-4 p-4 bg-charcoal-light border border-white/10 rounded-xl hover:border-mint/30 transition-colors"
               >
                 <div className="w-12 h-12 bg-mint/10 rounded-lg flex items-center justify-center">
@@ -129,7 +132,7 @@ export default function ContactSection() {
                 </div>
                 <div>
                   <p className="text-sm text-offwhite-dark">Email</p>
-                  <p className="text-offwhite">info@ikonicmarketing303.com</p>
+                  <p className="text-offwhite">info@ikonic303.com</p>
                 </div>
               </a>
               
@@ -151,8 +154,8 @@ export default function ContactSection() {
                   <MapPin className="w-5 h-5 text-mint" />
                 </div>
                 <div>
-                  <p className="text-sm text-offwhite-dark">Location</p>
-                  <p className="text-offwhite">Colorado, USA</p>
+                  <p className="text-sm text-offwhite-dark">Shop</p>
+                  <p className="text-offwhite">4880 Robb St #8, Wheat Ridge, CO 80033</p>
                 </div>
               </div>
             </div>
@@ -193,12 +196,12 @@ export default function ContactSection() {
             {/* CTA */}
             <div className="bg-gradient-to-r from-mint/20 to-mint/5 border border-mint/30 rounded-xl p-6">
               <p className="text-offwhite font-medium mb-2">
-                Ready to Automate Your Sales & Lead Flow?
+                Ready for a Free On-Site Consultation?
               </p>
               <p className="text-offwhite-dark text-sm mb-4">
-                Book your free 15-minute GHL Audit. No commitment, just a clear plan to scale your business.
+                No commitment — we check the glass or walk the site and send one honest quote.
               </p>
-              <a 
+              <a
                 href="tel:+17206791230"
                 className="inline-flex items-center gap-2 text-mint font-medium hover:gap-3 transition-all"
               >
