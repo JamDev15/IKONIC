@@ -7,11 +7,18 @@ import HeroSection from './sections/HeroSection';
 import { services } from './pages/services/serviceData';
 import './App.css';
 
-// Below-fold home sections — lazy loaded
-const ServicesSection = lazy(() => import('./sections/ServicesSection'));
-const AboutSection = lazy(() => import('./sections/AboutSection'));
+// Below-fold home sections — lazy loaded. Residential-first order (2026-09-04):
+// benefits → film options → process → gallery → reviews → commercial → areas → estimate.
+const HomeBenefitsSection = lazy(() => import('./sections/HomeBenefitsSection'));
+const FilmOptionsSection = lazy(() => import('./sections/FilmOptionsSection'));
+const ProcessSection = lazy(() => import('./sections/ProcessSection'));
+const HomeGallerySection = lazy(() => import('./sections/HomeGallerySection'));
 const TestimonialsSection = lazy(() => import('./sections/TestimonialsSection'));
+const CommercialSection = lazy(() => import('./sections/CommercialSection'));
+const ServiceAreasSection = lazy(() => import('./sections/ServiceAreasSection'));
 const ContactSection = lazy(() => import('./sections/ContactSection'));
+// ServicesSection.tsx and AboutSection.tsx are the pre-refocus homepage sections —
+// kept in src/sections/ but no longer rendered on the homepage.
 
 // All route pages — lazy loaded
 const About = lazy(() => import('./pages/About'));
@@ -57,8 +64,8 @@ function HomePage() {
   return (
     <>
       <PageSEO
-        title="Architectural Window Film, Tint & Graphics — Denver, CO | ikonic303"
-        description="Denver architectural window film and graphics: residential and commercial window tint, storefront and window graphics, signage, and wayfinding. Designed, printed, and installed in-house. Call (720) 679-1230."
+        title="Residential Window Tinting Denver | Home Window Film | ikonic303"
+        description="Professional residential window tinting in Denver. Heat and glare reduction, 99% UV protection, privacy, energy savings, and fade protection for floors and furniture. Free in-home estimate — call (720) 679-1230. Commercial storefront window tint also available."
         canonical="/"
       />
       <Navigation />
@@ -67,9 +74,13 @@ function HomePage() {
         {/* Reserve space while the below-fold section chunks load so the page
             doesn't collapse to the hero and then jump as each one arrives. */}
         <Suspense fallback={<div className="min-h-screen" aria-hidden="true" />}>
-          <ServicesSection />
-          <AboutSection />
+          <HomeBenefitsSection />
+          <FilmOptionsSection />
+          <ProcessSection />
+          <HomeGallerySection />
           <TestimonialsSection />
+          <CommercialSection />
+          <ServiceAreasSection />
           <ContactSection />
         </Suspense>
       </main>
@@ -136,13 +147,22 @@ function App() {
             <Route path="/blogs" element={<Blogs />} />
             <Route path="/post/:slug" element={<BlogPost />} />
 
-            {/* Service pages (same URLs as the former static HTML) */}
-            <Route path="/window-tint" element={<ServicePage data={services.windowFilm} />} />
-            <Route path="/window-tint/home" element={<ServicePage data={services.residentialTint} />} />
+            {/* Service pages. Residential-first (2026-09-04):
+                  /window-tint          → Residential Window Tinting (primary)
+                  /window-tint/office   → Commercial Storefront Window Tint (secondary)
+                  /storefront-graphics  → Commercial Storefront Film & Graphics (secondary)
+                /window-tint/home 301s to /window-tint; /signage and /wayfinding
+                301 to /storefront-graphics (see vercel.json). Those serviceData
+                entries and the old static HTML are kept for reference. */}
+            <Route path="/window-tint" element={<ServicePage data={services.residential} />} />
+            <Route path="/window-tint/solar-heat" element={<ServicePage data={services.solarHeat} />} />
+            <Route path="/window-tint/uv-protection" element={<ServicePage data={services.uvProtection} />} />
+            <Route path="/window-tint/privacy" element={<ServicePage data={services.privacyFilm} />} />
+            <Route path="/window-tint/decorative-privacy" element={<ServicePage data={services.decorativePrivacy} />} />
+            <Route path="/window-tint/security-film" element={<ServicePage data={services.securityFilm} />} />
             <Route path="/window-tint/office" element={<ServicePage data={services.commercialTint} />} />
+            <Route path="/window-tint/storefront" element={<ServicePage data={services.storefrontTint} />} />
             <Route path="/storefront-graphics" element={<ServicePage data={services.storefrontGraphics} />} />
-            <Route path="/signage" element={<ServicePage data={services.signage} />} />
-            <Route path="/wayfinding" element={<ServicePage data={services.wayfinding} />} />
             <Route path="/proof-manager" element={<ProofManager />} />
             <Route path="/proof/:token" element={<ProofClient />} />
             <Route path="/gallery" element={<Gallery />} />

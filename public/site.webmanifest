@@ -1,11 +1,11 @@
 {
-  "name": "ikonic — Window Film & Graphics",
+  "name": "ikonic — Residential Window Tinting Denver",
   "short_name": "ikonic",
-  "description": "Denver architectural window film, window tint, storefront and window graphics, signage, and wayfinding. Designed, printed, and installed in-house in Wheat Ridge, CO.",
+  "description": "Professional residential window tinting in Denver — heat, glare, UV, privacy, and energy savings for your home. Commercial storefront window tint and graphics also available.",
   "start_url": "/",
   "display": "standalone",
-  "background_color": "#0D0D0D",
-  "theme_color": "#00D9FF",
+  "background_color": "#0A1428",
+  "theme_color": "#00FF9D",
   "icons": [
     {
       "src": "/favicon-16x16.png",

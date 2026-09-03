@@ -13,7 +13,7 @@ export default function NotFound() {
     <div className="relative bg-charcoal min-h-screen flex flex-col">
       <PageSEO
         title="Page Not Found"
-        description="That page doesn't exist. Find architectural window film, window graphics, and signage for Denver-area homes and businesses at ikonic303."
+        description="That page doesn't exist. Find residential window tinting for Denver homes — heat, glare, UV, privacy, and energy savings — at ikonic303."
         noIndex
       />
       <Navigation />
@@ -29,21 +29,21 @@ export default function NotFound() {
           </p>
 
           <div className="grid sm:grid-cols-2 gap-3 text-left mb-10">
-            <Link to="/services" className="block bg-charcoal-light/80 border border-white/10 rounded-xl px-5 py-4 hover:border-mint transition-colors">
-              <span className="block text-offwhite font-medium">Services</span>
-              <span className="block text-offwhite-dark text-sm">Window film, graphics &amp; signage</span>
-            </Link>
             <Link to="/window-tint" className="block bg-charcoal-light/80 border border-white/10 rounded-xl px-5 py-4 hover:border-mint transition-colors">
-              <span className="block text-offwhite font-medium">Architectural Window Film</span>
-              <span className="block text-offwhite-dark text-sm">Heat, glare, UV, privacy &amp; security</span>
+              <span className="block text-offwhite font-medium">Residential Window Tinting</span>
+              <span className="block text-offwhite-dark text-sm">Heat, glare, UV, privacy &amp; energy savings</span>
+            </Link>
+            <Link to="/contact" className="block bg-charcoal-light/80 border border-white/10 rounded-xl px-5 py-4 hover:border-mint transition-colors">
+              <span className="block text-offwhite font-medium">Get a Free Estimate</span>
+              <span className="block text-offwhite-dark text-sm">A free in-home visit and one written quote</span>
             </Link>
             <Link to="/gallery" className="block bg-charcoal-light/80 border border-white/10 rounded-xl px-5 py-4 hover:border-mint transition-colors">
               <span className="block text-offwhite font-medium">Our Work</span>
-              <span className="block text-offwhite-dark text-sm">Film, graphics &amp; signage we&rsquo;ve installed</span>
+              <span className="block text-offwhite-dark text-sm">Completed home window film projects</span>
             </Link>
-            <Link to="/contact" className="block bg-charcoal-light/80 border border-white/10 rounded-xl px-5 py-4 hover:border-mint transition-colors">
-              <span className="block text-offwhite font-medium">Contact</span>
-              <span className="block text-offwhite-dark text-sm">Talk to us about a project</span>
+            <Link to="/services" className="block bg-charcoal-light/80 border border-white/10 rounded-xl px-5 py-4 hover:border-mint transition-colors">
+              <span className="block text-offwhite font-medium">All Services</span>
+              <span className="block text-offwhite-dark text-sm">Residential tint, plus commercial storefront</span>
             </Link>
           </div>
 

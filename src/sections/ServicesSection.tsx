@@ -1,3 +1,10 @@
+/**
+ * DEPRECATED — not imported anywhere. This was the pre-refocus homepage "Services"
+ * grid; the residential-first homepage (App.tsx, 2026-09-04) uses HomeBenefitsSection
+ * + FilmOptionsSection + CommercialSection instead. Kept for reference only. The
+ * `/signage` and `/wayfinding` links below are dead (those pages now 301 to
+ * /storefront-graphics). Delete this file once nothing needs the old copy.
+ */
 import { useRef, useLayoutEffect } from 'react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
