@@ -59,7 +59,7 @@
   </script>
   <style>
     *{box-sizing:border-box}
-    :root{--bg:#0B0D10;--panel:#141922;--line:#27303f;--text:#eef2f7;--muted:#9aa7b8;--accent:#00FF9D;--accent2:#4DFFB8;--char:#0B0D10;--char2:#141619;--ow:#F6F7F9;--owd:#A6A9B0;--amber:#F5A623}
+    :root{--bg:#0A1428;--panel:#132238;--line:#27303f;--text:#eef2f7;--muted:#9aa7b8;--accent:#00FF9D;--accent2:#4DFFB8;--char:#0A1428;--char2:#132238;--ow:#F6F7F9;--owd:#A6A9B0;--amber:#F5A623}
     html,body{overflow-x:hidden}
     img,video,iframe,canvas,svg{max-width:100%}
     body{margin:0;font-family:"Inter","Segoe UI",system-ui,Helvetica,Arial,sans-serif;background:var(--bg);color:var(--text);line-height:1.65}
@@ -137,7 +137,7 @@
 <a href="/">Home</a>
 <a href="/about">About</a>
 <div class="nav-item"><button class="nav-trigger" type="button">Services <svg class="caret" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg></button>
-<div class="dropdown"><a class="head" href="/services">View All Services &rarr;</a><a href="/window-tint">Architectural Window Film</a><a href="/window-tint/home">Residential Window Tint</a><a href="/window-tint/office">Commercial Window Tint</a><a href="/storefront-graphics">Storefront &amp; Window Graphics</a><a href="/signage">Signage &amp; Visual Graphics</a><a href="/wayfinding">Wayfinding &amp; ADA</a></div></div>
+<div class="dropdown"><a class="head" href="/services">View All Services &rarr;</a><a href="/window-tint">Residential Window Tinting</a><a href="/window-tint/decorative-privacy">Decorative &amp; Privacy Film</a><a href="/window-tint/security-film">Security &amp; Safety Film</a><a href="/window-tint/office">Commercial Storefront Tint</a><a href="/storefront-graphics">Storefront Film &amp; Graphics</a></div></div>
 <a href="/blogs">Blogs</a>
 <a href="/careers">Careers</a>
 <a href="/contact" class="btn-start">Get a Quote</a>
@@ -195,7 +195,7 @@
 <div class="foot-grid">
 <div><img class="flogo" src="/logo-ikonic.webp" alt="ikonic"><p class="tag">Architectural window film, tint &amp; graphics &mdash; designed, printed, and installed in-house in Wheat Ridge, CO.</p></div>
 <div><h4>Quick Links</h4><ul><li><a href="/">Home</a></li><li><a href="/about">About</a></li><li><a href="/services">Services</a></li><li><a href="/contact">Contact</a></li><li><a href="/blogs">Blogs</a></li></ul></div>
-<div><h4>Services</h4><ul><li><a href="/window-tint">Architectural Window Film</a></li><li><a href="/window-tint/home">Residential Window Tint</a></li><li><a href="/window-tint/office">Commercial Window Tint</a></li><li><a href="/storefront-graphics">Storefront &amp; Window Graphics</a></li><li><a href="/signage">Signage &amp; Visual Graphics</a></li></ul></div>
+<div><h4>Services</h4><ul><li><a href="/window-tint">Residential Window Tinting</a></li><li><a href="/window-tint/decorative-privacy">Decorative &amp; Privacy Film</a></li><li><a href="/window-tint/security-film">Security &amp; Safety Film</a></li><li><a href="/window-tint/office">Commercial Storefront Tint</a></li><li><a href="/storefront-graphics">Storefront Film &amp; Graphics</a></li></ul></div>
 <div><h4>Free On-Site Consultation</h4><p class="tag" style="margin-bottom:14px">Tell us your building and what you want the glass to do &mdash; we check the windows and send one written quote. Serving the Denver metro.</p>
 <form class="foot-mail" onsubmit="return false"><input type="email" placeholder="Your email"><button type="submit" aria-label="Subscribe"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg></button></form>
 <p class="tag" style="margin-top:22px">Follow Us</p>
@@ -219,7 +219,7 @@
     if(document.hidden){requestAnimationFrame(draw);return;}
     if(ts-last<frameMs){requestAnimationFrame(draw);return;}
     last=ts;
-    ctx.fillStyle='rgba(11,13,16,0.06)';ctx.fillRect(0,0,W,H);
+    ctx.fillStyle='rgba(10,20,40,0.06)';ctx.fillRect(0,0,W,H);
     ctx.font='bold '+fontSize+'px monospace';ctx.textBaseline='top';
     for(var i=0;i<drops.length;i++){
       var ch=CHARS[Math.floor(Math.random()*CHARS.length)],x=i*fontSize*colStep,y=drops[i];

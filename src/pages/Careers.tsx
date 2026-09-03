@@ -17,20 +17,20 @@ import PageSEO from '../components/PageSEO';
 gsap.registerPlugin(ScrollTrigger);
 
 const whatYoullDo = [
-  'Install architectural window film on residential and commercial flat glass',
-  'Apply cut vinyl, printed graphics, and frosted / perforated window film',
-  'Fabricate and hang dimensional letters, banners, and wayfinding signage',
-  'Prep and finish surfaces — clean edges, no bubbles, no rushed jobs',
-  'Run on-site glass checks and site surveys before installs',
-  'Print and weed vinyl and laminate prints in the Wheat Ridge shop'
+  'Install residential window film — solar, UV, privacy, decorative, and security',
+  'Run in-home estimates and glass compatibility checks before installs',
+  'Prep and finish glass — clean edges, no bubbles, no rushed jobs',
+  'Protect the customer’s floors and furniture and leave a tidy work area',
+  'Some commercial storefront tint and window-graphics work',
+  'Help keep the Wheat Ridge shop and install vehicles stocked and organized'
 ];
 
 const whoWereLookingFor = [
   'Careful hands and pride in a clean finished edge',
-  'Comfortable on ladders, lifts, and job sites',
-  'Reliable, on time, and good with customers on-site',
-  'Coachable — we train the film and vinyl technique',
-  'Window-film, vinyl, or sign experience a plus, not required',
+  'Comfortable on ladders and working in customers’ homes',
+  'Reliable, on time, and courteous with homeowners on-site',
+  'Coachable — we train the window-film technique',
+  'Window-film or vinyl experience a plus, not required',
   'Valid driver’s license'
 ];
 
@@ -38,17 +38,17 @@ const whyJoin = [
   {
     icon: Clock,
     title: 'Real Craft',
-    description: 'Learn window film, large-format vinyl, and sign fabrication from people who care about the finish. Every job is something you can point at.'
+    description: 'Learn residential window film from people who care about the finish. Every job is something you can point at.'
   },
   {
     icon: TrendingUp,
     title: 'Steady Work',
-    description: 'A full pipeline of residential and commercial jobs across the Denver metro — homes, offices, clinics, and storefronts, year-round.'
+    description: 'A full pipeline of home tinting jobs across the Denver metro, year-round, plus some commercial storefront work.'
   },
   {
     icon: DollarSign,
     title: 'Grow Your Rate',
-    description: 'Pay that moves up with skill. Take on estimating, lead-installer, or shop production as you master the work.'
+    description: 'Pay that moves up with skill. Take on in-home estimating or lead-installer as you master the work.'
   }
 ];
 
@@ -76,8 +76,8 @@ export default function Careers() {
   return (
     <div className="relative bg-charcoal min-h-screen">
       <PageSEO
-        title="Careers at ikonic303 | Window Film & Sign Installers — Denver, CO"
-        description="Join the ikonic303 shop in Wheat Ridge, CO. We're hiring window film installers, vinyl and graphics applicators, and sign fabricators. Craft-focused, steady work across the Denver metro."
+        title="Careers at ikonic303 | Window Tint Installers — Denver, CO"
+        description="Join the ikonic303 crew in Wheat Ridge, CO. We're hiring residential window film / tint installers. Craft-focused, steady year-round work across the Denver metro. Training provided."
         canonical="/careers"
       />
       <MatrixBackground />
@@ -89,11 +89,11 @@ export default function Careers() {
           <p className="text-micro text-mint mb-4">CAREERS AT IKONIC</p>
           <h1 className="font-display text-4xl md:text-5xl lg:text-6xl font-bold text-offwhite mb-6 leading-tight">
             Join <span className="text-mint">ikonic</span><br />
-            Install Film, Graphics &amp; Signs
+            Install Residential Window Film
           </h1>
           <p className="text-lg text-offwhite-dark max-w-2xl mx-auto mb-8">
-            We're growing our Wheat Ridge shop and crew — window film installers, vinyl and
-            graphics applicators, and sign fabricators who take pride in a clean finish.
+            We're growing our Wheat Ridge crew — residential window film / tint installers who take
+            pride in a clean finish and treat a customer's home like their own.
           </p>
           <div className="flex items-center justify-center gap-2 text-offwhite-dark mb-10">
             <MapPin className="w-4 h-4 text-mint" />
@@ -113,15 +113,15 @@ export default function Careers() {
         <div className="max-w-4xl mx-auto">
           <p className="text-micro text-mint mb-4 text-center">WHO WE ARE</p>
           <h2 className="font-display text-3xl md:text-4xl font-bold text-offwhite mb-6 text-center">
-            A Local Shop Focused on <span className="text-mint">the Finish</span>
+            A Local Crew Focused on <span className="text-mint">the Finish</span>
           </h2>
           <p className="text-offwhite-dark text-center max-w-2xl mx-auto mb-6">
-            ikonic installs architectural window film, storefront and window graphics, and
-            signage for homes and businesses across the Denver metro.
+            ikonic is Denver&rsquo;s residential window tinting specialist — home window film for
+            heat, glare, UV, privacy, and energy savings, with some commercial storefront work.
           </p>
           <p className="text-offwhite-dark text-center max-w-2xl mx-auto">
-            We design, print, and install everything in-house. When you finish a job, it's your
-            work on that glass or that wall — and we build the crew around that standard.
+            When you finish a job, it&rsquo;s your work on that glass — and we build the crew
+            around that standard.
           </p>
         </div>
       </section>
@@ -160,13 +160,13 @@ export default function Careers() {
                 Hourly, With Room to Move Up
               </p>
               <p className="text-offwhite-dark text-sm mb-6">
-                Full-time, based out of the Wheat Ridge shop, with installs across the Denver
-                metro. Some commercial work is scheduled after hours.
+                Full-time, based out of the Wheat Ridge shop, with home installs across the Denver
+                metro. Mostly regular daytime hours.
               </p>
               <ul className="space-y-2 text-sm text-offwhite-dark">
                 <li>• Competitive hourly rate, based on experience</li>
-                <li>• Raises tied to skill — film, vinyl, and fabrication</li>
-                <li>• Paths to lead installer, estimator, or shop production</li>
+                <li>• Raises tied to skill with window film and vinyl</li>
+                <li>• Paths to in-home estimator or lead installer</li>
                 <li>• Paid training on materials and technique</li>
                 <li>• Company vehicle and tools for install crews</li>
               </ul>

@@ -1,7 +1,7 @@
 import { useRef, useLayoutEffect } from 'react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import { PanelsTopLeft, Sun, MapPin, ShieldCheck, Target, Zap, Shield, Heart } from 'lucide-react';
+import { Home, Sun, MapPin, ShieldCheck, Target, Zap, Shield, Heart } from 'lucide-react';
 import Navigation from '../components/Navigation';
 import MatrixBackground from '../components/MatrixBackground';
 import Footer from '../components/Footer';
@@ -10,17 +10,17 @@ import PageSEO from '../components/PageSEO';
 gsap.registerPlugin(ScrollTrigger);
 
 const stats = [
-  { icon: PanelsTopLeft, label: 'Panes & Panels Installed', value: '10K+' },
-  { icon: Sun, label: 'Heat & UV Rejected', value: 'up to 99%' },
+  { icon: Home, label: 'Denver-Area Homes Tinted', value: '1,000s' },
+  { icon: Sun, label: 'UV Blocked by Quality Film', value: '99%' },
   { icon: MapPin, label: 'Denver-Metro Service Radius', value: '30 mi' },
   { icon: ShieldCheck, label: 'Manufacturer Film Warranty', value: 'Lifetime' }
 ];
 
 const values = [
-  { icon: Target, title: 'Right Film, Right Glass', desc: 'We check every window against the manufacturer chart before we quote.' },
-  { icon: Zap, title: 'Clean Installs', desc: 'Dust-controlled prep, finished edges, and a firm timeline we hold.' },
+  { icon: Target, title: 'Right Film, Right Window', desc: 'We recommend a film per window and check your glass against the manufacturer chart before we quote.' },
+  { icon: Zap, title: 'Clean, One-Day Installs', desc: 'Dust-controlled prep, floors and furniture protected, and finished edges on every pane.' },
   { icon: Shield, title: 'One Honest Number', desc: 'No hidden fees and no surprise add-ons at the end of the job.' },
-  { icon: Heart, title: 'One Consistent Look', desc: 'Film, graphics, and signage from the same shop so it all matches.' }
+  { icon: Heart, title: 'No Pressure', desc: 'A free in-home estimate and a clear quote — decide on your timeline, not ours.' }
 ];
 
 export default function About() {
@@ -39,25 +39,25 @@ export default function About() {
   return (
     <div className="relative bg-charcoal min-h-screen">
       <PageSEO
-        title="About ikonic303 | Denver Window Film & Graphics Shop"
-        description="ikonic is a Wheat Ridge, CO shop for architectural window film, storefront and window graphics, and signage. Design, print, and installation in-house for the Denver metro."
+        title="About ikonic303 | Denver Residential Window Tinting"
+        description="ikonic is a Wheat Ridge, CO window film company specializing in residential window tinting for the Denver metro — heat, glare, UV, privacy, and energy savings. Commercial storefront tint and graphics also available."
         canonical="/about"
       />
       <MatrixBackground />
       <Navigation />
-      
+
       {/* Hero Section */}
       <section className="pt-32 pb-20 px-[6vw] relative z-10">
         <div ref={heroRef} className="max-w-4xl mx-auto text-center">
           <p className="text-micro text-mint mb-4">ABOUT IKONIC</p>
           <h1 className="font-display text-4xl md:text-5xl lg:text-6xl font-bold text-offwhite mb-6 leading-tight">
-            One Shop for Film,<br />
-            <span className="text-mint">Graphics &amp; Signage</span>
+            Denver&rsquo;s Residential<br />
+            <span className="text-mint">Window Tinting Specialists</span>
           </h1>
           <p className="text-lg text-offwhite-dark max-w-2xl mx-auto">
-            ikonic is a Wheat Ridge, Colorado shop for the visible skin of a building — architectural
-            window film, storefront and window graphics, and signage. We design, print, and install
-            all of it in-house for the Denver metro.
+            ikonic is a Wheat Ridge, Colorado window film company. Home window tinting is what we do
+            most — heat, glare, UV, privacy, and energy savings for houses across the Denver metro.
+            Commercial storefront tint and graphics are a supporting service.
           </p>
         </div>
       </section>
@@ -70,20 +70,20 @@ export default function About() {
           </h2>
           <div className="space-y-6 text-offwhite-dark">
             <p>
-              ikonic started with a pressure washer and an obsession with making things look
-              flawless. That grew into a shop that handles the surfaces customers actually see:
-              the film on your glass, the graphics on your windows, and the sign over your door.
+              ikonic started with an obsession for making surfaces look flawless. Today that focus
+              lives in residential window film: getting the right product on the right glass, and
+              installing it so cleanly you forget it&rsquo;s there.
             </p>
             <p>
-              Most businesses hire three different vendors for those three things and end up with
-              three slightly different looks. We do all of it under one roof in Wheat Ridge —
-              design, printing, and installation — so it matches, and so nothing gets lost
-              between companies.
+              A Denver home has west-facing rooms that overheat, floors fading in the sun, and
+              windows that face a neighbor a little too closely. We&rsquo;ve solved those same
+              problems in hundreds of houses — and we recommend a film per window rather than one
+              film for the whole place.
             </p>
             <p>
-              We serve the Denver metro: Wheat Ridge, Arvada, Lakewood, Golden, and greater
-              Denver. Building and storefront work is installed on-site; printing and fabrication
-              happen at the shop.
+              We serve the Denver metro: Wheat Ridge, Arvada, Lakewood, Golden, and greater Denver.
+              Most homes are installed in a single visit. We also tint and brand commercial
+              storefronts as a secondary service.
             </p>
           </div>
         </div>
@@ -99,12 +99,14 @@ export default function About() {
               </h2>
               <p className="text-offwhite-dark mb-6">
                 We only install film a manufacturer's compatibility chart says is safe for your
-                glass. Dual-pane, low-e, tempered, and annealed glass each behave differently, and
-                the wrong film can crack a pane or void its seal warranty — so we check first.
+                glass. Single-pane, dual-pane, low-E, tempered, and laminated glass each behave
+                differently, and the wrong film can crack a pane or void its seal warranty — so we
+                check first, at the free in-home estimate.
               </p>
               <p className="text-offwhite-dark">
-                The same care goes into graphics and signage: the right substrate for the surface,
-                finished edges, and a firm timeline. Quality-first, every pane and every panel.
+                Then a clean, dust-controlled install with your floors and furniture protected,
+                finished edges on every pane, and a manufacturer warranty plus our workmanship
+                guarantee behind it.
               </p>
             </div>
             <div className="bg-gradient-to-br from-mint/20 to-mint/5 border border-mint/30 rounded-2xl p-8">
@@ -113,11 +115,11 @@ export default function About() {
               </h3>
               <ul className="space-y-3">
                 {[
-                  'Design, printing, and installation in-house',
+                  'Residential window tinting is our specialty',
+                  'A film recommended per window, not one for the whole house',
                   'Glass checked against the film chart before quoting',
-                  'One written quote — no surprise add-ons',
-                  'Building & storefront work installed on-site',
-                  'Film, graphics, and signage that match'
+                  'Free in-home estimate — one written quote, no add-ons',
+                  'Clean, one-day install with your home protected'
                 ].map((item, index) => (
                   <li key={index} className="flex items-center gap-2 text-offwhite">
                     <div className="w-1.5 h-1.5 bg-mint rounded-full" />
@@ -182,13 +184,13 @@ export default function About() {
       <section className="py-20 px-[6vw] bg-charcoal-light/80 backdrop-blur-sm relative z-10">
         <div className="max-w-4xl mx-auto text-center">
           <h2 className="font-display text-3xl font-bold text-offwhite mb-6">
-            Ready to Work With Us?
+            Ready for a Free Estimate?
           </h2>
           <p className="text-offwhite-dark mb-8">
-            Book a free on-site consultation — we'll check the glass or walk the site and send one quote.
+            We visit your home, look at the actual windows, and send one clear written quote.
           </p>
           <a href="/contact" className="btn-primary inline-flex items-center gap-2 text-lg px-8 py-4">
-            Get a Quote
+            Get a Free Home Tint Estimate
           </a>
         </div>
       </section>

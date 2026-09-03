@@ -27,38 +27,38 @@ gsap.registerPlugin(ScrollTrigger);
 const testimonials = [
   {
     name: 'Sarah Mitchell',
-    title: 'Owner, Peak Fitness Denver',
-    quote: 'The west wall of our studio was unusable by 3pm. ikonic put heat-rejection film on it and the afternoon classes stopped feeling like a sauna. Clean install, no bubbles.',
+    title: 'Homeowner, Arvada',
+    quote: 'Our west-facing living room was unusable by 3pm every summer. ikonic put heat-rejection film on it and now we actually use that room in the afternoon. Clean install, no bubbles, and they protected the floors while they worked.',
     rating: 5
   },
   {
     name: 'Marcus Chen',
-    title: 'Practice Manager, Chen Dental',
-    quote: 'They frosted our operatory glass for privacy and did new lobby window graphics that match our sign. It finally looks like one practice instead of three different eras.',
+    title: 'Homeowner, Wheat Ridge',
+    quote: 'We wanted privacy on the bedroom and bathroom windows that face the neighbor without living behind blinds. The frosted film they recommended is exactly right — private during the day, still bright inside.',
     rating: 5
   },
   {
     name: 'Jake Rodriguez',
-    title: 'Facilities, Rodriguez Property Group',
-    quote: 'Four tenant suites, all tinted after hours over one weekend. Nobody lost a workday and the cooling complaints on the south side basically stopped.',
+    title: 'Homeowner, Lakewood',
+    quote: 'The hardwood by the back windows was fading in one obvious stripe. They did near-invisible UV film on the whole back of the house. You can’t tell it’s there and the fading stopped.',
     rating: 5
   },
   {
     name: 'Amanda Foster',
-    title: 'Director, Foster Law Group',
-    quote: 'ikonic handled the permit drawings and the install for our new dimensional lettering. They told us the realistic timeline up front and hit it.',
+    title: 'Homeowner, Golden',
+    quote: 'Estimate was on time, the quote was clear, and the crew was in and out in a day. Our upstairs is noticeably more even temperature now — fewer hot rooms.',
     rating: 5
   },
   {
     name: 'David Park',
-    title: 'Owner, Park Auto Repair',
-    quote: 'Perforated film on the front glass — you can still see out, but from the street it reads as a finished storefront now. Fair quote, no add-ons at the end.',
+    title: 'Property Manager, Denver',
+    quote: 'Used ikonic for solar film on a duplex and then for our storefront office. Same clean work both times, fair quote, no add-ons at the end.',
     rating: 5
   },
   {
     name: 'Lisa Thompson',
-    title: 'Manager, Thompson Realty',
-    quote: 'Security film on the ground-floor glass plus new hours and branding vinyl. One shop, one look, done when they said it would be.',
+    title: 'Business Owner, Denver',
+    quote: 'They tinted our storefront glass for heat and glare and added privacy film on the back office. Scheduled around our hours so we never closed.',
     rating: 5
   }
 ];
@@ -140,13 +140,13 @@ export default function TestimonialsSection() {
       <div className="px-[6vw]">
         {/* Header */}
         <div ref={headerRef} className="text-center mb-16">
-          <p className="text-micro text-mint mb-4">TESTIMONIALS</p>
+          <p className="text-micro text-mint mb-4">CUSTOMER REVIEWS</p>
           <h2 className="font-display text-4xl md:text-5xl font-bold text-offwhite mb-6">
-            See It From Our <span className="text-mint">Customers</span>
+            What Denver Homeowners <span className="text-mint">Say</span>
           </h2>
           <p className="text-lg text-offwhite-dark max-w-2xl mx-auto">
-            Homes, offices, clinics, and storefronts across the Denver metro rely on ikonic for
-            window film, graphics, and signage that's installed clean and holds up.
+            Families across Wheat Ridge, Arvada, Lakewood, Golden, and greater Denver trust ikonic
+            for residential window tinting that&rsquo;s installed clean and holds up.
           </p>
         </div>
 
@@ -240,25 +240,25 @@ export default function TestimonialsSection() {
           ))}
         </div>
 
-        {/* Case Study Preview */}
+        {/* Featured home project */}
         <div className="mt-16 bg-gradient-to-r from-mint/20 to-mint/5 border border-mint/30 rounded-2xl p-8 lg:p-12">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
             <div>
-              <p className="text-micro text-mint mb-2">CASE STUDY</p>
+              <p className="text-micro text-mint mb-2">FEATURED HOME PROJECT</p>
               <h3 className="font-display text-2xl lg:text-3xl font-bold text-offwhite mb-4">
-                Belmar Retail: One West Wall, Three Fixes
+                Arvada Two-Story: Hot Rooms &amp; Fading, Fixed in a Day
               </h3>
               <p className="text-offwhite-dark mb-6">
-                A Lakewood storefront had an unusable west-facing sales floor, mismatched window
-                signage, and no privacy on the office glass. ikonic scoped all three together so
-                the film, graphics, and lettering matched.
+                A west-facing living room overheated every afternoon and the hardwood near the back
+                windows was fading. We checked the dual-pane glass, spec&rsquo;d a spectrally-selective
+                solar film, and installed the whole main floor in one visit.
               </p>
               <ul className="space-y-2 mb-6">
                 {[
-                  'Checked the glass against the film compatibility chart before quoting',
-                  'Spectrally-selective heat film on the west elevation',
-                  'New full-color window graphics and hours vinyl',
-                  'Frosted privacy film on the back-office glass'
+                  'Glass checked against the film compatibility chart before quoting',
+                  'Spectrally-selective solar film on the west and south elevations',
+                  'Near-invisible UV film on the fading rooms',
+                  'One-day install with floors and furniture protected'
                 ].map((item, i) => (
                   <li key={i} className="flex items-center gap-2 text-offwhite-dark text-sm">
                     <div className="w-1.5 h-1.5 bg-mint rounded-full" />
@@ -269,9 +269,9 @@ export default function TestimonialsSection() {
             </div>
             <div className="text-center lg:text-right">
               <div className="inline-block bg-charcoal rounded-xl p-8">
-                <p className="text-5xl font-bold text-mint mb-2">78%</p>
-                <p className="text-offwhite">Solar Heat Rejected</p>
-                <p className="text-offwhite-dark text-sm mt-2">West sales floor usable all afternoon</p>
+                <p className="text-5xl font-bold text-mint mb-2">99%</p>
+                <p className="text-offwhite">UV Blocked</p>
+                <p className="text-offwhite-dark text-sm mt-2">Living room comfortable all afternoon</p>
               </div>
             </div>
           </div>

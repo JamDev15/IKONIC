@@ -77,8 +77,8 @@ export default function Blogs() {
   return (
     <div className="relative bg-charcoal min-h-screen">
       <PageSEO
-        title="Window Film & Graphics Blog | Guides for Denver Businesses | ikonic303"
-        description="Guides on architectural window film, residential and commercial window tint, storefront and window graphics, signage, and wayfinding for Denver-area homes and businesses."
+        title="Residential Window Tinting Blog | Denver Home Window Film Guides | ikonic303"
+        description="Guides on residential window tinting for Denver homes — heat and glare control, UV and fade protection, privacy film, energy-efficient window tint, and decorative and security film. Plus commercial storefront window tint."
         canonical="/blogs"
       />
       <MatrixBackground />
@@ -92,16 +92,17 @@ export default function Blogs() {
             Our <span className="text-mint">Blog</span>
           </h1>
           <p className="text-lg text-offwhite-dark max-w-2xl mx-auto mb-10">
-            Practical guides on window film, storefront and window graphics, signage, and
-            wayfinding — written for Denver-area homeowners and business owners.
+            Practical guides on home window tinting — heat and glare, UV and fade protection,
+            privacy film, energy savings, and decorative and security options — written for
+            Denver-area homeowners. Plus commercial storefront tint.
           </p>
           <div className="flex flex-wrap justify-center gap-4">
             <a href="/contact" className="btn-primary inline-flex items-center gap-2">
-              Contact Us
+              Get a Free Home Tint Estimate
               <ArrowRight className="w-4 h-4" />
             </a>
-            <a href="/services" className="btn-outline">
-              View Services
+            <a href="/window-tint" className="btn-outline">
+              Residential Window Tinting
             </a>
           </div>
         </div>

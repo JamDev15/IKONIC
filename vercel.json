@@ -52,12 +52,12 @@
     },
     {
       "source": "/commercial-wraps",
-      "destination": "/signage",
+      "destination": "/storefront-graphics",
       "permanent": true
     },
     {
       "source": "/commercial-wraps.html",
-      "destination": "/signage",
+      "destination": "/storefront-graphics",
       "permanent": true
     },
     {
@@ -136,28 +136,58 @@
       "permanent": true
     },
     {
-      "source": "/signage.html",
-      "destination": "/signage",
-      "permanent": true
-    },
-    {
       "source": "/storefront-graphics.html",
       "destination": "/storefront-graphics",
       "permanent": true
     },
     {
-      "source": "/wayfinding.html",
-      "destination": "/wayfinding",
+      "source": "/window-tint/office.html",
+      "destination": "/window-tint/office",
+      "permanent": true
+    },
+    {
+      "source": "/window-tint/storefront.html",
+      "destination": "/window-tint/storefront",
+      "permanent": true
+    },
+    {
+      "source": "/window-tint/security-film.html",
+      "destination": "/window-tint/security-film",
+      "permanent": true
+    },
+    {
+      "source": "/window-tint/decorative-privacy.html",
+      "destination": "/window-tint/decorative-privacy",
+      "permanent": true
+    },
+    {
+      "source": "/window-tint/home",
+      "destination": "/window-tint",
       "permanent": true
     },
     {
       "source": "/window-tint/home.html",
-      "destination": "/window-tint/home",
+      "destination": "/window-tint",
       "permanent": true
     },
     {
-      "source": "/window-tint/office.html",
-      "destination": "/window-tint/office",
+      "source": "/signage",
+      "destination": "/window-tint",
+      "permanent": true
+    },
+    {
+      "source": "/signage.html",
+      "destination": "/window-tint",
+      "permanent": true
+    },
+    {
+      "source": "/wayfinding",
+      "destination": "/window-tint",
+      "permanent": true
+    },
+    {
+      "source": "/wayfinding.html",
+      "destination": "/window-tint",
       "permanent": true
     }
   ],
@@ -177,18 +207,6 @@
     {
       "source": "/api/auto-blog-generate",
       "destination": "/api/blog?action=auto-generate"
-    },
-    {
-      "source": "/window-tint/storefront",
-      "destination": "/window-tint/storefront.html"
-    },
-    {
-      "source": "/window-tint/security-film",
-      "destination": "/window-tint/security-film.html"
-    },
-    {
-      "source": "/window-tint/decorative-privacy",
-      "destination": "/window-tint/decorative-privacy.html"
     },
     {
       "source": "/service-areas/wheat-ridge",

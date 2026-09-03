@@ -73,20 +73,22 @@ export default function ContactSection() {
   }, []);
 
   return (
-    <section 
+    <section
       ref={sectionRef}
-      id="contact" 
-      className="relative bg-charcoal/90 backdrop-blur-sm py-24 lg:py-32 z-20"
+      id="contact"
+      className="relative bg-charcoal/90 backdrop-blur-sm py-24 lg:py-32 z-20 scroll-mt-24"
     >
       <div className="px-[6vw]">
         {/* Header */}
         <div ref={headerRef} className="text-center mb-16">
+          <p className="text-micro text-mint mb-4">FREE ESTIMATE</p>
           <h2 className="font-display text-4xl md:text-5xl lg:text-6xl font-bold text-offwhite mb-6">
-            Get a <span className="text-mint">Quote</span><br />on Your Glass
+            Get a Free <span className="text-mint">Home Tint</span><br />Estimate
           </h2>
           <p className="text-lg text-offwhite-dark max-w-2xl mx-auto">
-            Tell us the building, the windows, and what you want the glass to do. We'll set up a
-            free on-site check and send one written quote — usually within one business day.
+            Tell us which rooms and windows you want treated and what you&rsquo;re trying to fix —
+            heat, glare, privacy, fading, or a decorative look. We&rsquo;ll set up a free in-home
+            visit and send one clear written quote, usually within a business day.
           </p>
         </div>
 
@@ -98,13 +100,13 @@ export default function ContactSection() {
             className="bg-charcoal-light border border-white/10 rounded-2xl p-8 lg:p-10"
           >
             <h3 className="font-display text-2xl font-bold text-offwhite mb-6">
-              Get Started
+              Request Your Estimate
             </h3>
 
             <iframe
               src="https://crm.ikonic303.com/widget/form/YoKGheZ0aVCEaSOJQFxY"
               className="w-full h-[1199px] border-0 rounded-[3px] bg-charcoal-light"
-              title="Client Information"
+              title="Free home window tint estimate request"
               loading="lazy"
             />
           </div>
@@ -113,11 +115,11 @@ export default function ContactSection() {
           <div ref={infoRef} className="space-y-8">
             <div>
               <h3 className="font-display text-2xl font-bold text-offwhite mb-6">
-                Connect With Us
+                Prefer to Talk First?
               </h3>
               <p className="text-offwhite-dark mb-8">
-                Questions about film for a specific type of glass, a storefront graphics idea, or
-                a sign permit? Call or email and we'll talk it through.
+                Call or email and we&rsquo;ll answer questions about film for a specific type of
+                glass, privacy options, or scheduling — no pressure.
               </p>
             </div>
 
@@ -196,16 +198,17 @@ export default function ContactSection() {
             {/* CTA */}
             <div className="bg-gradient-to-r from-mint/20 to-mint/5 border border-mint/30 rounded-xl p-6">
               <p className="text-offwhite font-medium mb-2">
-                Ready for a Free On-Site Consultation?
+                Free in-home estimate — no commitment
               </p>
               <p className="text-offwhite-dark text-sm mb-4">
-                No commitment — we check the glass or walk the site and send one honest quote.
+                We look at your actual windows, recommend the right film per room, and send one
+                clear written quote.
               </p>
               <a
                 href="tel:+17206791230"
                 className="inline-flex items-center gap-2 text-mint font-medium hover:gap-3 transition-all"
               >
-                Call Now
+                Call (720) 679-1230
                 <ArrowRight className="w-4 h-4" />
               </a>
             </div>
