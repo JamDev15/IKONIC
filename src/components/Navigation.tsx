@@ -2,11 +2,25 @@ import { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Menu, X, ChevronDown } from 'lucide-react';
 
+// Residential window tinting is the primary service — the dropdown lists the
+// overview hub plus every dedicated film page.
+const residentialLinks = [
+  { label: 'Residential Window Tinting', href: '/window-tint' },
+  { label: 'Solar & Heat-Rejection Film', href: '/window-tint/solar-heat' },
+  { label: 'UV & Fade Protection Film', href: '/window-tint/uv-protection' },
+  { label: 'Privacy Window Film', href: '/window-tint/privacy' },
+  { label: 'Frosted & Decorative Film', href: '/window-tint/decorative-privacy' },
+  { label: 'Security & Safety Film', href: '/window-tint/security-film' },
+  { label: 'Films & Pricing', href: '/window-tint/films-and-pricing' },
+];
+
 // Commercial is the secondary service — grouped under one dropdown so residential
-// stays the clear primary in the bar.
+// stays the clear primary in the bar. Kept in sync with the footer's Commercial column.
 const commercialLinks = [
   { label: 'Storefront Window Tint', href: '/window-tint/office' },
-  { label: 'Storefront Film & Graphics', href: '/storefront-graphics' },
+  { label: 'Storefront Film & Window Graphics', href: '/storefront-graphics' },
+  { label: 'Privacy & Decorative Film', href: '/window-tint/decorative-privacy' },
+  { label: 'Business Branding & Promo Graphics', href: '/storefront-graphics' },
 ];
 
 // City pages are prerendered SPA routes served by static HTML (vercel rewrites),
@@ -21,7 +35,7 @@ const areaLinks = [
 export default function Navigation() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [openMenu, setOpenMenu] = useState<null | 'commercial' | 'areas'>(null);
+  const [openMenu, setOpenMenu] = useState<null | 'residential' | 'commercial' | 'areas'>(null);
   const location = useLocation();
 
   useEffect(() => {
@@ -59,9 +73,33 @@ export default function Navigation() {
           <div className="hidden lg:flex items-center gap-5">
             <Link to="/" className={linkCls}>Home</Link>
 
-            <Link to="/window-tint" className="text-sm font-semibold text-offwhite hover:text-mint transition-colors">
-              Residential Tinting
-            </Link>
+            {/* Residential dropdown (primary) */}
+            <div className="relative">
+              <button
+                onClick={() => setOpenMenu(openMenu === 'residential' ? null : 'residential')}
+                onMouseEnter={() => setOpenMenu('residential')}
+                className="flex items-center gap-1 text-sm font-semibold text-offwhite hover:text-mint transition-colors"
+              >
+                Residential Tinting
+                <ChevronDown className={`w-4 h-4 transition-transform ${openMenu === 'residential' ? 'rotate-180' : ''}`} />
+              </button>
+              {openMenu === 'residential' && (
+                <div
+                  onMouseLeave={() => setOpenMenu(null)}
+                  className="absolute top-full left-0 mt-2 w-64 bg-charcoal border border-white/10 rounded-lg shadow-xl overflow-hidden"
+                >
+                  {residentialLinks.map((l) => (
+                    <Link
+                      key={l.href}
+                      to={l.href}
+                      className="block px-4 py-3 text-sm text-offwhite-dark hover:bg-mint/10 hover:text-mint transition-colors"
+                    >
+                      {l.label}
+                    </Link>
+                  ))}
+                </div>
+              )}
+            </div>
 
             {/* Commercial dropdown (secondary) */}
             <div className="relative">
@@ -76,11 +114,11 @@ export default function Navigation() {
               {openMenu === 'commercial' && (
                 <div
                   onMouseLeave={() => setOpenMenu(null)}
-                  className="absolute top-full left-0 mt-2 w-60 bg-charcoal border border-white/10 rounded-lg shadow-xl overflow-hidden"
+                  className="absolute top-full left-0 mt-2 w-72 bg-charcoal border border-white/10 rounded-lg shadow-xl overflow-hidden"
                 >
                   {commercialLinks.map((l) => (
                     <Link
-                      key={l.href}
+                      key={l.label}
                       to={l.href}
                       className="block px-4 py-3 text-sm text-offwhite-dark hover:bg-mint/10 hover:text-mint transition-colors"
                     >
@@ -147,15 +185,25 @@ export default function Navigation() {
       >
         <div className="flex flex-col items-center justify-center h-full gap-5 overflow-y-auto py-24">
           <Link to="/" className="text-2xl font-display font-bold text-offwhite hover:text-mint transition-colors">Home</Link>
-          <Link to="/window-tint" className="text-2xl font-display font-bold text-mint hover:text-mint-light transition-colors">
-            Residential Tinting
-          </Link>
+
+          <div className="text-center">
+            <p className="text-mint text-sm mb-2">Residential Tinting</p>
+            {residentialLinks.map((l) => (
+              <Link
+                key={l.href}
+                to={l.href}
+                className="block text-xl font-display font-bold text-offwhite-dark hover:text-mint transition-colors py-1.5"
+              >
+                {l.label}
+              </Link>
+            ))}
+          </div>
 
           <div className="text-center">
             <p className="text-mint text-sm mb-2">Commercial</p>
             {commercialLinks.map((l) => (
               <Link
-                key={l.href}
+                key={l.label}
                 to={l.href}
                 className="block text-xl font-display font-bold text-offwhite-dark hover:text-mint transition-colors py-1.5"
               >

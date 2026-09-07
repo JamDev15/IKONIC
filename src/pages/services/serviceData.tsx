@@ -111,13 +111,22 @@ const residential: ServiceData = {
     {
       heading: 'We check your glass before we quote',
       body: (
-        <p>
-          Single-pane, dual-pane, low-E, tempered, and laminated glass each handle absorbed heat
-          differently. The wrong film on the wrong glass can cause thermal-stress cracks or void a
-          window&rsquo;s seal warranty — so every quote starts with us identifying your glass and
-          matching it to the film manufacturer&rsquo;s compatibility chart. If a window
-          isn&rsquo;t a safe candidate, we tell you before you commit.
-        </p>
+        <>
+          <p>
+            Single-pane, dual-pane, low-E, tempered, and laminated glass each handle absorbed heat
+            differently. The wrong film on the wrong glass can cause thermal-stress cracks or void a
+            window&rsquo;s seal warranty — so every quote starts with us identifying your glass and
+            matching it to the film manufacturer&rsquo;s compatibility chart. If a window
+            isn&rsquo;t a safe candidate, we tell you before you commit.
+          </p>
+          <p>
+            <a href="/window-tint/films-and-pricing" className="text-mint hover:underline">
+              See the films we install, what each costs per square foot, and which are approved on
+              your glass
+            </a>
+            .
+          </p>
+        </>
       ),
     },
     {
