@@ -192,6 +192,40 @@ winter.</p>
 ${CONTACT_BLOCK}`,
   },
   {
+    path: '/window-tint/films-and-pricing',
+    title: 'Window Film Pricing & Glass Compatibility | ikonic — Denver',
+    description:
+      'See the exact window films we install, what each one costs per square foot, and which films are approved on your glass. We verify your glass before we quote.',
+    body: `<h1>Our Films, Your Glass, and What It Costs</h1>
+<p>This page is a rate card and a glass-compatibility check &mdash; not a quote. It lists the exact
+architectural window films ikonic installs, the published price per square foot for each, and which
+of those films the manufacturer approves on a given type of glass. ikonic verifies your glass in
+person before any quote.</p>
+<h2>We install Edge Window Films</h2>
+<p>Edge is an architectural flat-glass film line. The families we install: solar and heat-control
+film (Silver, Ultra View, Cool Alloy, Bronze, Nature); ceramic film (Pristine Ceramic); exterior
+film (X-Series, Ext Pristine, Zen SSX 55); decorative and privacy film (Frost, Whiteout, Blackout);
+anti-graffiti film (Clear Defense); and security film (Guardian, the only security-film line we
+carry). Every film we propose is checked against the manufacturer's published film-to-glass
+compatibility chart for your specific glass before it goes in a quote.</p>
+<h2>Published rates</h2>
+<p>Film is priced per square foot, from about $10 per square foot for basic solar film to $20 per
+square foot for Guardian security film. A $400 job minimum applies. Exterior, X-Series, and security
+films also require edge sealing, priced per lineal foot. Blackout film is approved only on tempered
+single-pane glass. Every charge is itemized in your written quote &mdash; this page does not
+calculate a total.</p>
+<h2>Not every film belongs on every window</h2>
+<p>The manufacturer's chart contains 972 film-and-glass combinations. Of those, 326 &mdash;
+approximately one in three &mdash; are rated Not Safe. That is why ikonic identifies your glass
+&mdash; pane count, Low-E coatings, and whether it is annealed, laminated, or tempered &mdash;
+before quoting. Wired glass, factory-tinted double- or triple-pane glass, cracked or chipped glass,
+fogged sealed units, and glass that already has film on it are always assessed on site.</p>
+<h2>Get a written quote</h2>
+<p>ikonic identifies your glass first, confirms the film is approved on it, then prices it. If a
+film isn't safe on your windows, we tell you and specify one that is.</p>
+${CONTACT_BLOCK}`,
+  },
+  {
     path: '/window-tint/office',
     title: 'Commercial Storefront Window Tint Denver | ikonic303',
     description:

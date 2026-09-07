@@ -29,6 +29,7 @@ export default defineConfig({
         '/blogs',
         '/gallery',
         '/window-tint',
+        '/window-tint/films-and-pricing',
         '/window-tint/solar-heat',
         '/window-tint/uv-protection',
         '/window-tint/privacy',

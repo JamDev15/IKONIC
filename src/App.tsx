@@ -37,6 +37,8 @@ const NotFound = lazy(() => import('./pages/NotFound'));
 // are unchanged from the old prerendered static HTML (/window-tint, /signage, …)
 // so no SEO equity moves. Crawler shells live in scripts/prerender-routes.mjs.
 const ServicePage = lazy(() => import('./pages/services/ServicePage'));
+// Staging page (2026-09-04): Edge film rate card + glass-compatibility filter.
+const FilmsAndPricing = lazy(() => import('./pages/services/FilmsAndPricing'));
 
 // ---------------------------------------------------------------------------
 // HIDDEN 2026-08-29 — site refocused on architectural window film & graphics
@@ -155,6 +157,7 @@ function App() {
                 301 to /storefront-graphics (see vercel.json). Those serviceData
                 entries and the old static HTML are kept for reference. */}
             <Route path="/window-tint" element={<ServicePage data={services.residential} />} />
+            <Route path="/window-tint/films-and-pricing" element={<FilmsAndPricing />} />
             <Route path="/window-tint/solar-heat" element={<ServicePage data={services.solarHeat} />} />
             <Route path="/window-tint/uv-protection" element={<ServicePage data={services.uvProtection} />} />
             <Route path="/window-tint/privacy" element={<ServicePage data={services.privacyFilm} />} />

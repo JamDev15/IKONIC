@@ -168,6 +168,11 @@ export default function AllServices() {
               </div>
             ))}
           </div>
+          <p className="text-center text-sm text-offwhite-dark mt-8">
+            <Link to="/window-tint/films-and-pricing" className="text-mint hover:underline">
+              See the films we install, their per-square-foot rates, and which are approved on your glass
+            </Link>
+          </p>
         </div>
       </section>
 
